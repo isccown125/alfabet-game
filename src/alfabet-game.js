@@ -1,4 +1,5 @@
 import {Board} from "./board.js";
+import {Component} from "./components.js";
 
 export class AlphabetGame extends Board{
     timerId = null;
@@ -27,27 +28,24 @@ export class AlphabetGame extends Board{
     }
 
     timer (time){
-        const div = document.createElement('div');
-        const span = document.createElement('span');
-        const levelTime = time / 1000
-        div.id = 'timer'
-        div.textContent = 'Czas'
-        span.textContent = `${levelTime}s`
-        div.appendChild(span)
+        let seconds = time / 1000
+        const div = new Component().create('div').setId('timer').setTextContext('Czas').htmlElement
+        const span = new Component().create('span').setTextContext(`${seconds}s`).htmlElement
+
+        div.append(span);
         this.timerHtmlElement = div
         this.boardHeaderHtmlElement.append(div);
-        let seconds = levelTime;
+
         this.timerId = setInterval(()=>{
             seconds--
-            span.textContent = (seconds<=9)?`0${seconds}s`: `${seconds}s`;
+            span.textContent = (seconds<=9)?`0${seconds}s`: `${seconds}s`
             div.appendChild(span)
         }, 1000)
 
-
     }
-
     renderGame() {
         this.boardHtmlElement = document.getElementById('alphabet-game');
         document.body.appendChild(this.boardHtmlElement);
+
     }
 }

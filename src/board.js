@@ -1,3 +1,6 @@
+import {random} from "./utils.js";
+import {Component} from "./components.js";
+
 export class Board {
     boardHtmlElement = undefined
     boardHeaderHtmlElement = undefined
@@ -6,54 +9,36 @@ export class Board {
     symbols = ["L","P", "O"];
     groupedAlphabet = [];
     countSymbols = 0;
+    maxSymbolRepeition = 2;
     lastSymbol = undefined
 
     randomizeSymbols(){
-        const random = ()=>{
-            return Math.round(Math.random()*(this.symbols.length-1))
-        }
-        let randomIndex = random();
-        if(this.lastSymbol === this.symbols[randomIndex]&&this.countSymbols < 2){
+        let randomIndex = random(1 ,this.symbols.length);
+        if(this.lastSymbol === this.symbols[randomIndex]&&this.countSymbols < this.maxSymbolRepeition){
             this.countSymbols++
         }
         if(this.lastSymbol !== this.symbols[randomIndex]){
-            console.log(this.lastSymbol, this.countSymbols, this.symbols[randomIndex], 'w')
             this.lastSymbol = this.symbols[randomIndex];
             this.countSymbols = 0;
 
             return this.symbols[randomIndex]
         }
-
-        if(this.countSymbols === 2){
+        if(this.countSymbols === this.maxSymbolRepeition){
             while (this.symbols[randomIndex] === this.lastSymbol){
-                randomIndex = random();
+                randomIndex = random(1 ,this.symbols.length);
             }
             this.countSymbols = 0;
         }
-        console.log(this.lastSymbol, this.countSymbols, this.symbols[randomIndex], 'poza')
         return this.symbols[randomIndex]
     }
-
     elementsGroup(){
         this.groupedAlphabet = this.alphabet.map((el)=>{ return {character: el, symbol: this.randomizeSymbols()}})
     }
 
     createTextGroup(character, symbol){
-        const div = document.createElement('div');
-        const span = document.createElement('span');
-        const span1 = document.createElement('span');
-
-        div.className='character-group'
-
-        span.textContent = character;
-        span1.textContent = symbol
-
-        span.className = 'character';
-        span1.className = 'symbol'
-
-
-        div.appendChild(span);
-        div.appendChild(span1);
+        const span = new Component().create('span').setClassList('character').setTextContext(character).htmlElement
+        const span1 = new Component().create('span').setClassList('symbol').setTextContext(symbol).htmlElement
+        const div = new Component().create('div').setClassList('character-group').setChild({htmlElement: span}, {htmlElement:span1}).htmlElement
         return div;
     }
     createGame(){
@@ -68,6 +53,9 @@ export class Board {
         this.boardHeaderHtmlElement = document.createElement('header');
         this.boardHtmlElement.id = 'board';
         this.boardHeaderHtmlElement.className = 'game-header';
+
+
+
         this.createGame()
         this.gameHtmlElement.append(this.boardHeaderHtmlElement);
         this.gameHtmlElement.append(this.boardHtmlElement);

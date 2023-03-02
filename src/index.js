@@ -13,7 +13,6 @@ class App{
             this.gameMenu.createRule('P - gdy widzisz ten symbol podnosisz do góry prawą ręke.',{group: true, htmlTag: "li", parent})
             this.gameMenu.createRule('O - gdy widzisz ten symbol podnosisz do góry obie ręce.',{group: true, htmlTag: "li", parent})
             this.gameMenu.createRule('Wybierz poziom', {htmlTag:'p', classes: "main-menu-headers"})
-            this.gameMenu.createLevel('VERY_HARD', 500*60, "bardzo łatwy")
             this.gameMenu.createLevel('HARD', 1000*60, 'łatwy')
             this.gameMenu.createLevel('MEDIUM', 1000*60*2, 'średni' )
             this.gameMenu.createLevel('EASY', 1000*60*3, "trudny")

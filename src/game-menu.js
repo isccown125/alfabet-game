@@ -1,5 +1,6 @@
 import {AlphabetGame} from "./alfabet-game.js";
 import {showModal} from "./modal.js";
+import {Component} from "./components.js";
 
 export class GameMenu{
     rules = []
@@ -12,31 +13,28 @@ export class GameMenu{
 
     createRule(description, options = {htmlTag:'p', group: false, parent:undefined, classes: ""}) {
         const {htmlTag, group, parent, classes} = options
-        const htmlElement = document.createElement(htmlTag);
+        const rule = new Component().create(htmlTag)
 
         if(classes && classes.length>0){
-            htmlElement.classList.add(classes);
+            rule.setClassList(classes);
         }
         if(group){
             if(parent){
-                htmlElement.textContent = description
-                parent.append(htmlElement)
-                return htmlElement;
+                rule.setTextContext(description)
+                parent.append(rule.htmlElement)
+                return rule.htmlElement;
             }
-            this.rules.push(htmlElement)
-            htmlElement.textContent = description
-            return htmlElement;
+            this.rules.push(rule.htmlElement)
+            rule.setTextContext(description)
+            return rule.htmlElement;
         }
-        htmlElement.textContent = description
-        this.rules.push(htmlElement)
-        return htmlElement;
+        rule.setTextContext(description)
+        this.rules.push(rule.htmlElement)
+        return rule.htmlElement;
     }
 
     createButton(label, gameLevel){
-        const button = document.createElement('button');
-        button.textContent = label
-        button.className='level-button';
-        button.setAttribute('data-level', gameLevel.name);
+        const button = new Component().create('button').setClassList('level-button').setTextContext(label).setAttributes({name:'data-level', value:gameLevel.name}).htmlElement
         this.levelButtons.push(button);
     }
 
@@ -56,7 +54,6 @@ export class GameMenu{
         }
     }
 
-
     getLevel(name){
         if(!name || typeof name !== 'string'){
             throw new Error('Cannot start game!');
@@ -68,10 +65,7 @@ export class GameMenu{
         if(event.target.nodeName ==='BUTTON'){
             const level = this.getLevel(event.target.dataset.level);
             const game = new AlphabetGame();
-            const cancelGame = document.createElement('button')
-
-            cancelGame.textContent='Wybierz inny poziom';
-            cancelGame.classList.add('cancel-game-btn')
+            const cancelGame = new Component().create('button').setClassList('cancel-game-btn').setTextContext('Wybierz inny poziom').htmlElement
 
             game.startGame(level)
             cancelGame.addEventListener('click', ()=>{
@@ -94,27 +88,14 @@ export class GameMenu{
 
     render(){
         const game = document.getElementById('alphabet-game');
-        this.gameMenu = document.createElement('div');
-        this.gameMenu.id = 'main-menu';
+        const title = new Component().create('p').setId('game-title').setTextContext('Alphabet Game').htmlElement
+        this.rulesContainer = new Component().create('div').setId('rules')
+        this.actionsContainer = new Component().create('div').setId('actions')
+        this.gameMenu = new Component().create('div').setId('main-menu').setChild({htmlElement: title}, {htmlElement: this.rulesContainer.htmlElement}, {htmlElement: this.actionsContainer.htmlElement}).htmlElement;
+        this.rules.map((el)=>this.rulesContainer.setChild({htmlElement:el}));
+        this.levelButtons.map((el)=>this.actionsContainer.setChild({htmlElement:el}));
 
-        const title = document.createElement('p')
-        title.textContent = 'Alphabet Game'
-        title.id = 'game-title'
-
-        this.rulesContainer = document.createElement('div');
-        this.rulesContainer.id = 'rules'
-        this.actionsContainer = document.createElement('div');
-        this.actionsContainer.id = 'actions'
-
-        this.rules.map((el)=>this.rulesContainer.append(el));
-        this.levelButtons.map((el)=>this.actionsContainer.append(el));
-
-
-        this.gameMenu.append(title)
-        this.gameMenu.append(this.rulesContainer);
-        this.gameMenu.append(this.actionsContainer)
-
-        this.actionsContainer.addEventListener('click',this.startGameHandler.bind(this));
+        this.actionsContainer.htmlElement.addEventListener('click',this.startGameHandler.bind(this));
         game.append(this.gameMenu)
     }
 }
