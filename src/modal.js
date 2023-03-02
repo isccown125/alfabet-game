@@ -12,6 +12,7 @@ export const showModal = (title, description)=>{
 
     const button = document.createElement('button');
     button.textContent = 'Ok!';
+    button.className = 'modal-button'
     modal.append(button)
     const modalBackdrop = backdrop();
     button.addEventListener('click', ()=>{

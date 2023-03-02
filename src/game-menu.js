@@ -80,7 +80,7 @@ export class GameMenu{
                 game.finishGame();
                 cancelGame.remove()
                 this.showMenu();
-                showModal("Koniec czasu!", "<p>Możesz pochwalić jak ci poszło na naszym discordzie.</p>\n<p>Jeśli masz jakieś uwagi do samej gry <br>skontaktuj się z nami!</p>");
+                showModal("Runda się zakończyła!", "<p>Koniecznie pochwal jak ci poszło na naszym discordzie.</p>\n<p>Jeśli masz jakieś uwagi do samej gry <br>skontaktuj się z nami!</p>");
             }, level.time)
 
         }
