@@ -271,7 +271,7 @@ body{
         height: min-content;
         top: clamp(0px, 2vh, 50px);
         gap: 0;
-        padding: 10px 0;
+        padding: 20px 0;
         max-width: 600px;
     }
     #game-title{
@@ -317,16 +317,16 @@ body{
         justify-content: center;
     }
     #game-title{
-        font-size: clamp(20px, 10vw, 30px);
+        font-size: clamp(20px, 10vw, 40px);
     }
     .list-head,
     .main-menu-headers{
-        font-size: clamp(10px, 10vw, 17px);
+        font-size: clamp(10px, 10vw, 20px);
     }
     .text-style,
     .list li:first-letter,
     .list{
-        font-size: clamp(9px, 8vw, 10px);
+        font-size: clamp(9px, 8vw, 13px);
     }
     #main-menu{
         width: 100%;
