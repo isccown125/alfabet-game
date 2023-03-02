@@ -265,14 +265,14 @@ body{
 }
 
 
-@media screen and (max-width: 700px) and (min-height: 700px) and (max-height: 1000px){
+@media screen and (max-width: 700px) and (min-height: 750px) and (max-height: 1000px){
     #main-menu{
         width: 100%;
         height: min-content;
         top: clamp(0px, 2vh, 50px);
         gap: 0;
         padding: 10px 0;
-        max-width: 700px;
+        max-width: 600px;
     }
     #game-title{
         font-size: clamp(27px, 10vw, 50px);
@@ -281,7 +281,6 @@ body{
     .main-menu-headers{
         font-size: clamp(20px, 8vw, 25px);
     }
-
 
     .text-style,
     .list li:first-letter,
@@ -313,7 +312,7 @@ body{
 }
 
 
-@media screen and (max-width: 600px) and (max-height: 699px){
+@media screen and (max-width: 700px) and (max-height: 749px){
     #alphabet-game{
         justify-content: center;
     }
@@ -324,7 +323,7 @@ body{
     .main-menu-headers{
         font-size: clamp(10px, 10vw, 17px);
     }
-
+    .text-style,
     .list li:first-letter,
     .list{
         font-size: clamp(9px, 8vw, 10px);
@@ -335,7 +334,7 @@ body{
         gap: 0;
         top: 0;
         padding: 10px 0;
-        max-width: 700px;
+        max-width: 500px;
     }
     #board{
         width: clamp(270px, 15vw, 700px);
