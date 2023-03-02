@@ -220,11 +220,11 @@ body{
 
 /*================ modal ========================*/
 #modal{
-    position: fixed;
-    top:50%;
-    left: 50%;
-    translate: -50% -50%;
+    position: absolute;
     background: white;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -234,10 +234,10 @@ body{
 @keyframes animate-modal {
     from{
         opacity: 0;
-        translate: -50% 100%;
+        transform: translateX(-50%) translateY(100%);
     }to{
     opacity: 1;
-    translate: -50% -50%;
+             transform: translateX(-50%) translateY(-50%);
          }
 }
 .modal-title{
