@@ -275,20 +275,18 @@ body{
         max-width: 700px;
     }
     #game-title{
-        font-size: clamp(30px, 10vw, 50px);
+        font-size: clamp(27px, 10vw, 50px);
     }
+    .list-head,
     .main-menu-headers{
-        font-size: clamp(20px, 8vw, 30px);
+        font-size: clamp(20px, 8vw, 25px);
     }
-    .list-head{
-        font-size: clamp(20px, 15vw, 40px);
-    }
-    .text-style{
-        font-size: clamp(10px, 8vw, 15px)
-    }
+
+
+    .text-style,
     .list li:first-letter,
     .list{
-        font-size: clamp(9px, 8vw, 10px);
+        font-size: clamp(9px, 8vw, 13px);
     }
 
     #board{
@@ -308,6 +306,10 @@ body{
     .cancel-game-btn{
         padding: 5px 10px;
     }
+    .level-button{
+        font-size: 10px;
+        padding: 5px 10px;
+    }
 }
 
 
@@ -318,12 +320,11 @@ body{
     #game-title{
         font-size: clamp(20px, 10vw, 30px);
     }
+    .list-head,
     .main-menu-headers{
-        font-size: clamp(10px, 10vw, 20px);
+        font-size: clamp(10px, 10vw, 17px);
     }
-    .list-head{
-        font-size: clamp(10px, 10vw, 20px);
-    }
+
     .list li:first-letter,
     .list{
         font-size: clamp(9px, 8vw, 10px);
