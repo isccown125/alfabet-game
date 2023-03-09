@@ -1,19 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,700;1,800;1,900&display=swap');
 
 @font-face {
-    font-family: Fun-Blob;
-    src: url("../fonts/FunBlob.otf");
+    font-family: mosmos;
+    src: url("../fonts/Mosmos.otf");
 }
+
 @font-face {
-    font-family: back-grove;
-    src: url("../fonts/BackGroove.otf");
+    font-family: boldenVan;
+    src: url("../fonts/BoldenVan.otf");
 }
-@font-face {
-    font-family: strong-brain;
-    src: url("../fonts/StrongBrain.otf");
-}
-*{
+
+* {
     box-sizing: border-box;
+    font-family: poppins;
 }
 
 html {
@@ -24,18 +23,20 @@ html {
     -o-background-size: cover;
     background-size: cover;
 }
-body{
+
+body {
     margin: 0;
     padding: 0;
     font-family: poppins;
     width: 100%;
     height: 100%;
 }
-.d-none{
+
+.d-none {
     display: none !important;
 }
 
-#alphabet-game{
+#alphabet-game {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -46,9 +47,10 @@ body{
     position: relative;
 
 }
+
 /*================ main-menu ========================*/
 
-#main-menu{
+#main-menu {
     box-sizing: border-box;
     border: 10px solid #42a9d5;
     box-shadow: 0 0 5px 4px #1b4150;
@@ -62,33 +64,34 @@ body{
     height: min-content;
     gap: 20px;
     position: relative;
-    top:50px;
+    top: 50px;
     animation: animate-main-menu 0.15s 1 forwards;
 }
+
 @keyframes animate-main-menu {
-    from{
+    from {
         opacity: 0;
         translate: 0 30%;
-    }to{
-             opacity: 1;
-            translate: 0;
-          }
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
 }
 
-.main-menu-headers{
+.main-menu-headers {
     color: #cb3b3b;
-    text-shadow: 1px 1px 2px black;
-    font-size: clamp(18px, 10vw,30px);
+    font-size: clamp(18px, 10vw, 30px);
     font-weight: bold;
     margin: 10px 0;
     letter-spacing: 1.5px;
-    font-family: strong-brain;
+    font-family: boldenVan;
 }
 
-#game-title{
-    font-family: strong-brain;
+#game-title {
+    font-family: boldenVan;
     text-transform: uppercase;
-    color: #42a9d5;
+    color: #07a4f2;
     font-size: clamp(40px, 10vw, 80px);
     position: relative;
     top: 0;
@@ -96,19 +99,21 @@ body{
     padding: 0;
 }
 
-#rules{
+#rules {
     text-align: center;
     width: 90%;
 }
+
 .text-style {
     font-size: clamp(8px, 3vw, 18px);
 }
-#actions{
+
+#actions {
     display: flex;
     gap: 20px;
 }
 
-.level-button{
+.level-button {
     color: white;
     border: none;
     font-size: 15px;
@@ -117,18 +122,17 @@ body{
     cursor: pointer;
     text-transform: uppercase;
     font-weight: bold;
-    font-family: back-grove;
+    font-family: poppins;
     letter-spacing: 1px;
-    text-shadow: 1px 1px 2px black;
 }
-.list-head{
-    font-weight: bold;
-    font-family: back-grove;
+
+.list-head {
+    font-family: boldenVan;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    font-size: clamp(15px, 10vw,30px);
+    font-size: clamp(15px, 10vw, 30px);
     color: #07a4f2;
     margin: 6px 0;
-    text-shadow: 1px 1px 2px black;
 }
 
 .list {
@@ -136,17 +140,18 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: left;
-    list-style-type: "- ";
+    list-style: none;
 }
-.list li:first-letter{
+
+.list li:first-letter {
     color: #07a4f2;
-    font-family: strong-brain;
+    font-family: boldenVan;
     font-size: clamp(8px, 10vw, 20px);
 }
 
 /*================ board ========================*/
 
-#board{
+#board {
     display: grid;
     width: 100%;
     max-width: 600px;
@@ -158,43 +163,53 @@ body{
     grid-template-columns: repeat(4, 70px);
     gap: 0 100px;
 }
-.game-header{
+
+.game-header {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
-#timer{
+
+#timer {
     display: flex;
     color: #ffffff;
     font-weight: bold;
     font-size: 60px;
-    font-family: back-grove;
+    font-family: mosmos;
+    align-items: center;
+    letter-spacing: 4px;
+    font-weight: bold;
     gap: 10px;
-    text-shadow: 2px 2px 1px  black;
 }
-.character-group{
+
+#timer span {
+    letter-spacing: 0;
+}
+
+.character-group {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: strong-brain;
     height: min-content;
 }
-.character-group .character{
-    font-weight: bold;
+
+.character-group .character {
+
     display: block;
     color: #ffffff;
     font-size: 70px;
     height: min-content;
     text-decoration: #07a4f2;
+    font-family: boldenVan;
     padding: 0;
     margin: 0;
-    text-shadow: 2px 2px 2px black;
 }
-.character-group .symbol{
+
+.character-group .symbol {
     font-weight: bold;
-    font-variant: small-caps;
+    font-family: mosmos;
     display: block;
     word-spacing: 0;
     text-space: 2;
@@ -203,9 +218,9 @@ body{
     font-size: 46px;
     padding: 0;
     margin: 0;
-    text-shadow: 2px 2px 2px black;
 }
-.cancel-game-btn{
+
+.cancel-game-btn {
     color: white;
     border: none;
     font-size: 15px;
@@ -213,13 +228,12 @@ body{
     background: #d33939;
     cursor: pointer;
     text-transform: uppercase;
-    font-weight: bold;
-    font-family: back-grove;
-    letter-spacing: 1px;
+    font-family: boldenVan;
+    letter-spacing: 2px;
 }
 
 /*================ modal ========================*/
-#modal{
+#modal {
     position: absolute;
     background: white;
     top: 50%;
@@ -230,33 +244,39 @@ body{
     flex-direction: column;
     z-index: 11;
     animation: animate-modal 0.25s forwards ease-in-out;
+    border-radius: 12px;
 }
+
 @keyframes animate-modal {
-    from{
+    from {
         opacity: 0;
         transform: translateX(-50%) translateY(100%);
-    }to{
-    opacity: 1;
-             transform: translateX(-50%) translateY(-50%);
-         }
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%);
+    }
 }
-.modal-title{
+
+.modal-title {
     color: #07a4f2;
-    font-family: back-grove;
+    font-family: poppins;
     font-size: clamp(30px, 10vw, 50px);
     margin: 10px 0;
-    text-shadow: 2px 2px 2px black;
 }
-.modal-button{
+
+.modal-button {
     padding: 10px 15px;
     color: white;
-    text-shadow: 2px 2px 2px black;
     background: #cb3b3b;
+    font-family: poppins;
+    font-size: 15px;
     text-transform: uppercase;
     border: none;
 }
+
 /*================ backdrop ========================*/
-.backdrop{
+.backdrop {
     background: rgba(0, 0, 0, 0.47);
     position: fixed;
     width: 100%;
@@ -264,17 +284,19 @@ body{
     z-index: 10;
     animation: animate-backdrop 0.3s forwards ease-in-out;
 }
+
 @keyframes animate-backdrop {
-    from{
+    from {
         opacity: 0;
-    }to{
+    }
+    to {
         opacity: 1;
-          }
+    }
 }
 
 
-@media screen and (max-width: 700px) and (min-height: 750px) and (max-height: 1000px){
-    #main-menu{
+@media screen and (max-width: 700px) and (min-height: 750px) and (max-height: 1000px) {
+    #main-menu {
         width: 100%;
         height: min-content;
         top: clamp(0px, 2vh, 50px);
@@ -282,43 +304,51 @@ body{
         padding: 20px 0;
         max-width: 600px;
     }
-    #game-title{
+
+    #game-title {
         font-size: clamp(27px, 10vw, 50px);
     }
+
     .list-head,
-    .main-menu-headers{
+    .main-menu-headers {
         font-size: clamp(20px, 8vw, 25px);
     }
 
     .text-style,
     .list li:first-letter,
-    .list{
+    .list {
         font-size: clamp(9px, 8vw, 13px);
     }
 
-    #board{
+    #board {
         width: clamp(270px, 15vw, 700px);
         grid-template-columns: repeat(4, min-content);
         gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 100px);
     }
-    .character-group .character{
+
+    .character-group .character {
         font-size: clamp(40px, 10vw, 80px);
     }
-    .character-group .symbol{
+
+    .character-group .symbol {
         font-size: clamp(20px, 10vw, 30px);
     }
-    #timer{
+
+    #timer {
         font-size: clamp(30px, 10vw, 60px);
     }
-    .cancel-game-btn{
+
+    .cancel-game-btn {
         padding: 5px 7px;
         font-size: 11px;
     }
-    .level-button{
+
+    .level-button {
         font-size: 10px;
         padding: 5px 10px;
     }
-    #modal{
+
+    #modal {
         padding: 20px;
         width: 90%;
         max-width: 400px;
@@ -326,22 +356,26 @@ body{
 }
 
 
-@media screen and (max-width: 700px) and (max-height: 749px){
-    #alphabet-game{
+@media screen and (max-width: 700px) and (max-height: 749px) {
+    #alphabet-game {
     }
-    #game-title{
+
+    #game-title {
         font-size: clamp(20px, 10vw, 40px);
     }
+
     .list-head,
-    .main-menu-headers{
+    .main-menu-headers {
         font-size: clamp(10px, 10vw, 20px);
     }
+
     .text-style,
     .list li:first-letter,
-    .list{
+    .list {
         font-size: clamp(9px, 5vw, 13px);
     }
-    #main-menu{
+
+    #main-menu {
         width: 100%;
         height: min-content;
         gap: 0;
@@ -350,30 +384,37 @@ body{
         height: min-content;
         max-width: 500px;
     }
-    #board{
+
+    #board {
         width: clamp(270px, 15vw, 700px);
         justify-content: center;
         grid-template-columns: repeat(4, min-content);
         gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 150px);
     }
-    .character-group .character{
+
+    .character-group .character {
         font-size: clamp(30px, 12vw, 60px);
     }
-    .character-group .symbol{
+
+    .character-group .symbol {
         font-size: clamp(16px, 8vw, 30px);
     }
-    #timer{
+
+    #timer {
         font-size: clamp(30px, 10vw, 60px);
     }
-    .cancel-game-btn{
+
+    .cancel-game-btn {
         padding: 5px 7px;
         font-size: 11px;
     }
-    .level-button{
+
+    .level-button {
         font-size: 10px;
         padding: 5px 10px;
     }
-    #modal{
+
+    #modal {
         padding: 20px;
         width: 90%;
         max-width: 400px;
