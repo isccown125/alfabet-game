@@ -30,6 +30,11 @@ body {
     font-family: poppins;
     width: 100%;
     height: 100%;
+    user-select: unset;
+}
+
+.font-bold {
+    font-weight: bold;
 }
 
 .d-none {
@@ -53,7 +58,6 @@ body {
 #main-menu {
     box-sizing: border-box;
     border: 10px solid #42a9d5;
-    box-shadow: 0 0 5px 4px #1b4150;
     background: #f8f8f8;
     display: flex;
     flex-direction: column;
@@ -66,6 +70,7 @@ body {
     position: relative;
     top: 50px;
     animation: animate-main-menu 0.15s 1 forwards;
+    border-radius: 4px;
 }
 
 @keyframes animate-main-menu {
@@ -124,6 +129,7 @@ body {
     font-weight: bold;
     font-family: poppins;
     letter-spacing: 1px;
+    border-radius: 8px;
 }
 
 .list-head {
@@ -171,7 +177,7 @@ body {
     align-items: center;
 }
 
-#timer {
+.timer {
     display: flex;
     color: #ffffff;
     font-weight: bold;
@@ -261,6 +267,8 @@ body {
 .modal-title {
     color: #07a4f2;
     font-family: poppins;
+    font-weight: bold;
+    font-size: 35px !important;
     font-size: clamp(30px, 10vw, 50px);
     margin: 10px 0;
 }
