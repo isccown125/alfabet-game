@@ -1,57 +1,23 @@
 import { AlphabetGame } from "./alfabet-game.js";
 import { showModal } from "./modal.js";
 import { Component } from "./components.js";
+import { PageManager } from "./pageManager.js";
+import { LevelManager } from "./levelManager.js";
 
 export class GameMenu {
-  rules = [];
-  levelButtons = [];
-  levels = [];
   gameMenu = undefined;
+  alphabetGame = new AlphabetGame();
+  pageManager = undefined;
+  levelManager = new LevelManager();
   actionsContainer = undefined;
-  rulesContainer = undefined;
-  timerId = undefined;
 
-  createRule(
-    description,
-    options = { htmlTag: "p", group: false, parent: undefined, classes: [] }
-  ) {
-    const { htmlTag, group, parent, classes } = options;
-    const rule = new Component().create(htmlTag);
-
-    if (classes && classes.length > 0) {
-      if (Array.isArray(classes)) {
-        classes.forEach((el) => {
-          rule.setClassList(el);
-        });
-      } else {
-        rule.setClassList(classes);
-      }
-    }
-    if (group) {
-      if (parent) {
-        rule.setTextContext(description);
-        parent.append(rule.htmlElement);
-        return rule.htmlElement;
-      }
-      this.rules.push(rule.htmlElement);
-      rule.setTextContext(description);
-      return rule.htmlElement;
-    }
-    rule.setTextContext(description);
-    this.rules.push(rule.htmlElement);
-    return rule.htmlElement;
-  }
-
-  createButton(label, gameLevel) {
-    const button = new Component()
-      .create("button")
-      .setClassList("level-button")
-      .setTextContext(label)
-      .setAttributes({
-        name: "data-level",
-        value: gameLevel.name,
-      }).htmlElement;
-    this.levelButtons.push(button);
+  constructor() {
+    const game = document.getElementById("alphabet-game");
+    this.gameMenu = new Component()
+      .create("div")
+      .setId("main-menu").htmlElement;
+    this.pageManager = new PageManager(this.gameMenu);
+    game.append(this.gameMenu);
   }
 
   hideMenu() {
@@ -62,78 +28,37 @@ export class GameMenu {
     this.gameMenu.classList.remove("d-none");
   }
 
-  createLevel(name, time, label) {
-    if (typeof name === "string" && typeof time === "number") {
-      this.levels.push({ label, name, time });
-    } else {
-      throw new Error(
-        `Name must be type of string and time must be typeof number. Given: name:${typeof name}, time:${typeof time}`
-      );
+  chooseLevelHandler(event) {
+    if (
+      event.target.nodeName === "BUTTON" &&
+      event.target.className.includes("level-button")
+    ) {
+      const levelName = event.target.getAttribute("data-level");
+      if (levelName === "CUSTOM_LEVEL") {
+        this.pageManager.setCurrentPage("custom-level");
+      } else {
+        this.hideMenu();
+        this.levelManager.setCurrentLevel(levelName);
+        this.alphabetGame.startGame(this.levelManager.currentLevel);
+        setTimeout(() => {
+          this.alphabetGame.finishGame();
+          this.showMenu();
+          showModal(
+            "Koniec gry!",
+            "<p>Koniecznie pochwal się na naszym klubowym discordzie jak ci poszło :) <br> Jeśli masz jakieś uwagi do gry prosimy abyś skontaktował się z nami.</p>"
+          );
+        }, this.levelManager.currentLevel.time + 2000);
+      }
     }
   }
 
-  getLevel(name) {
-    if (!name || typeof name !== "string") {
-      throw new Error("Cannot start game!");
-    }
-    return this.levels.find((el) => el.name === name);
-  }
-
-  startGameHandler(event) {
-    if (event.target.nodeName === "BUTTON") {
-      const level = this.getLevel(event.target.dataset.level);
-      const game = new AlphabetGame();
-      const cancelGame = new Component()
-        .create("button")
-        .setClassList("cancel-game-btn")
-        .setTextContext("Wybierz inny poziom").htmlElement;
-
-      game.startGame(level);
-      cancelGame.addEventListener("click", () => {
-        game.finishGame();
-        cancelGame.remove();
-        this.showMenu();
-        clearTimeout(this.timerId);
-      });
-      game.boardHeaderHtmlElement.prepend(cancelGame);
-      this.hideMenu();
-      this.timerId = setTimeout(() => {
-        game.finishGame();
-        cancelGame.remove();
-        this.showMenu();
-        showModal(
-          "Runda się zakończyła!",
-          "<p>Koniecznie pochwal się jak ci poszło na naszym discordzie.</p>\n<p>Jeśli masz jakieś uwagi do samej gry <br>skontaktuj się z nami!</p>"
-        );
-      }, level.time);
-    }
-  }
-
-  render() {
-    const game = document.getElementById("alphabet-game");
-    const title = new Component()
-      .create("p")
-      .setId("game-title")
-      .setTextContext("Alphabet Game").htmlElement;
-    this.rulesContainer = new Component().create("div").setId("rules");
-    this.actionsContainer = new Component().create("div").setId("actions");
-    this.gameMenu = new Component()
-      .create("div")
-      .setId("main-menu")
-      .setChild(
-        { htmlElement: title },
-        { htmlElement: this.rulesContainer.htmlElement },
-        { htmlElement: this.actionsContainer.htmlElement }
-      ).htmlElement;
-    this.rules.map((el) => this.rulesContainer.setChild({ htmlElement: el }));
-    this.levelButtons.map((el) =>
-      this.actionsContainer.setChild({ htmlElement: el })
-    );
-
-    this.actionsContainer.htmlElement.addEventListener(
+  init() {
+    this.pageManager.setCurrentPage(this.pageManager.defaultPage);
+    this.actionsContainer =
+      this.pageManager.getPage("choose-level").htmlElement.lastChild;
+    this.actionsContainer.addEventListener(
       "click",
-      this.startGameHandler.bind(this)
+      this.chooseLevelHandler.bind(this)
     );
-    game.append(this.gameMenu);
   }
 }
