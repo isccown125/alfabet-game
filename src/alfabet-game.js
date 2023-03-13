@@ -44,7 +44,7 @@ export class AlphabetGame extends Board {
       }
       this.finishGame();
       finishGameCB(true);
-    }, this.currentLevel.gameTime);
+    }, this.currentLevel.gameTime + 2000);
   }
 
   finishGame() {
