@@ -1,44 +1,56 @@
-import { Board } from "./board.js";
+import { Board } from "./Board/board.js";
 import { Timer } from "./timer.js";
-import { HighlightCharacters } from "./gameEvents/highlightCharacters.js";
+import { CreateGameSymbols } from "./Board/CreateGameSymbols.js";
 
 export class AlphabetGame extends Board {
   timer = undefined;
-  gameTimerId = undefined;
   timerHtmlElement = undefined;
-  events = [new HighlightCharacters(this)];
+  currentLevel = undefined;
 
-  constructor() {
+  constructor(level) {
     super();
+    this.currentLevel = level;
+  }
+
+  startEffects() {
+    this.currentLevel.effects.forEach((el) => {
+      el.start();
+    });
+  }
+
+  stopEffects() {
+    this.currentLevel.effects.forEach((el) => {
+      el.stop();
+    });
+  }
+
+  startGame(finishGameCB) {
+    this.createTimer(this.currentLevel.gameTime);
     this.renderGame();
-  }
-
-  setGameBoard() {
-    this.render();
-  }
-
-  startGame(level) {
-    const [highlight] = this.events;
-    if (!level.name || !level.time) {
-      throw new Error("Cannot start game!");
+    if (this.currentLevel.effects) {
+      this.startEffects();
     }
-    this.setGameBoard();
-    if (level.options.highlightOptions.normal) {
-      highlight.intervalTime = level.options.highlightOptions.intervalTime;
-      highlight.updateOptions(level.options.highlightOptions);
-      highlight.start();
-      highlight.updateStateGame(this);
-    }
-    this.createTimer(level.time);
     this.timer.startTimer();
+    this.cancelGameButton.addEventListener("click", () => {
+      if (this.currentLevel.effects) {
+        this.stopEffects();
+      }
+      this.finishGame();
+      finishGameCB(false);
+    });
+    setTimeout(() => {
+      if (this.currentLevel.effects) {
+        this.stopEffects();
+      }
+      this.finishGame();
+      finishGameCB(true);
+    }, this.currentLevel.gameTime);
   }
 
   finishGame() {
-    const [highlight] = this.events;
     this.boardHtmlElement.remove();
-    this.boardHeaderHtmlElement.remove();
     this.timer.clearTimer();
-    highlight.stop();
+    this.currentLevel = undefined;
   }
 
   createTimer(time) {
@@ -48,8 +60,15 @@ export class AlphabetGame extends Board {
     this.timerHtmlElement = this.timer.render();
   }
 
+  createCharacters() {
+    this.setAlphabet(this.currentLevel.alphabet);
+    this.setSymbols(this.currentLevel.symbols);
+    this.createdSymbols = new CreateGameSymbols(this.alphabet, this.symbols);
+  }
+
   renderGame() {
-    this.boardHtmlElement = document.getElementById("alphabet-game");
-    document.body.appendChild(this.boardHtmlElement);
+    this.renderBoard();
+
+    this.boardHeaderHtmlElement.appendChild(this.timerHtmlElement);
   }
 }

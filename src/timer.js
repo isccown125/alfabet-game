@@ -40,7 +40,6 @@ export class Timer {
     this.currentTimeInMilliseconds = this.remainingMilliseconds;
     this.clearTimer();
     this.createInterval();
-    return;
   }
 
   stopTimer() {
@@ -80,9 +79,7 @@ export class Timer {
     }
     this.timerHtmlElement.textContent = `${
       this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
-    }m ${
-      this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
-    }s`;
+    }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
   }
 
   render() {
