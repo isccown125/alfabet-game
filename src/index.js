@@ -1,25 +1,47 @@
-import {GameMenu} from "./game-menu.js";
+import { GameMenu } from "./game-menu.js";
+import { customizeLevelPage } from "./gameMenuPages/customize-level-page.js";
+import { chooseLevelPage } from "./gameMenuPages/choose-level-page.js";
+import { LevelManager } from "./levels/LevelManager.js";
+import { LevelFactory } from "./levels/LevelFactory.js";
+import { AlphabetGame } from "./alfabet-game.js";
+import { showModal } from "./modal.js";
 
-class App{
-    gameMenu = new GameMenu();
-        constructor() {
-            this.gameMenu.createRule('Zasady gry', {htmlTag:"p", classes: "main-menu-headers"})
-            this.gameMenu.createRule('Po przejściu do gry będzie generowała się plansza z alfabetem oraz symbolami.', {htmlTag:"p", classes: "text-style"})
-            this.gameMenu.createRule('W ciągu określonego czasu musisz przeczytać cały alfabet jednocześnie podnąsząc ręce do góry w zależności od symbolu.', {htmlTag:"p", classes: "text-style"})
-            this.gameMenu.createRule('Pod literami alfabetu znajdują się symbole, w zależności od symbolu musisz wykonać jakąś akcje.',{htmlTag:"p", classes: "text-style"})
-            const parent = this.gameMenu.createRule('', {htmlTag: 'ul', group: true, classes:"list"})
-            this.gameMenu.createRule('Oznaczenia', {group: true, htmlTag: "p", parent, classes:"list-head"})
-            this.gameMenu.createRule('L - gdy widzisz ten symbol podnosisz do góry lewą ręke.', {group: true, htmlTag: "li", parent})
-            this.gameMenu.createRule('P - gdy widzisz ten symbol podnosisz do góry prawą ręke.',{group: true, htmlTag: "li", parent})
-            this.gameMenu.createRule('O - gdy widzisz ten symbol podnosisz do góry obie ręce.',{group: true, htmlTag: "li", parent})
-            this.gameMenu.createRule('Wybierz poziom', {htmlTag:'p', classes: "main-menu-headers"})
-            this.gameMenu.createLevel('HARD', 1, 'łatwy')
-            this.gameMenu.createLevel('MEDIUM', 1000*60*2, 'średni' )
-            this.gameMenu.createLevel('EASY', 1000*60*3, "trudny")
-            this.gameMenu.levels.map((el)=>this.gameMenu.createButton(el.label, {name: el.name, time: el.time}))
-            this.gameMenu.render()
+class App {
+  static init() {
+    const gameMenu = new GameMenu();
+    const levelManager = new LevelManager();
+    const level = new LevelFactory();
+
+    levelManager.subscribe((selectedLevel) => {
+      const currentLevel = level.getLevel(selectedLevel);
+      if (currentLevel.name === "custom") {
+        gameMenu.pageManager.setCurrentPage("custom-level");
+        return;
+      }
+      const game = new AlphabetGame(currentLevel);
+      game.createCharacters();
+      if (currentLevel.effects) {
+        currentLevel.effects.forEach((el) => {
+          el.setCharacters(game.createdSymbols);
+        });
+      }
+      game.startGame((finish) => {
+        gameMenu.showMenu();
+        if (finish) {
+          showModal(
+            "Koniec Gry!",
+            "<p>Koniecznie pochwal się na naszym discordzie jak ci poszło!<br>Jeśli masz jakieś uwagi do gry skontaktuj się z nami.</p>"
+          );
         }
+      });
+      gameMenu.hideMenu();
+    });
+    gameMenu.pageManager.registerPage(chooseLevelPage(levelManager.getRoot()));
+    gameMenu.pageManager.registerPage(customizeLevelPage());
+    gameMenu.init();
+  }
 }
-window.addEventListener('load', ()=>{
-    new App();
-})
+
+window.addEventListener("load", () => {
+  App.init();
+});

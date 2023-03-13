@@ -1,51 +1,74 @@
-import {Board} from "./board.js";
-import {Component} from "./components.js";
+import { Board } from "./Board/board.js";
+import { Timer } from "./timer.js";
+import { CreateGameSymbols } from "./Board/CreateGameSymbols.js";
 
-export class AlphabetGame extends Board{
-    timerId = null;
-    timerHtmlElement = undefined;
+export class AlphabetGame extends Board {
+  timer = undefined;
+  timerHtmlElement = undefined;
+  currentLevel = undefined;
 
-    constructor() {
-        super();
-        this.renderGame()
+  constructor(level) {
+    super();
+    this.currentLevel = level;
+  }
+
+  startEffects() {
+    this.currentLevel.effects.forEach((el) => {
+      el.start();
+    });
+  }
+
+  stopEffects() {
+    this.currentLevel.effects.forEach((el) => {
+      el.stop();
+    });
+  }
+
+  startGame(finishGameCB) {
+    this.createTimer(this.currentLevel.gameTime);
+    this.renderGame();
+    if (this.currentLevel.effects) {
+      this.startEffects();
     }
+    this.timer.startTimer();
+    this.cancelGameButton.addEventListener("click", () => {
+      if (this.currentLevel.effects) {
+        this.stopEffects();
+      }
+      this.finishGame();
+      finishGameCB(false);
+    });
+    setTimeout(() => {
+      if (this.currentLevel.effects) {
+        this.stopEffects();
+      }
+      this.finishGame();
+      finishGameCB(true);
+    }, this.currentLevel.gameTime + 2000);
+  }
 
-    setGameBoard(){
-        this.render()
-    }
+  finishGame() {
+    this.boardHtmlElement.remove();
+    this.timer.clearTimer();
+    this.currentLevel = undefined;
+  }
 
-    startGame(level){
-        if(!level.name || !level.time){
-            throw new Error('Cannot start game!');
-        }
-        this.setGameBoard()
-        this.timer(level.time)
-    }
-    finishGame(){
-        this.boardHtmlElement.remove();
-        this.boardHeaderHtmlElement.remove();
-        clearInterval(this.timerId)
-    }
+  createTimer(time) {
+    this.timer = new Timer(time, {
+      parent: this.boardHeaderHtmlElement,
+    });
+    this.timerHtmlElement = this.timer.render();
+  }
 
-    timer (time){
-        let seconds = time / 1000
-        const div = new Component().create('div').setId('timer').setTextContext('Czas').htmlElement
-        const span = new Component().create('span').setTextContext(`${seconds}s`).htmlElement
+  createCharacters() {
+    this.setAlphabet(this.currentLevel.alphabet);
+    this.setSymbols(this.currentLevel.symbols);
+    this.createdSymbols = new CreateGameSymbols(this.alphabet, this.symbols);
+  }
 
-        div.append(span);
-        this.timerHtmlElement = div
-        this.boardHeaderHtmlElement.append(div);
+  renderGame() {
+    this.renderBoard();
 
-        this.timerId = setInterval(()=>{
-            seconds--
-            span.textContent = (seconds<=9)?`0${seconds}s`: `${seconds}s`
-            div.appendChild(span)
-        }, 1000)
-
-    }
-    renderGame() {
-        this.boardHtmlElement = document.getElementById('alphabet-game');
-        document.body.appendChild(this.boardHtmlElement);
-
-    }
+    this.boardHeaderHtmlElement.appendChild(this.timerHtmlElement);
+  }
 }

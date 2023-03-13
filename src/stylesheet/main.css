@@ -1,19 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,700;1,800;1,900&display=swap');
 
 @font-face {
-    font-family: Fun-Blob;
-    src: url("../fonts/FunBlob.otf");
+    font-family: mosmos;
+    src: url("../fonts/Mosmos.otf");
 }
+
 @font-face {
-    font-family: back-grove;
-    src: url("../fonts/BackGroove.otf");
+    font-family: boldenVan;
+    src: url("../fonts/BoldenVan.otf");
 }
-@font-face {
-    font-family: strong-brain;
-    src: url("../fonts/StrongBrain.otf");
-}
-*{
+
+* {
     box-sizing: border-box;
+    font-family: poppins;
+    scroll-behavior: smooth;
 }
 
 html {
@@ -24,71 +24,88 @@ html {
     -o-background-size: cover;
     background-size: cover;
 }
-body{
+
+body {
     margin: 0;
     padding: 0;
     font-family: poppins;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    user-select: unset;
 }
-.d-none{
+
+.font-bold {
+    font-weight: bold;
+}
+
+.d-none {
     display: none !important;
 }
 
-#alphabet-game{
+#alphabet-game {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: 100vw;
+    width: 100%;
     min-height: min-content;
     height: 100%;
     flex-direction: column;
     position: relative;
 
 }
+
 /*================ main-menu ========================*/
 
-#main-menu{
+#main-menu {
     box-sizing: border-box;
     border: 10px solid #42a9d5;
-    box-shadow: 0 0 5px 4px #1b4150;
     background: #f8f8f8;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px 0;
+    padding: 20px 0;
     width: 700px;
     height: min-content;
     gap: 20px;
     position: relative;
-    top:50px;
+    top: 10px;
     animation: animate-main-menu 0.15s 1 forwards;
-}
-@keyframes animate-main-menu {
-    from{
-        opacity: 0;
-        translate: 0 30%;
-    }to{
-             opacity: 1;
-            translate: 0;
-          }
+    border-radius: 4px;
 }
 
-.main-menu-headers{
+#choose-level {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+@keyframes animate-main-menu {
+    from {
+        opacity: 0;
+        translate: 0 30%;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+.main-menu-headers {
     color: #cb3b3b;
-    text-shadow: 1px 1px 2px black;
-    font-size: clamp(18px, 10vw,30px);
+    font-size: clamp(18px, 10vw, 30px);
     font-weight: bold;
     margin: 10px 0;
     letter-spacing: 1.5px;
-    font-family: strong-brain;
+    font-family: boldenVan;
 }
 
-#game-title{
-    font-family: strong-brain;
+#game-title {
+    font-family: boldenVan;
     text-transform: uppercase;
-    color: #42a9d5;
+    color: #07a4f2;
     font-size: clamp(40px, 10vw, 80px);
     position: relative;
     top: 0;
@@ -96,19 +113,31 @@ body{
     padding: 0;
 }
 
-#rules{
+#rules {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     width: 90%;
+    overflow: hidden;
+    max-width: 700px;
 }
+
 .text-style {
+    display: flex;
+    justify-content: center;
+    width: 90%;
     font-size: clamp(8px, 3vw, 18px);
 }
-#actions{
+
+.actions {
     display: flex;
     gap: 20px;
 }
 
-.level-button{
+.custom-level-button,
+.level-button {
     color: white;
     border: none;
     font-size: 15px;
@@ -117,18 +146,18 @@ body{
     cursor: pointer;
     text-transform: uppercase;
     font-weight: bold;
-    font-family: back-grove;
+    font-family: poppins;
     letter-spacing: 1px;
-    text-shadow: 1px 1px 2px black;
+    border-radius: 8px;
 }
-.list-head{
-    font-weight: bold;
-    font-family: back-grove;
+
+.list-head {
+    font-family: boldenVan;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    font-size: clamp(15px, 10vw,30px);
+    font-size: clamp(15px, 10vw, 30px);
     color: #07a4f2;
     margin: 6px 0;
-    text-shadow: 1px 1px 2px black;
 }
 
 .list {
@@ -136,65 +165,103 @@ body{
     flex-direction: column;
     justify-content: center;
     text-align: left;
-    list-style-type: "- ";
+    list-style: none;
 }
-.list li:first-letter{
+
+.list li:first-letter {
     color: #07a4f2;
-    font-family: strong-brain;
+    font-family: boldenVan;
     font-size: clamp(8px, 10vw, 20px);
+}
+
+/*================ custom level menu ========================*/
+
+.custom-level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 /*================ board ========================*/
 
-#board{
-    display: grid;
+#board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-container {
     width: 100%;
     max-width: 600px;
+    gap: 0 100px;
+    display: grid;
     height: min-content;
     justify-items: center;
     justify-content: center;
     align-content: center;
     align-items: center;
-    grid-template-columns: repeat(4, 70px);
-    gap: 0 100px;
+    grid-template-columns: repeat(4, min-content);
 }
-.game-header{
+
+.game-header {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
-#timer{
-    display: flex;
-    color: #ffffff;
+
+.timer {
     font-weight: bold;
     font-size: 60px;
-    font-family: back-grove;
-    gap: 10px;
-    text-shadow: 2px 2px 1px  black;
+    font-family: mosmos;
+    letter-spacing: 3px;
+    color: #07a4f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: max-content;
+    text-shadow: 0 0 1px black;
 }
-.character-group{
+
+.timer:before {
+    content: 'Czas';
+}
+
+#timer span {
+    letter-spacing: 0;
+}
+
+.character-group {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: strong-brain;
     height: min-content;
 }
-.character-group .character{
-    font-weight: bold;
+
+.character-group .character {
+
     display: block;
     color: #ffffff;
     font-size: 70px;
     height: min-content;
     text-decoration: #07a4f2;
+    font-family: boldenVan;
     padding: 0;
     margin: 0;
-    text-shadow: 2px 2px 2px black;
 }
-.character-group .symbol{
+
+.character-group .symbol {
     font-weight: bold;
-    font-variant: small-caps;
+    font-family: mosmos;
     display: block;
     word-spacing: 0;
     text-space: 2;
@@ -203,9 +270,9 @@ body{
     font-size: 46px;
     padding: 0;
     margin: 0;
-    text-shadow: 2px 2px 2px black;
 }
-.cancel-game-btn{
+
+.cancel-game-btn {
     color: white;
     border: none;
     font-size: 15px;
@@ -213,13 +280,12 @@ body{
     background: #d33939;
     cursor: pointer;
     text-transform: uppercase;
-    font-weight: bold;
-    font-family: back-grove;
-    letter-spacing: 1px;
+    font-family: boldenVan;
+    letter-spacing: 2px;
 }
 
 /*================ modal ========================*/
-#modal{
+#modal {
     position: absolute;
     background: white;
     top: 50%;
@@ -230,33 +296,46 @@ body{
     flex-direction: column;
     z-index: 11;
     animation: animate-modal 0.25s forwards ease-in-out;
+    border-radius: 12px;
 }
+
+.highlight {
+    color: #07a4f2 !important;
+    transform: scale(1.3);
+    transition: 0.1s;
+}
+
 @keyframes animate-modal {
-    from{
+    from {
         opacity: 0;
         transform: translateX(-50%) translateY(100%);
-    }to{
-    opacity: 1;
-             transform: translateX(-50%) translateY(-50%);
-         }
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%);
+    }
 }
-.modal-title{
+
+.modal-title {
     color: #07a4f2;
-    font-family: back-grove;
-    font-size: clamp(30px, 10vw, 50px);
+    font-family: poppins;
+    font-weight: bold;
+    font-size: 35px !important;
     margin: 10px 0;
-    text-shadow: 2px 2px 2px black;
 }
-.modal-button{
+
+.modal-button {
     padding: 10px 15px;
     color: white;
-    text-shadow: 2px 2px 2px black;
     background: #cb3b3b;
+    font-family: poppins;
+    font-size: 15px;
     text-transform: uppercase;
     border: none;
 }
+
 /*================ backdrop ========================*/
-.backdrop{
+.backdrop {
     background: rgba(0, 0, 0, 0.47);
     position: fixed;
     width: 100%;
@@ -264,118 +343,105 @@ body{
     z-index: 10;
     animation: animate-backdrop 0.3s forwards ease-in-out;
 }
+
 @keyframes animate-backdrop {
-    from{
+    from {
         opacity: 0;
-    }to{
+    }
+    to {
         opacity: 1;
-          }
-}
-
-
-@media screen and (max-width: 700px) and (min-height: 750px) and (max-height: 1000px){
-    #main-menu{
-        width: 100%;
-        height: min-content;
-        top: clamp(0px, 2vh, 50px);
-        gap: 0;
-        padding: 20px 0;
-        max-width: 600px;
-    }
-    #game-title{
-        font-size: clamp(27px, 10vw, 50px);
-    }
-    .list-head,
-    .main-menu-headers{
-        font-size: clamp(20px, 8vw, 25px);
-    }
-
-    .text-style,
-    .list li:first-letter,
-    .list{
-        font-size: clamp(9px, 8vw, 13px);
-    }
-
-    #board{
-        width: clamp(270px, 15vw, 700px);
-        grid-template-columns: repeat(4, min-content);
-        gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 100px);
-    }
-    .character-group .character{
-        font-size: clamp(40px, 10vw, 80px);
-    }
-    .character-group .symbol{
-        font-size: clamp(20px, 10vw, 30px);
-    }
-    #timer{
-        font-size: clamp(30px, 10vw, 60px);
-    }
-    .cancel-game-btn{
-        padding: 5px 7px;
-        font-size: 11px;
-    }
-    .level-button{
-        font-size: 10px;
-        padding: 5px 10px;
-    }
-    #modal{
-        padding: 20px;
-        width: 90%;
-        max-width: 400px;
     }
 }
 
+@media screen and (max-height: 600px) {
 
-@media screen and (max-width: 700px) and (max-height: 749px){
-    #alphabet-game{
+}
+
+@media screen and (max-width: 700px) {
+    #alphabet-game {
     }
-    #game-title{
-        font-size: clamp(20px, 10vw, 40px);
-    }
-    .list-head,
-    .main-menu-headers{
-        font-size: clamp(10px, 10vw, 20px);
-    }
-    .text-style,
-    .list li:first-letter,
-    .list{
-        font-size: clamp(9px, 5vw, 13px);
-    }
-    #main-menu{
+
+    #main-menu {
         width: 100%;
-        height: min-content;
-        gap: 0;
         top: 0;
-        padding: 10px 0;
-        height: min-content;
-        max-width: 500px;
     }
-    #board{
-        width: clamp(270px, 15vw, 700px);
-        justify-content: center;
-        grid-template-columns: repeat(4, min-content);
-        gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 150px);
-    }
-    .character-group .character{
-        font-size: clamp(30px, 12vw, 60px);
-    }
-    .character-group .symbol{
-        font-size: clamp(16px, 8vw, 30px);
-    }
-    #timer{
-        font-size: clamp(30px, 10vw, 60px);
-    }
-    .cancel-game-btn{
-        padding: 5px 7px;
-        font-size: 11px;
-    }
-    .level-button{
-        font-size: 10px;
-        padding: 5px 10px;
-    }
-    #modal{
-        padding: 20px;
-        width: 90%;
+
+    #modal {
         max-width: 400px;
+        width: 100%;
+    }
+
+    .modal-title {
+        font-size: clamp(20px, 3vw, 35px) !important;
+    }
+
+    .modal-content p {
+        font-size: clamp(8px, 5vw, 15px);
+    }
+
+
+    #game-title {
+        font-size: clamp(15px, 10vw, 80px);
+    }
+
+    .main-menu-headers,
+    .list-head {
+        font-size: clamp(10px, 5vw, 30px);
+    }
+
+    .list {
+        padding: 0;
+        margin: 0;
+        width: 90%;
+    }
+
+    .text-style,
+    .list li:first-letter,
+    .list li {
+        font-size: clamp(8px, 3vw, 18px);
+    }
+
+    #rules {
+        max-width: 700px;
+        width: 90%;
+    }
+
+    .modal-button,
+    .cancel-game-btn,
+    .level-button {
+        padding: 5px clamp(5px, 3vw, 8px);
+        font-size: clamp(8px, 3vw, 15px);
+    }
+
+    .board-container {
+        gap: 0 clamp(10px, 15vw, 100px);
+    }
+
+    .character-group .character {
+        font-size: clamp(30px, 10vw, 70px);
+    }
+
+    .character-group .symbol {
+        font-size: clamp(10px, 10vw, 36px);
+    }
+
+    .timer {
+        font-size: clamp(10px, 10vw, 60px);
+    }
+
+    .board-container {
+        overflow-y: auto;
+    }
+
+    #board {
+        justify-content: flex-start;
+        height: auto;
+        gap: 20px;
+    }
+
+    .game-header {
+        top: 0;
+        position: sticky;
     }
 }
+
