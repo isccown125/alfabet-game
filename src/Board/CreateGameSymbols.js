@@ -1,41 +1,23 @@
-import { random } from "./utils.js";
-import { Component } from "./components.js";
+import { random } from "../utils.js";
+import { Component } from "../components.js";
 
-export class Board {
-  boardHtmlElement = undefined;
-  boardHeaderHtmlElement = undefined;
-  createdElements = [];
-  alphabet = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "R",
-    "S",
-    "T",
-    "U",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
-  symbols = ["L", "P", "O"];
-  groupedAlphabet = [];
+export class CreateGameSymbols {
+  alphabet = [];
+  symbols = [];
   countSymbols = 0;
   maxSymbolRepeition = 2;
   lastSymbol = undefined;
+  createdElements = [];
+
+  constructor(alphabet, symbols) {
+    this.alphabet = alphabet;
+    this.symbols = symbols;
+    this.elementsGroup();
+    this.groupedAlphabet.forEach((el) => {
+      this.createTextGroup(el.character, el.symbol);
+    });
+    return this.createdElements;
+  }
 
   randomizeSymbols() {
     let randomIndex = random(1, this.symbols.length);
@@ -81,34 +63,5 @@ export class Board {
       .setChild({ htmlElement: span }, { htmlElement: span1 }).htmlElement;
     this.createdElements.push({ group: div, character: span, symbol: span1 });
     return div;
-  }
-
-  createGame() {
-    this.elementsGroup();
-  }
-
-  render() {
-    this.gameHtmlElement = document.getElementById("alphabet-game");
-    this.boardHtmlElement = document.createElement("div");
-    this.boardHeaderHtmlElement = document.createElement("header");
-    this.boardHtmlElement.id = "board";
-    this.boardHeaderHtmlElement.className = "game-header";
-    this.createGame();
-    this.gameHtmlElement.append(this.boardHeaderHtmlElement);
-    this.gameHtmlElement.append(this.boardHtmlElement);
-
-    if (this.groupedAlphabet) {
-      this.createdElements = [];
-      this.groupedAlphabet.forEach((el) => {
-        const group = this.createTextGroup(el.character, el.symbol);
-        this.boardHtmlElement.append(group);
-      });
-    }
-    console.log(
-      this.gameHtmlElement,
-      this.boardHtmlElement,
-      this.groupedAlphabet,
-      this.createdElements
-    );
   }
 }

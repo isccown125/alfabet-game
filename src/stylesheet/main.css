@@ -29,8 +29,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: poppins;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     user-select: unset;
 }
 
@@ -64,12 +64,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px 0;
+    padding: 20px 0;
     width: 700px;
     height: min-content;
     gap: 20px;
     position: relative;
-    top: 50px;
+    top: 10px;
     animation: animate-main-menu 0.15s 1 forwards;
     border-radius: 4px;
 }
@@ -79,6 +79,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 @keyframes animate-main-menu {
@@ -113,15 +114,24 @@ body {
 }
 
 #rules {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     width: 90%;
+    overflow: hidden;
+    max-width: 700px;
 }
 
 .text-style {
+    display: flex;
+    justify-content: center;
+    width: 90%;
     font-size: clamp(8px, 3vw, 18px);
 }
 
-#actions {
+.actions {
     display: flex;
     gap: 20px;
 }
@@ -181,16 +191,23 @@ body {
 /*================ board ========================*/
 
 #board {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-container {
     width: 100%;
     max-width: 600px;
+    gap: 0 100px;
+    display: grid;
     height: min-content;
     justify-items: center;
     justify-content: center;
     align-content: center;
     align-items: center;
-    grid-template-columns: repeat(4, 70px);
-    gap: 0 100px;
+    grid-template-columns: repeat(4, min-content);
 }
 
 .game-header {
@@ -201,15 +218,21 @@ body {
 }
 
 .timer {
-    display: flex;
-    color: #ffffff;
     font-weight: bold;
     font-size: 60px;
     font-family: mosmos;
+    letter-spacing: 3px;
+    color: #07a4f2;
+    display: flex;
     align-items: center;
-    letter-spacing: 4px;
-    font-weight: bold;
-    gap: 10px;
+    justify-content: center;
+    gap: 2px;
+    min-width: max-content;
+    text-shadow: 0 0 1px black;
+}
+
+.timer:before {
+    content: 'Czas';
 }
 
 #timer span {
@@ -298,7 +321,6 @@ body {
     font-family: poppins;
     font-weight: bold;
     font-size: 35px !important;
-    font-size: clamp(30px, 10vw, 50px);
     margin: 10px 0;
 }
 
@@ -331,130 +353,95 @@ body {
     }
 }
 
+@media screen and (max-height: 600px) {
 
-@media screen and (max-width: 700px) and (min-height: 750px) and (max-height: 1000px) {
-    #main-menu {
-        width: 100%;
-        height: min-content;
-        top: clamp(0px, 2vh, 50px);
-        gap: 0;
-        padding: 20px 0;
-        max-width: 600px;
-    }
-
-    #game-title {
-        font-size: clamp(27px, 10vw, 50px);
-    }
-
-    .list-head,
-    .main-menu-headers {
-        font-size: clamp(20px, 8vw, 25px);
-    }
-
-    .text-style,
-    .list li:first-letter,
-    .list {
-        font-size: clamp(9px, 8vw, 13px);
-    }
-
-    #board {
-        width: clamp(270px, 15vw, 700px);
-        grid-template-columns: repeat(4, min-content);
-        gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 100px);
-    }
-
-    .character-group .character {
-        font-size: clamp(40px, 10vw, 80px);
-    }
-
-    .character-group .symbol {
-        font-size: clamp(20px, 10vw, 30px);
-    }
-
-    #timer {
-        font-size: clamp(30px, 10vw, 60px);
-    }
-
-    .cancel-game-btn {
-        padding: 5px 7px;
-        font-size: 11px;
-    }
-
-    .level-button {
-        font-size: 10px;
-        padding: 5px 10px;
-    }
-
-    #modal {
-        padding: 20px;
-        width: 90%;
-        max-width: 400px;
-    }
 }
 
-
-@media screen and (max-width: 700px) and (max-height: 749px) {
+@media screen and (max-width: 700px) {
     #alphabet-game {
     }
 
-    #game-title {
-        font-size: clamp(20px, 10vw, 40px);
+    #main-menu {
+        width: 100%;
+        top: 0;
     }
 
-    .list-head,
-    .main-menu-headers {
-        font-size: clamp(10px, 10vw, 20px);
+    #modal {
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .modal-title {
+        font-size: clamp(20px, 3vw, 35px) !important;
+    }
+
+    .modal-content p {
+        font-size: clamp(8px, 5vw, 15px);
+    }
+
+
+    #game-title {
+        font-size: clamp(15px, 10vw, 80px);
+    }
+
+    .main-menu-headers,
+    .list-head {
+        font-size: clamp(10px, 5vw, 30px);
+    }
+
+    .list {
+        padding: 0;
+        margin: 0;
+        width: 90%;
     }
 
     .text-style,
     .list li:first-letter,
-    .list {
-        font-size: clamp(9px, 5vw, 13px);
+    .list li {
+        font-size: clamp(8px, 3vw, 18px);
     }
 
-    #main-menu {
-        width: 100%;
-        height: min-content;
-        gap: 0;
-        top: 0;
-        padding: 10px 0;
-        height: min-content;
-        max-width: 500px;
+    #rules {
+        max-width: 700px;
+        width: 90%;
     }
 
-    #board {
-        width: clamp(270px, 15vw, 700px);
-        justify-content: center;
-        grid-template-columns: repeat(4, min-content);
-        gap: clamp(0px, 2vh, 20px) clamp(30px, 15vw, 150px);
+    .modal-button,
+    .cancel-game-btn,
+    .level-button {
+        padding: 5px clamp(5px, 3vw, 8px);
+        font-size: clamp(8px, 3vw, 15px);
+    }
+
+    .board-container {
+        gap: 0 clamp(10px, 15vw, 100px);
     }
 
     .character-group .character {
-        font-size: clamp(30px, 12vw, 60px);
+        font-size: clamp(30px, 10vw, 70px);
     }
 
     .character-group .symbol {
-        font-size: clamp(16px, 8vw, 30px);
+        font-size: clamp(10px, 10vw, 36px);
     }
 
-    #timer {
-        font-size: clamp(30px, 10vw, 60px);
+    .timer {
+        font-size: clamp(10px, 10vw, 60px);
     }
 
-    .cancel-game-btn {
-        padding: 5px 7px;
-        font-size: 11px;
+    .board-container {
+        overflow-y: auto;
     }
 
-    .custom-level-button,
-    .level-button {
-        font-size: 10px;
-        padding: 5px 10px;
+    #board {
+        justify-content: flex-start;
+        height: auto;
+        gap: 20px;
     }
 
-    #modal {
-        padding: 20px;
-        width: 90%;
-        max-width: 400px;
+    .game-header {
+        top: 0;
+        position: sticky;
     }
 }
+

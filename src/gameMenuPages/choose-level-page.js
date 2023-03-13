@@ -1,6 +1,6 @@
 import { Component } from "../components.js";
 
-export const chooseLevelPage = () => {
+export const chooseLevelPage = (buttonsContainer) => {
   const gameTitle = new Component()
     .create("p")
     .setId("game-title")
@@ -89,49 +89,6 @@ export const chooseLevelPage = () => {
     .setClassList("main-menu-headers")
     .setTextContext("Wybierz poziom").htmlElement;
 
-  const levelButton = new Component()
-    .create("button")
-    .setClassList("level-button")
-    .setAttributes({
-      name: "data-level",
-      value: "EASY_LEVEL",
-    })
-    .setTextContext("ŁATWY").htmlElement;
-  const levelButton1 = new Component()
-    .create("button")
-    .setClassList("level-button")
-    .setAttributes({
-      name: "data-level",
-      value: "MEDIUM_LEVEL",
-    })
-    .setTextContext("ŚREDNI").htmlElement;
-  const levelButton2 = new Component()
-    .create("button")
-    .setClassList("level-button")
-    .setAttributes({
-      name: "data-level",
-      value: "HARD_LEVEL",
-    })
-    .setTextContext("TRUDNY").htmlElement;
-  const levelButton3 = new Component()
-    .create("button")
-    .setClassList("level-button")
-    .setAttributes({
-      name: "data-level",
-      value: "CUSTOM_LEVEL",
-    })
-    .setTextContext("NIESTANDARDOWY").htmlElement;
-
-  const actions = new Component()
-    .create("div")
-    .setChild(
-      { htmlElement: levelButton },
-      { htmlElement: levelButton1 },
-      { htmlElement: levelButton2 }
-      // { htmlElement: levelButton3 }
-    )
-    .setId("actions").htmlElement;
-
   const chooseLevelPage = new Component()
     .create("div")
     .setId("choose-level")
@@ -139,7 +96,7 @@ export const chooseLevelPage = () => {
       { htmlElement: gameTitle },
       { htmlElement: gameRuleContainer },
       { htmlElement: levelHeader },
-      { htmlElement: actions }
+      { htmlElement: buttonsContainer }
     ).htmlElement;
 
   return { id: "choose-level", htmlElement: chooseLevelPage };
