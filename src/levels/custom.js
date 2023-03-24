@@ -2,6 +2,7 @@ export class Custom {
   gameTime = 1000 * 60;
   name = "custom";
   effects = [];
+  randomEffects = [];
   alphabet = [
     "A",
     "B",
@@ -28,7 +29,15 @@ export class Custom {
     "Y",
     "Z",
   ];
-  symbols = ["L", "P", "saddas"];
+  symbols = ["L", "P", "O"];
+  highlightOptions = {
+    normal: false,
+    standard: false,
+    reverse: false,
+    highlightSpeed: 1000,
+  };
+  accelerationPeace = false;
+  randomEffects = false;
 
   setTime(time = this.gameTime) {
     this.gameTime = time;

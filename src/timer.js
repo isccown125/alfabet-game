@@ -72,14 +72,12 @@ export class Timer {
         this.timerHtmlElement.textContent = `60s`;
         return;
       }
-      this.timerHtmlElement.textContent = `${
-        this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
-      }s`;
+      this.timerHtmlElement.textContent = `${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
+        }s`;
       return;
     }
-    this.timerHtmlElement.textContent = `${
-      this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
-    }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
+    this.timerHtmlElement.textContent = `${this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
+      }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
   }
 
   render() {
@@ -92,11 +90,12 @@ export class Timer {
     this.remainingMilliseconds = this.currentTimeInMilliseconds;
     this.timerId = setInterval(() => {
       if (this.remainingMilliseconds >= 0) {
-        this.updateTimerHtmlElement();
         this.remainingMilliseconds -= 1000;
+        this.updateTimerHtmlElement();
       } else {
         this.stopTimer();
       }
-    }, this.options.intervalTime);
+    }, 1000);
+
   }
 }

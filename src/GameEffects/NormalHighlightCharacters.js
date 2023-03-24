@@ -3,8 +3,12 @@ export class NormalHighlightCharacters {
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
+  fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
+  effectName = 'NORMAL_HIGHLIGHT';
+  index = 0;
+
 
   setCharacters(characters) {
     this.characters = characters;
@@ -12,9 +16,8 @@ export class NormalHighlightCharacters {
 
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
-    if (index % 4 === 0) {
-      this.scrollToCurrentCharacter(elementForHighlight);
-    }
+    const elementPos = elementForHighlight.getBoundingClientRect()
+    window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
 
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -30,24 +33,20 @@ export class NormalHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
-  scrollToCurrentCharacter(character) {
-    const elementBoudingRect = character.getBoundingClientRect();
-    const { top, left } = elementBoudingRect;
-    const x = left;
-    const y = window.scrollY + top - 50;
-    window.scrollTo(x, y);
-  }
-
   start() {
-    let index = 0;
     const alphabetLength = this.characters.length;
     this.timerId = setInterval(() => {
-      if (alphabetLength === index) {
-        index = 0;
+      if (alphabetLength === this.index) {
+        this.index = 0;
       }
-      this.highlight(index);
-      index++;
+      this.highlight(this.index);
+      this.index++;
     }, this.intervalTime);
+  }
+
+  update() {
+    clearInterval(this.timerId)
+    this.start();
   }
 
   stop() {
@@ -60,6 +59,7 @@ export class NormalHighlightCharacters {
     }
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
+    this.currentIndex = 0
     this.options = { randomize: false, reverse: false };
   }
 }

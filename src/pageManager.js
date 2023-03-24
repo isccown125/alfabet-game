@@ -11,10 +11,10 @@ export class PageManager {
 
   setCurrentPage(pageID) {
     const pageFound = this.pages.find((el) => pageID === el.id);
-    console.log(pageFound);
     if (this.lastPage) {
+      this.lastPage = this.currentPage;
       this.currentPage = pageFound.htmlElement;
-      this.lastPage.parentNode.replaceChild(this.currentPage, this.lastPage);
+      this.rootForRenderPage.replaceChild(this.currentPage, this.lastPage);
       return;
     }
     this.lastPage = this.currentPage;
@@ -31,5 +31,5 @@ export class PageManager {
     return this.pages.find((el) => pageID === el.id);
   }
 
-  update() {}
+  update() { }
 }

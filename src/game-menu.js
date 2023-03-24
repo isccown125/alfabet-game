@@ -14,12 +14,12 @@ export class GameMenu {
     game.append(this.gameMenu);
   }
 
-  hideMenu() {
-    this.gameMenu.classList.add("d-none");
+  static hideMenu() {
+    document.getElementById('main-menu').classList.add('d-none')
   }
 
-  showMenu() {
-    this.gameMenu.classList.remove("d-none");
+  static showMenu() {
+    document.getElementById('main-menu').classList.remove('d-none')
   }
 
   init() {

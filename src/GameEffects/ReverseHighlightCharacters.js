@@ -3,26 +3,20 @@ export class ReverseHighlightCharacters {
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
+  fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
+  effectName = 'REVERSE_HIGHLIGHT';
+  index = 0
 
   setCharacters(characters) {
     this.characters = characters;
   }
 
-  scrollToCurrentCharacter(character) {
-    const elementBoudingRect = character.getBoundingClientRect();
-    const { top, left } = elementBoudingRect;
-    const x = left;
-    const y = window.scrollY + top - 50;
-    window.scrollTo(x, y);
-  }
-
   highlight(index) {
-    const elementForHighlight = this.characters[index - 1].character;
-    if (index % 4 === 0) {
-      this.scrollToCurrentCharacter(elementForHighlight);
-    }
+    const elementForHighlight = this.characters[index].character;
+    const elementPos = elementForHighlight.getBoundingClientRect()
+    window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
 
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -38,16 +32,21 @@ export class ReverseHighlightCharacters {
   }
 
   start() {
-    const alphabetLength = this.characters.length;
-    let index = alphabetLength;
+    const alphabetLength = this.characters.length - 1;
+    this.index = alphabetLength;
     this.timerId = setInterval(() => {
-      this.highlight(index);
-      if (index === 1) {
-        index = alphabetLength;
+      this.highlight(this.index);
+      if (this.index === 0) {
+        this.index = alphabetLength;
         return;
       }
-      index--;
+      this.index--;
     }, this.intervalTime);
+  }
+
+  update() {
+    clearInterval(this.timerId)
+    this.start();
   }
 
   stop() {
@@ -58,6 +57,7 @@ export class ReverseHighlightCharacters {
     if (this.lastHighlightElement) {
       this.lastHighlightElement.classList.remove(this.className);
     }
+    this.index = 0
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
   }

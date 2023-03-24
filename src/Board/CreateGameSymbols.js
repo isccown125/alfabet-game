@@ -20,7 +20,8 @@ export class CreateGameSymbols {
   }
 
   randomizeSymbols() {
-    let randomIndex = random(1, this.symbols.length);
+    let randomIndex = random(0, this.symbols.length - 1);
+
     if (
       this.lastSymbol === this.symbols[randomIndex] &&
       this.countSymbols < this.maxSymbolRepeition
@@ -35,7 +36,7 @@ export class CreateGameSymbols {
     }
     if (this.countSymbols === this.maxSymbolRepeition) {
       while (this.symbols[randomIndex] === this.lastSymbol) {
-        randomIndex = random(1, this.symbols.length);
+        randomIndex = random(1, this.symbols.length - 1);
       }
       this.countSymbols = 0;
     }
