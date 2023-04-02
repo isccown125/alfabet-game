@@ -8,21 +8,23 @@ export class RandomHighlightCharacters {
   fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
-  effectName = 'RANDOM_HIGHLIGHT';
-  index = 0
+  effectName = "RANDOM_HIGHLIGHT";
+  index = 0;
   lastIndex = 0;
-  currentHighlightElementGroup = undefined
+  currentHighlightElementGroup = undefined;
   subscribers = [];
+  canBeSkipped = false;
+  skipTimer = undefined;
+  skipTimer1 = undefined;
 
   setCharacters(characters) {
     this.characters = characters;
   }
 
-
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
-    this.currentHighlightElementGroup = this.characters[index]
-    const elementPos = elementForHighlight.getBoundingClientRect()
+    this.currentHighlightElementGroup = this.characters[index];
+    const elementPos = elementForHighlight.getBoundingClientRect();
     window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
 
     if (!this.lastHighlightElement) {
@@ -37,15 +39,28 @@ export class RandomHighlightCharacters {
     this.lastHighlightElement.classList.remove(this.className);
     this.lastHighlightElement = this.currentHighlightElement;
   }
+
   getCurrentHighlightElement() {
-    return this.currentHighlightElementGroup
+    return this.currentHighlightElementGroup;
   }
+
   next() {
-    const alphabetLength = this.characters.length - 1;
-    this.index = random(0, alphabetLength);
-    this.lastIndex = this.index;
-    this.update();
+    if (this.canBeSkipped) {
+      clearInterval(this.timerId);
+      clearTimeout(this.skipTimer);
+      clearTimeout(this.skipTimer1);
+      if (this.characters.length === this.index) {
+        this.index = 0;
+      }
+      this.highlight(this.index);
+      this.subscribers.forEach((el) => {
+        el(this.currentHighlightElementGroup);
+      });
+      this.index++;
+      this.start();
+    }
   }
+
   start() {
     const alphabetLength = this.characters.length - 1;
     this.index = random(0, alphabetLength);
@@ -60,12 +75,13 @@ export class RandomHighlightCharacters {
       this.lastIndex = this.index;
       this.highlight(this.index);
       this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup)
-      })
+        el(this.currentHighlightElementGroup);
+      });
     }, this.intervalTime);
   }
+
   update() {
-    clearInterval(this.timerId)
+    clearInterval(this.timerId);
     this.start();
   }
 
@@ -77,13 +93,14 @@ export class RandomHighlightCharacters {
     if (this.lastHighlightElement) {
       this.lastHighlightElement.classList.remove(this.className);
     }
-    this.lastIndex = 0
-    this.index = 0
+    this.lastIndex = 0;
+    this.index = 0;
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
     this.subscribers = [];
   }
+
   subscribe(subscriber) {
-    this.subscribers.push(subscriber)
+    this.subscribers.push(subscriber);
   }
 }
