@@ -14,23 +14,21 @@ export class AlphabetGame extends Board {
   timer = undefined;
   timerHtmlElement = undefined;
   currentLevel = undefined;
-  lastGameEffect = undefined
-  currentGameEffect = undefined
+  lastGameEffect = undefined;
+  currentGameEffect = undefined;
   randomEffectTime = {
     min: 1000 * 24,
     max: 1000 * 30,
-  }
+  };
   fasterRateTime = {
     value: 100,
     minIntevalTime: 300,
-    howManySecondsChange: 24000
-  }
-  initialTimerTime = 3000
+    howManySecondsChange: 24000,
+  };
+  initialTimerTime = 3000;
 
   effectStarted = false;
   timers = [];
-
-
 
   constructor(level) {
     super();
@@ -38,8 +36,8 @@ export class AlphabetGame extends Board {
   }
 
   startEffects() {
-    this.currentGameEffect = this.currentLevel.effects[0]
-    this.currentGameEffect
+    this.currentGameEffect = this.currentLevel.effects[0];
+    this.currentGameEffect;
     this.currentGameEffect.start();
   }
 
@@ -51,19 +49,22 @@ export class AlphabetGame extends Board {
 
   initialTimer() {
     const timer = new Timer(this.initialTimerTime, { parent: document.body });
-    const label = new Component().create('span').setTextContext('Przygotuj się...').setClassList('timer-label').htmlElement
+    const label = new Component()
+      .create("span")
+      .setTextContext("Przygotuj się...")
+      .setClassList("timer-label").htmlElement;
 
     timer.render();
-    timer.timerHtmlElement.classList.add('initialTimer')
-    timer.timerHtmlElement.prepend(label)
-    const backdropELement = backdrop()
+    timer.timerHtmlElement.classList.add("initialTimer");
+    timer.timerHtmlElement.prepend(label);
+    const backdropELement = backdrop();
     document.body.prepend(backdropELement);
     timer.startTimer();
     setTimeout(() => {
       timer.clearTimer();
       timer.timerHtmlElement.remove();
       backdropELement.remove();
-    }, this.initialTimerTime + 20)
+    }, this.initialTimerTime + 20);
   }
 
   randomEffects() {
@@ -75,68 +76,82 @@ export class AlphabetGame extends Board {
 
     this.currentLevel.effects.forEach((el) => {
       el.setCharacters(this.createdSymbols);
-      el.intervalTime = this.currentLevel.options.highlightOptions.intervalTime
+      el.intervalTime = this.currentLevel.options.highlightOptions.intervalTime;
     });
 
-    let randomDurationEffectTime = random((this.randomEffectTime.min), (this.randomEffectTime.max));
+    let randomDurationEffectTime = random(
+      this.randomEffectTime.min,
+      this.randomEffectTime.max
+    );
     let randomEffectIndex = random(0, this.currentLevel.effects.length - 1);
 
     this.currentGameEffect = this.currentLevel.effects[randomEffectIndex];
 
     if (!this.lastGameEffect) this.lastGameEffect = this.currentGameEffect;
 
-    let effectTimeout = undefined
+    let effectTimeout = undefined;
 
     const randomEffectTimer = setInterval(() => {
       if (!this.effectStarted) {
-        this.effectStarted = true
+        this.effectStarted = true;
         this.currentGameEffect.start();
         effectTimeout = setTimeout(() => {
           this.stopEffects();
-          this.effectStarted = false
+          this.effectStarted = false;
           randomEffectIndex = random(0, this.currentLevel.effects.length - 1);
-          randomDurationEffectTime = random((this.randomEffectTime.min), (this.randomEffectTime.max));
+          randomDurationEffectTime = random(
+            this.randomEffectTime.min,
+            this.randomEffectTime.max
+          );
 
           if (!this.lastGameEffect) {
-            this.currentGameEffect = this.currentLevel.effects[randomEffectIndex];
+            this.currentGameEffect =
+              this.currentLevel.effects[randomEffectIndex];
           }
 
-          if (this.lastGameEffect.effectName === this.currentGameEffect.effectName) {
-            this.lastGameEffectIndex = this.currentGameEffect
-            while (this.lastGameEffect.effectName === this.currentGameEffect.effectName) {
-              randomEffectIndex = random(0, this.currentLevel.effects.length - 1);
-              this.currentGameEffect = this.currentLevel.effects[randomEffectIndex];
+          if (
+            this.lastGameEffect.effectName === this.currentGameEffect.effectName
+          ) {
+            this.lastGameEffectIndex = this.currentGameEffect;
+            while (
+              this.lastGameEffect.effectName ===
+              this.currentGameEffect.effectName
+            ) {
+              randomEffectIndex = random(
+                0,
+                this.currentLevel.effects.length - 1
+              );
+              this.currentGameEffect =
+                this.currentLevel.effects[randomEffectIndex];
             }
           } else {
-            this.lastGameEffect = this.currentGameEffect
-            this.currentGameEffect = this.currentLevel.effects[randomEffectIndex];
+            this.lastGameEffect = this.currentGameEffect;
+            this.currentGameEffect =
+              this.currentLevel.effects[randomEffectIndex];
           }
-        }, randomDurationEffectTime)
+        }, randomDurationEffectTime);
       }
-      this.timers.push({ type: 'timeout', id: effectTimeout })
+      this.timers.push({ type: "timeout", id: effectTimeout });
     }, 500);
-    this.timers.push({ type: 'interval', id: randomEffectTimer })
+    this.timers.push({ type: "interval", id: randomEffectTimer });
   }
 
   fasterRateEffect() {
     const fasterRateTimer = setInterval(() => {
-
       this.currentLevel.effects.forEach((el) => {
         if (this.fasterRateTime.minIntevalTime === el.intervalTime) {
-          clearInterval(fasterRateTimer)
+          clearInterval(fasterRateTimer);
         }
         if (el.intervalTime > this.fasterRateTime.minIntevalTime) {
           el.intervalTime -= this.fasterRateTime.value;
         } else {
           el.intervalTime = this.fasterRateTime.minIntevalTime;
         }
-
-      })
+      });
       this.currentGameEffect.update();
-    }, this.fasterRateTime.howManySecondsChange)
-    this.timers.push({ type: 'interval', id: fasterRateTimer })
+    }, this.fasterRateTime.howManySecondsChange);
+    this.timers.push({ type: "interval", id: fasterRateTimer });
   }
-
 
   clearTimers() {
     this.timers.forEach((el) => {
@@ -157,14 +172,15 @@ export class AlphabetGame extends Board {
         setTimeout(() => {
           this.stopEffects();
           this.startEffects();
-        }, 1000)
+        }, 1000);
       } else {
         this.startEffects();
       }
     }
 
     if (this.currentLevel.randomEffects) this.randomEffects();
-    if (this.currentLevel.fasterRate) { }
+    if (this.currentLevel.fasterRate) {
+    }
     this.timers.push({ type: "timeout", id: gameTimer });
   }
 
@@ -173,22 +189,28 @@ export class AlphabetGame extends Board {
 
     this.renderGame();
 
-    this.initialTimer()
+    this.initialTimer();
 
     GameMenu.hideMenu();
     setTimeout(() => {
-      let timerForAnswer = undefined
+      let timerForAnswer = undefined;
       this.timer.startTimer();
       this.gameAnswers.addListener((e) => {
         if (e.target.dataset.answer) {
           this.gameAnswers.setUserAnswear(e.target.dataset.answer);
           console.log(this.gameAnswers);
-          console.log(points.currentPoints, `correct answers:${points.correctAnswers}`, `incorrect answers:${points.incorrectAnswers}`)
+          console.log(
+            points.currentPoints,
+            `correct answers:${points.correctAnswers}`,
+            `incorrect answers:${points.incorrectAnswers}`
+          );
           clearTimeout(timerForAnswer);
-          this.gameAnswers.checkAnswer() ? points.addPoints() : points.substractPoints();
+          this.gameAnswers.checkAnswer()
+            ? points.addPoints()
+            : points.substractPoints();
           this.currentGameEffect.next();
         }
-      })
+      });
 
       if (this.currentLevel.effects && !this.currentLevel.randomEffects) {
         this.startEffects();
@@ -202,17 +224,22 @@ export class AlphabetGame extends Board {
       }
 
       if (this.currentLevel.effects !== undefined) {
-        this.currentLevel.effects.forEach(el => {
+        this.currentLevel.effects.forEach((el) => {
           el.subscribe((currentEl) => {
             this.gameAnswers.setCorrentAnswear(currentEl.values.symbol);
             timerForAnswer = setTimeout(() => {
-              this.gameAnswers.checkAnswer() ? points.addPoints() : points.substractPoints();
-              console.log(points.currentPoints, `correct answers:${points.correctAnswers}`, `incorrect answers:${points.incorrectAnswers}`)
-            }, this.currentGameEffect.intervalTime)
-          })
-        })
+              this.gameAnswers.checkAnswer()
+                ? points.addPoints()
+                : points.substractPoints();
+              console.log(
+                "Punkty: " + points.currentPoints,
+                `correct answers:${points.correctAnswers}`,
+                `incorrect answers:${points.incorrectAnswers}`
+              );
+            }, this.currentGameEffect.intervalTime);
+          });
+        });
       }
-
 
       const gameTimer = setTimeout(() => {
         if (this.currentLevel !== undefined) {
@@ -236,7 +263,6 @@ export class AlphabetGame extends Board {
       this.clearTimers();
       this.finishGame();
     });
-
   }
 
   finishGame() {
@@ -246,7 +272,7 @@ export class AlphabetGame extends Board {
     GameMenu.showMenu();
     this.currentLevel = undefined;
     this.currentGameEffect = undefined;
-    this.lastGameEffect = undefined
+    this.lastGameEffect = undefined;
   }
 
   createTimer(time) {
