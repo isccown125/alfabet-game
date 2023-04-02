@@ -32,6 +32,10 @@ export class Hard {
   ];
   symbols = ["L", "P", "O"];
 
+  constructor() {
+    this.effects[0].intervalTime = 800
+  }
+
   setTime(time = this.gameTime) {
     this.gameTime = time;
   }
@@ -40,7 +44,7 @@ export class Hard {
     effects.forEach((el) => this.effects.push(el));
   }
 
-  setAlphabet(alphabet) {}
+  setAlphabet(alphabet) { }
 
-  setSymbols(symbols) {}
+  setSymbols(symbols) { }
 }

@@ -3,8 +3,7 @@ import { CustomLevelPage } from "./gameMenuPages/custom-level-page.js";
 import { chooseLevelPage } from "./gameMenuPages/choose-level-page.js";
 import { LevelManager } from "./levels/LevelManager.js";
 import { LevelFactory } from "./levels/LevelFactory.js";
-import { AlphabetGame } from "./alfabet-game.js";
-
+import { AlphabetGame } from "./game/alfabet-game.js";
 
 class App {
   static init() {
@@ -24,7 +23,7 @@ class App {
           el.setCharacters(game.createdSymbols);
         });
       }
-      game.startGame()
+      game.startGame();
     });
 
     levelManager.subscribe((selectedLevel) => {
@@ -48,9 +47,9 @@ class App {
 
     customLevelPage.subscribe((data) => {
       if (data === "choose-level") {
-        gameMenu.pageManager.setCurrentPage(data)
+        gameMenu.pageManager.setCurrentPage(data);
       }
-    })
+    });
   }
 }
 

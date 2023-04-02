@@ -1,4 +1,4 @@
-export const showModal = (title, description)=>{
+export const showModal = (title, description) => {
     const modal = document.createElement('div')
     modal.innerHTML = `
         <header>
@@ -15,14 +15,14 @@ export const showModal = (title, description)=>{
     button.className = 'modal-button'
     modal.append(button)
     const modalBackdrop = backdrop();
-    button.addEventListener('click', ()=>{
+    button.addEventListener('click', () => {
         modal.remove();
         modalBackdrop.remove();
     })
     document.body.prepend(modal);
 }
 
-const backdrop = ()=>{
+export const backdrop = () => {
     const backdrop = document.createElement('div');
     backdrop.className = 'backdrop'
     document.body.prepend(backdrop);

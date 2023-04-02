@@ -32,6 +32,10 @@ export class Medium {
   ];
   symbols = ["L", "P", "O"];
 
+  constructor() {
+    this.effects[0].intervalTime = 1200
+  }
+
   setTime(time = this.gameTime) {
     this.gameTime = time;
   }

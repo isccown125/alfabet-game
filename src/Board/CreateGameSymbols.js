@@ -62,7 +62,7 @@ export class CreateGameSymbols {
       .create("div")
       .setClassList("character-group")
       .setChild({ htmlElement: span }, { htmlElement: span1 }).htmlElement;
-    this.createdElements.push({ group: div, character: span, symbol: span1 });
+    this.createdElements.push({ group: div, character: span, symbol: span1, values: { character, symbol } });
     return div;
   }
 }

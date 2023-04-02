@@ -33,6 +33,11 @@ export class Easy {
   ];
   symbols = ["L", "P", "O"];
 
+  constructor() {
+    this.effects[0].intervalTime = 1500
+  }
+
+
   setCreatedCharacters(characters) {
     this.createdCharacters = characters;
   }
@@ -45,7 +50,7 @@ export class Easy {
     effects.forEach((el) => this.effects.push(el));
   }
 
-  setAlphabet(alphabet) {}
+  setAlphabet(alphabet) { }
 
-  setSymbols(symbols) {}
+  setSymbols(symbols) { }
 }

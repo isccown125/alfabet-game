@@ -30,7 +30,7 @@ body {
   font-family: poppins;
   width: 100vw;
   height: 100vh;
-  user-select: unset;
+  position: relative;
 }
 
 .font-bold {
@@ -47,7 +47,7 @@ body {
   justify-content: flex-start;
   width: 100%;
   min-height: min-content;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
   position: relative;
 }
@@ -181,6 +181,7 @@ body {
   display: flex;
   min-width: 90%;
   flex-direction: column;
+  gap: 10px;
 }
 
 .custom-level-title {
@@ -266,6 +267,7 @@ body {
   justify-content: center;
   align-content: center;
   align-items: center;
+  overflow: hidden;
   grid-template-columns: repeat(4, min-content);
 }
 
@@ -276,22 +278,41 @@ body {
   align-items: center;
 }
 
-.timer {
+.initialTimer,
+.timer,
+.timer span {
   font-weight: bold;
   font-size: 60px;
   font-family: mosmos;
   letter-spacing: 3px;
-  color: #07a4f2;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2px;
   min-width: max-content;
-  text-shadow: 0 0 1px black;
+}
+.initialTimer,
+.timer span {
+  letter-spacing: 3px;
+}
+
+.timer {
+  color: #07a4f2;
+}
+.initialTimer {
+  flex-direction: column;
+  gap: 0;
+  position: fixed;
+  color: #07a4f2;
+  inset: 0 0 0 0;
+  z-index: 20;
 }
 
 .timer:before {
   content: "Czas";
+}
+.initialTimer::before {
+  content: "" !important;
 }
 
 #timer span {
@@ -340,6 +361,16 @@ body {
   text-transform: uppercase;
   font-family: boldenVan;
   letter-spacing: 2px;
+}
+
+#choose-answer {
+  display: flex;
+  gap: 10px;
+  margin: 40px 0;
+  position: sticky;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.514);
+  padding: 20px 20px;
 }
 
 /*================ modal ========================*/
@@ -396,8 +427,8 @@ body {
 .backdrop {
   background: rgba(0, 0, 0, 0.47);
   position: fixed;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 10;
   animation: animate-backdrop 0.3s forwards ease-in-out;
 }

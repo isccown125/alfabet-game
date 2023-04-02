@@ -11,6 +11,7 @@ export class Timer {
     intervalTime: 1000,
     parent: undefined,
   };
+  elementForUpdate = undefined
 
   constructor(
     time,
@@ -58,25 +59,28 @@ export class Timer {
 
   createTimerHtmlElement() {
     const { parent } = this.options;
+    this.elementForUpdate = new Component().create('span').htmlElement
     this.timerHtmlElement = new Component()
       .create("div")
       .setClassList("timer").htmlElement;
+    this.timerHtmlElement.appendChild(this.elementForUpdate)
     if (parent) {
       parent.appendChild(this.timerHtmlElement);
     }
   }
 
+
   updateTimerHtmlElement() {
     if (this.remainingMilliseconds <= 1000 * 60) {
       if (this.remainingMilliseconds === 1000 * 60) {
-        this.timerHtmlElement.textContent = `60s`;
+        this.elementForUpdate.textContent = `60s`;
         return;
       }
-      this.timerHtmlElement.textContent = `${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
+      this.elementForUpdate.textContent = `${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
         }s`;
       return;
     }
-    this.timerHtmlElement.textContent = `${this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
+    this.elementForUpdate.textContent = `${this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
       }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
   }
 
