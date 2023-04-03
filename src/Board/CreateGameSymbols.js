@@ -36,7 +36,7 @@ export class CreateGameSymbols {
     }
     if (this.countSymbols === this.maxSymbolRepeition) {
       while (this.symbols[randomIndex] === this.lastSymbol) {
-        randomIndex = random(1, this.symbols.length - 1);
+        randomIndex = random(0, this.symbols.length - 1);
       }
       this.countSymbols = 0;
     }
@@ -62,7 +62,12 @@ export class CreateGameSymbols {
       .create("div")
       .setClassList("character-group")
       .setChild({ htmlElement: span }, { htmlElement: span1 }).htmlElement;
-    this.createdElements.push({ group: div, character: span, symbol: span1, values: { character, symbol } });
+    this.createdElements.push({
+      group: div,
+      character: span,
+      symbol: span1,
+      values: { character, symbol },
+    });
     return div;
   }
 }

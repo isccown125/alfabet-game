@@ -16,6 +16,7 @@ class Points {
     this.currentPoints += points;
     this.correctAnswers++;
     this.validatePoints();
+    console.log("points added");
   }
 
   substractPoints() {
@@ -26,6 +27,7 @@ class Points {
     this.currentPoints -= points;
     this.incorrectAnswers++;
     this.validatePoints();
+    console.log("points substract");
   }
 
   incraseMultipler(id, value) {

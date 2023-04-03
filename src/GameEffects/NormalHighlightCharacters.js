@@ -7,12 +7,12 @@ export class NormalHighlightCharacters {
   intervalTime = 1000;
   className = "highlight";
   effectName = "NORMAL_HIGHLIGHT";
-  index = 0;
   currentHighlightElementGroup = undefined;
   subscribers = [];
-  canBeSkipped = false;
-  skipTimer = undefined;
-  skipTimer1 = undefined;
+  characterIndexForHighlight = 0;
+  nextCharacterIndexForHighlight = 1;
+  answearTimer = undefined;
+  firstStart = true;
 
   setCharacters(characters) {
     this.characters = characters;
@@ -20,6 +20,7 @@ export class NormalHighlightCharacters {
 
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
+    console.log(index, elementForHighlight);
     this.currentHighlightElementGroup = this.characters[index];
     const elementPos = elementForHighlight.getBoundingClientRect();
     window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
@@ -42,54 +43,54 @@ export class NormalHighlightCharacters {
   }
 
   start() {
-    const alphabetLength = this.characters.length;
-    this.canBeSkipped = false;
-    this.skipTimer1 = setTimeout(() => {
-      this.canBeSkipped = true;
-    }, 100);
-    this.timerId = setInterval(() => {
-      this.skipTimer1 = setTimeout(() => {
-        this.canBeSkipped = true;
-      }, 100);
-
-      this.highlight(this.index);
-      this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup);
-      });
-      this.index++;
-      this.skipTimer = setTimeout(() => {
-        this.canBeSkipped = false;
-      }, this.intervalTime - 100);
-      if (alphabetLength === this.index) {
-        this.index = 0;
+    const alphabetLength = this.characters.length - 1;
+    if (this.firstStart) {
+      this.highlight(this.characterIndexForHighlight);
+      this.timerId = setTimeout(() => {
+        this.next();
+        this.firstStart = false;
+      }, this.intervalTime);
+    } else {
+      // sprawdzenie indexu
+      if (this.characterIndexForHighlight === alphabetLength) {
+        this.characterIndexForHighlight = 0;
+      } else {
+        this.characterIndexForHighlight++;
       }
-    }, this.intervalTime);
-  }
+      // podświetlenie następnej literki
+      this.highlight(this.characterIndexForHighlight);
 
-  next() {
-    if (this.canBeSkipped) {
-      clearInterval(this.timerId);
-      clearTimeout(this.skipTimer);
-      clearTimeout(this.skipTimer1);
-      if (this.characters.length === this.index) {
-        this.index = 0;
-      }
-      this.highlight(this.index);
-      this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup);
-      });
-      this.index++;
-      this.start();
+      // ustawienie czasu na odp
+      this.timerId = setTimeout(() => {
+        this.next();
+      }, this.intervalTime);
     }
   }
 
+  next() {
+    if (this.firstStart) {
+      clearTimeout(this.timerId);
+      this.subscribers.forEach((el) => {
+        el(this.currentHighlightElementGroup);
+      });
+      this.firstStart = false;
+      this.start();
+      return;
+    }
+    clearTimeout(this.timerId);
+    this.subscribers.forEach((el) => {
+      el(this.currentHighlightElementGroup);
+    });
+    this.start();
+  }
+
   update() {
-    clearInterval(this.timerId);
+    clearTimeout(this.timerId);
     this.start();
   }
 
   stop() {
-    clearInterval(this.timerId);
+    clearTimeout(this.timerId);
     if (this.currentHighlightElement) {
       this.currentHighlightElement.classList.remove(this.className);
     }
@@ -98,7 +99,9 @@ export class NormalHighlightCharacters {
     }
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
-    this.index = 0;
+    this.characterIndexForHighlight = 0;
+    this.nextCharacterIndexForHighlight = 1;
+    this.firstStart = true;
     this.subscribers = [];
     this.options = { randomize: false, reverse: false };
   }

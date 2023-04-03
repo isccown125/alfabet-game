@@ -9,6 +9,8 @@ import { backdrop, showModal } from "../modal.js";
 import { GameMenu } from "../game-menu.js";
 import { Component } from "../components.js";
 import { points } from "../GameStats/Points.js";
+import { Statistics } from "../GameStats/Stats.js";
+import { Tips } from "../GameStats/tips.js";
 
 export class AlphabetGame extends Board {
   timer = undefined;
@@ -37,14 +39,12 @@ export class AlphabetGame extends Board {
 
   startEffects() {
     this.currentGameEffect = this.currentLevel.effects[0];
-    this.currentGameEffect;
     this.currentGameEffect.start();
   }
 
   stopEffects() {
-    this.currentLevel.effects.forEach((el) => {
-      el.stop();
-    });
+    this.currentGameEffect = this.currentLevel.effects[0];
+    this.currentGameEffect.stop();
   }
 
   initialTimer() {
@@ -165,26 +165,9 @@ export class AlphabetGame extends Board {
     });
   }
 
-  updateStateGame() {
-    this.createTimer(this.currentLevel.gameTime);
-    if (this.currentLevel.effects && !this.currentLevel.randomEffects) {
-      if (this.currentLevel.options.highlightOptions.intervalTime < 1000) {
-        setTimeout(() => {
-          this.stopEffects();
-          this.startEffects();
-        }, 1000);
-      } else {
-        this.startEffects();
-      }
-    }
-
-    if (this.currentLevel.randomEffects) this.randomEffects();
-    if (this.currentLevel.fasterRate) {
-    }
-    this.timers.push({ type: "timeout", id: gameTimer });
-  }
-
   startGame() {
+    const stats = new Statistics();
+
     this.createTimer(this.currentLevel.gameTime);
 
     this.renderGame();
@@ -193,21 +176,15 @@ export class AlphabetGame extends Board {
 
     GameMenu.hideMenu();
     setTimeout(() => {
-      let timerForAnswer = undefined;
       this.timer.startTimer();
       this.gameAnswers.addListener((e) => {
         if (e.target.dataset.answer) {
           this.gameAnswers.setUserAnswear(e.target.dataset.answer);
-          console.log(this.gameAnswers);
           console.log(
-            points.currentPoints,
+            "Punkty: " + points.currentPoints,
             `correct answers:${points.correctAnswers}`,
             `incorrect answers:${points.incorrectAnswers}`
           );
-          clearTimeout(timerForAnswer);
-          this.gameAnswers.checkAnswer()
-            ? points.addPoints()
-            : points.substractPoints();
           this.currentGameEffect.next();
         }
       });
@@ -222,21 +199,18 @@ export class AlphabetGame extends Board {
       if (this.currentLevel.fasterRate === true) {
         this.fasterRateEffect();
       }
-
       if (this.currentLevel.effects !== undefined) {
         this.currentLevel.effects.forEach((el) => {
           el.subscribe((currentEl) => {
+            console.log(
+              "Punkty: " + points.currentPoints,
+              `correct answers:${points.correctAnswers}`,
+              `incorrect answers:${points.incorrectAnswers}`
+            );
             this.gameAnswers.setCorrentAnswear(currentEl.values.symbol);
-            timerForAnswer = setTimeout(() => {
-              this.gameAnswers.checkAnswer()
-                ? points.addPoints()
-                : points.substractPoints();
-              console.log(
-                "Punkty: " + points.currentPoints,
-                `correct answers:${points.correctAnswers}`,
-                `incorrect answers:${points.incorrectAnswers}`
-              );
-            }, this.currentGameEffect.intervalTime);
+            this.gameAnswers.checkAnswer()
+              ? points.addPoints()
+              : points.substractPoints();
           });
         });
       }
@@ -246,11 +220,32 @@ export class AlphabetGame extends Board {
           this.stopEffects();
         }
         this.finishGame();
-        points.clear();
-        showModal(
-          "Koniec Gry!",
-          "<p>Koniecznie pochwal się na naszym discordzie jak ci poszło!<br>Jeśli masz jakieś uwagi do gry skontaktuj się z nami.</p>"
+        stats.addStatOption(
+          "bad-answers",
+          "Złe odpowiedzi: ",
+          points.incorrectAnswers
         );
+        stats.addStatOption(
+          "good-answers",
+          "Dobre odpowiedzi: ",
+          points.correctAnswers
+        );
+        stats.addStatOption("points", "Punkty: ", points.currentPoints);
+        stats.addStatOption(
+          "multipler",
+          "Mnożnik punktów: ",
+          points.multiplerPoints
+        );
+        const tip = new Tips(points.currentPoints);
+        points.clear();
+        showModal("Koniec Gry!", (content) => {
+          content.innerHTML +=
+            "<p>Koniecznie pochwal się na naszym discordzie jak ci poszło!<br>Jeśli masz jakieś uwagi do gry skontaktuj się z nami.</p>";
+
+          content.innerHTML += "Statystyki:";
+          content.appendChild(stats.getHtmlElement());
+          content.innerHTML += `<p>${tip.getCurrentTip()}</p>`;
+        });
 
         this.timers.push({ type: "timeout", id: gameTimer });
       }, this.currentLevel.gameTime);
@@ -260,6 +255,7 @@ export class AlphabetGame extends Board {
       if (this.currentLevel.effects) {
         this.stopEffects();
       }
+      points.clear();
       this.clearTimers();
       this.finishGame();
     });
