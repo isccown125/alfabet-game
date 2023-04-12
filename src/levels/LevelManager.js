@@ -14,7 +14,7 @@ export class LevelManager {
     this.root.appendChild(this.createButton("easy", "Łatwy"));
     this.root.appendChild(this.createButton("medium", "Średni"));
     this.root.appendChild(this.createButton("hard", "Trudny"));
-    // this.root.appendChild(this.createButton("custom", "Niestandardowy"));
+    this.root.appendChild(this.createButton("custom", "Niestandardowy"));
   }
 
   getRoot() {

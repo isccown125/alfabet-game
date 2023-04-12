@@ -1,4 +1,5 @@
 import { NormalHighlightCharacters } from "../GameEffects/NormalHighlightCharacters.js";
+import { points } from "../GameStats/Points.js";
 
 export class Medium {
   gameTime = 1000 * 60 * 2;
@@ -33,7 +34,8 @@ export class Medium {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effects[0].intervalTime = 1200
+    this.effects[0].intervalTime = 1200;
+    points.incraseMultipler("medium", 1);
   }
 
   setTime(time = this.gameTime) {

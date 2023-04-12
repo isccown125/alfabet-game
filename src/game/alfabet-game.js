@@ -39,12 +39,16 @@ export class AlphabetGame extends Board {
 
   startEffects() {
     this.currentGameEffect = this.currentLevel.effects[0];
-    this.currentGameEffect.start();
+    if (this.currentGameEffect !== undefined) {
+      this.currentGameEffect.start();
+    }
   }
 
   stopEffects() {
     this.currentGameEffect = this.currentLevel.effects[0];
-    this.currentGameEffect.stop();
+    if (this.currentGameEffect !== undefined) {
+      this.currentGameEffect.stop();
+    }
   }
 
   initialTimer() {
@@ -68,6 +72,7 @@ export class AlphabetGame extends Board {
   }
 
   randomEffects() {
+    points.addPoints("normal-highlight", 1);
     this.currentLevel.effects = [
       new NormalHighlightCharacters(),
       new RandomHighlightCharacters(),

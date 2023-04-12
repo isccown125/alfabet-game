@@ -1,4 +1,5 @@
 import { random } from "../utils/functions.js";
+import { points } from "../GameStats/Points.js";
 
 export class RandomHighlightCharacters {
   timerId = undefined;
@@ -9,13 +10,11 @@ export class RandomHighlightCharacters {
   intervalTime = 1000;
   className = "highlight";
   effectName = "RANDOM_HIGHLIGHT";
-  index = 0;
+  characterIndexForHighlight = 0;
   lastIndex = 0;
   currentHighlightElementGroup = undefined;
   subscribers = [];
-  canBeSkipped = false;
-  skipTimer = undefined;
-  skipTimer1 = undefined;
+  firstStart = true;
 
   setCharacters(characters) {
     this.characters = characters;
@@ -45,50 +44,51 @@ export class RandomHighlightCharacters {
   }
 
   next() {
-    if (this.canBeSkipped) {
-      clearInterval(this.timerId);
-      clearTimeout(this.skipTimer);
-      clearTimeout(this.skipTimer1);
-      this.highlight(this.index);
+    if (this.firstStart) {
+      clearTimeout(this.timerId);
       this.subscribers.forEach((el) => {
         el(this.currentHighlightElementGroup);
       });
-      this.index = random(0, this.characters.length - 1);
+      this.firstStart = false;
       this.start();
+      return;
     }
+    clearTimeout(this.timerId);
+    this.subscribers.forEach((el) => {
+      el(this.currentHighlightElementGroup);
+    });
+    this.start();
   }
 
   start() {
+    console.log("cos");
     const alphabetLength = this.characters.length - 1;
-    this.canBeSkipped = false;
-    this.skipTimer1 = setTimeout(() => {
-      this.canBeSkipped = true;
-    }, 100);
-    console.log("pre", this.index);
-    this.index = random(0, alphabetLength);
-    this.lastIndex = this.index;
-    console.log("post", this.index);
-    this.timerId = setInterval(() => {
-      console.log("start", this.index);
-      this.skipTimer1 = setTimeout(() => {
-        this.canBeSkipped = true;
-      }, 100);
-      this.index = random(0, alphabetLength);
-      if (this.index === this.lastIndex) {
-        while (this.index !== this.lastIndex) {
-          this.index = random(0, alphabetLength);
+    if (this.firstStart) {
+      points.addPoints("normal-highlight", 0, 75);
+      this.characterIndexForHighlight = random(0, alphabetLength);
+      this.lastIndex = this.characterIndexForHighlight;
+      this.highlight(this.characterIndexForHighlight);
+      this.timerId = setTimeout(() => {
+        this.next();
+        this.firstStart = false;
+      }, this.intervalTime);
+    } else {
+      // sprawdzenie indexu
+      if (this.characterIndexForHighlight === this.lastIndex) {
+        while (this.characterIndexForHighlight === this.lastIndex) {
+          this.characterIndexForHighlight = random(0, alphabetLength);
         }
+      } else {
+        this.characterIndexForHighlight = random(0, alphabetLength);
       }
-      this.lastIndex = this.index;
-      this.highlight(this.index);
-      this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup);
-      });
-      this.skipTimer1 = setTimeout(() => {
-        this.canBeSkipped = false;
-      }, this.intervalTime - 100);
-      console.log("end", this.index);
-    }, this.intervalTime);
+      // podświetlenie następnej literki
+      this.highlight(this.characterIndexForHighlight);
+
+      // ustawienie czasu na odp
+      this.timerId = setTimeout(() => {
+        this.next();
+      }, this.intervalTime);
+    }
   }
 
   update() {

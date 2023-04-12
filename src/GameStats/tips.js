@@ -9,14 +9,15 @@ export class Tips {
   }
 
   getCurrentTip() {
-    if (this.points <= 30) {
+    console.log("points");
+    if (this.points <= 30 && this.points >= 0) {
       this.currentTip =
-        "Musisz jeszcze troche popracować,ale nie poddawaj się!";
+        "Musisz jeszcze troche popracować, ale nie poddawaj się!";
     }
-    if (this.points <= 50) {
+    if (this.points <= 50 && this.points > 30) {
       this.currentTip = "Świetnie! Trzymaj tak dalej :)";
     }
-    if (this.points <= 80) {
+    if (this.points <= 80 && this.points > 50) {
       this.currentTip = "Wow! Już prawie jesteś legendą tej gry.";
     }
     if (this.points > 80) {

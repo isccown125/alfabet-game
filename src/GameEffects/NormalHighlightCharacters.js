@@ -1,3 +1,5 @@
+import { points } from "../GameStats/Points.js";
+
 export class NormalHighlightCharacters {
   timerId = undefined;
   characters = [];
@@ -45,6 +47,7 @@ export class NormalHighlightCharacters {
   start() {
     const alphabetLength = this.characters.length - 1;
     if (this.firstStart) {
+      points.addPoints("normal-highlight", 0, 25);
       this.highlight(this.characterIndexForHighlight);
       this.timerId = setTimeout(() => {
         this.next();

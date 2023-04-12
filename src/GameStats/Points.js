@@ -75,6 +75,7 @@ class Points {
     this.currentPoints = 0;
     this.correctAnswers = 0;
     this.incorrectAnswers = 0;
+    this.multiplerPoints = 0;
   }
 }
 
