@@ -30,7 +30,7 @@ export class Board {
       .setTextContext("wybierz inny poziom").htmlElement;
     const charactersContainer = new Component()
       .create("div")
-      .setClassList("Board-container");
+      .setClassList("board-container");
     this.createdSymbols.forEach((el) => {
       charactersContainer.setChild({ htmlElement: el.group });
     });

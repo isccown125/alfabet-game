@@ -1,4 +1,4 @@
-import { Board } from "../Board/board.js";
+import { Board } from "../board/board.js";
 import { Component } from "../components.js";
 import { backdrop } from "../modal.js";
 import { Timer } from "../timer.js";

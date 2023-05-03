@@ -291,7 +291,7 @@ body {
     width: 60px;
 }
 
-/*================ Board ========================*/
+/*================ board ========================*/
 #board {
     display: flex;
     flex-direction: column;
