@@ -4,7 +4,8 @@ export class Easy {
   gameTime = 1000 * 60;
   name = "easy";
   createdCharacters = [];
-  effects = [new NormalHighlightCharacters()];
+  effect = new NormalHighlightCharacters();
+  pointsMultipler = 0;
   alphabet = [
     "A",
     "B",
@@ -34,7 +35,7 @@ export class Easy {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effects[0].intervalTime = 1500
+    this.effect.intervalTime = 1500
   }
 
 
@@ -50,7 +51,4 @@ export class Easy {
     effects.forEach((el) => this.effects.push(el));
   }
 
-  setAlphabet(alphabet) { }
-
-  setSymbols(symbols) { }
 }

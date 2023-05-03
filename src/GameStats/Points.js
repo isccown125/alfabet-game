@@ -17,6 +17,7 @@ class Points {
     this.correctAnswers++;
     this.validatePoints();
     console.log("points added");
+    console.log(this.historyMultiplers)
   }
 
   substractPoints() {

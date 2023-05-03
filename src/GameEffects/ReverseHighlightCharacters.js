@@ -1,5 +1,3 @@
-import { points } from "../GameStats/Points.js";
-
 export class ReverseHighlightCharacters {
   timerId = undefined;
   characters = [];
@@ -61,7 +59,6 @@ export class ReverseHighlightCharacters {
   start() {
     const alphabetLength = this.characters.length - 1;
     if (this.firstStart) {
-      points.addPoints("normal-highlight", 0, 5);
       this.characterIndexForHighlight = alphabetLength;
       this.highlight(this.characterIndexForHighlight);
       this.timerId = setTimeout(() => {

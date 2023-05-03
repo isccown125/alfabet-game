@@ -37,7 +37,6 @@ export class Custom {
     highlightSpeed: 1000,
   };
   accelerationPeace = false;
-  randomEffects = false;
 
   setTime(time = this.gameTime) {
     this.gameTime = time;
@@ -45,13 +44,5 @@ export class Custom {
 
   setEffects(...effects) {
     effects.forEach((el) => this.effects.push(el));
-  }
-
-  setAlphabet(alphabet) {
-    this.alphabet = alphabet.split("");
-  }
-
-  setSymbols(symbols) {
-    this.symbols = symbols.split("");
   }
 }
