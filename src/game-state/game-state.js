@@ -121,7 +121,7 @@ class GameState {
     keyBinder.addAction({
       key: "d",
       actionID: "cos",
-      typeKeyEvent: "keydown",
+      typeKeyEvent: "keyup",
       actionCB: () => {
         if (answerState === "USER_CAN_CLICK") {
           gameAnswers.setCorrentAnswear(
@@ -145,7 +145,7 @@ class GameState {
     keyBinder.addAction({
       key: "a",
       actionID: "cos",
-      typeKeyEvent: "keydown",
+      typeKeyEvent: "keyup",
       actionCB: () => {
         if (answerState === "USER_CAN_CLICK") {
           gameAnswers.setCorrentAnswear(
@@ -174,7 +174,8 @@ class GameState {
               .values.symbol
           );
           if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswear(e.target.dataset.asnwer);
+            gameAnswers.setUserAnswear(e.target.dataset.answer);
+            console.log(gameAnswers.twoKeyTimer, gameAnswers)
             if (!gameAnswers.twoKeyTimer) {
               console.log(gameAnswers.checkAnswer());
               this.currentLevel.instance.effect.next();
@@ -234,7 +235,7 @@ class GameState {
     }, 3000);
   }
 
-  customizeLevel() {}
+  customizeLevel() { }
 
   initialize() {
     this.setDomRootForReneder();
