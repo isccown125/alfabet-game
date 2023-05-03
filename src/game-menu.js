@@ -1,5 +1,5 @@
 import { Component } from "./components.js";
-import { PageManager } from "./pageManager.js";
+import { PageManager } from "./page-manager.js";
 
 export class GameMenu {
   gameMenu = undefined;
@@ -16,11 +16,11 @@ export class GameMenu {
   }
 
   hideMenu() {
-    this.gameMenu.classList.add('d-none')
+    this.gameMenu.classList.add("d-none");
   }
 
   showMenu() {
-    this.gameMenu.classList.remove('d-none')
+    this.gameMenu.classList.remove("d-none");
   }
 
   init() {

@@ -1,4 +1,4 @@
-import { NormalHighlightCharacters } from "../GameEffects/NormalHighlightCharacters.js";
+import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
 
 export class Hard {
   gameTime = 1000 * 60 * 3;

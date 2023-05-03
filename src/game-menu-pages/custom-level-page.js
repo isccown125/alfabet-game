@@ -1,7 +1,7 @@
-import {Component} from "../components.js";
-import {NormalHighlightCharacters} from "../GameEffects/NormalHighlightCharacters.js";
-import {RandomHighlightCharacters} from "../GameEffects/RandomHighlightCharacters.js";
-import {ReverseHighlightCharacters} from "../GameEffects/ReverseHighlightCharacters.js";
+import { Component } from "../components.js";
+import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
+import { RandomHighlightCharacters } from "../game-effects/random-highlight-characters.js";
+import { ReverseHighlightCharacters } from "../game-effects/reverse-highlight-characters.js";
 
 export class CustomLevelPage {
   page = {
@@ -59,8 +59,8 @@ export class CustomLevelPage {
 
   constructor() {
     this.page.htmlElement = new Component()
-        .create("div")
-        .setId("custom-level").htmlElement;
+      .create("div")
+      .setId("custom-level").htmlElement;
     this.innerHtml();
     this.highlightOptions();
     this.generalOptions();
@@ -90,24 +90,24 @@ export class CustomLevelPage {
 
   initSavedLevel() {
     const highlightSpeed = this.page.htmlElement.querySelector(
-        "input[name='highlight-speed']"
+      "input[name='highlight-speed']"
     );
     const randomEffects = this.page.htmlElement.querySelector(
-        "input[name='random-effects']"
+      "input[name='random-effects']"
     );
     const fasterRate = this.page.htmlElement.querySelector(
-        "input[name='faster-rate']"
+      "input[name='faster-rate']"
     );
     const gameTime = this.page.htmlElement.querySelector(
-        "input[name='game-time']"
+      "input[name='game-time']"
     );
     const highlightType = this.page.htmlElement.querySelectorAll(
-        "input[name='highlight-type']"
+      "input[name='highlight-type']"
     );
 
     if (
-        this.level.gameTime !== undefined &&
-        typeof this.level.gameTime === "number"
+      this.level.gameTime !== undefined &&
+      typeof this.level.gameTime === "number"
     ) {
       gameTime.value = this.convertMsToTime(this.level.gameTime);
     }
@@ -121,9 +121,9 @@ export class CustomLevelPage {
       randomEffects.checked = this.level.randomEffects;
     }
     if (
-        !this.level.options.highlightOptions.normal &&
-        !this.level.options.highlightOptions.reverse &&
-        !this.level.options.highlightOptions.random
+      !this.level.options.highlightOptions.normal &&
+      !this.level.options.highlightOptions.reverse &&
+      !this.level.options.highlightOptions.random
     ) {
       highlightType.forEach((el) => {
         console.log(el);
@@ -135,13 +135,22 @@ export class CustomLevelPage {
       });
     } else {
       highlightType.forEach((el) => {
-        if (this.level.options.highlightOptions.normal && el.dataset.highlightDirection === "normal") {
+        if (
+          this.level.options.highlightOptions.normal &&
+          el.dataset.highlightDirection === "normal"
+        ) {
           el.checked = true;
         }
-        if (this.level.options.highlightOptions.random && el.dataset.highlightDirection === "random") {
+        if (
+          this.level.options.highlightOptions.random &&
+          el.dataset.highlightDirection === "random"
+        ) {
           el.checked = true;
         }
-        if (this.level.options.highlightOptions.reverse && el.dataset.highlightDirection === "reverse") {
+        if (
+          this.level.options.highlightOptions.reverse &&
+          el.dataset.highlightDirection === "reverse"
+        ) {
           el.checked = true;
         }
       });
@@ -183,21 +192,22 @@ export class CustomLevelPage {
     const hours = Math.floor(ms / 1000 / 60 / 60);
     const minutes = Math.floor(ms / 1000 / 60) % 60;
     const seconds = Math.floor(ms / 1000) % 60;
-    return `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes
+    return `${hours < 10 ? "0" + hours : hours}:${
+      minutes < 10 ? "0" + minutes : minutes
     }:${seconds < 10 ? "0" + seconds : seconds}`;
   }
 
   timeOptionValidate() {
     const gameTime = this.page.htmlElement.querySelector(
-        "input[name='game-time']"
+      "input[name='game-time']"
     );
     if (
-        this.convertTimeToMs("01:00:00") < this.convertTimeToMs(gameTime.value)
+      this.convertTimeToMs("01:00:00") < this.convertTimeToMs(gameTime.value)
     ) {
       gameTime.value = "01:00:00";
     }
     if (
-        this.convertTimeToMs("00:00:01") > this.convertTimeToMs(gameTime.value)
+      this.convertTimeToMs("00:00:01") > this.convertTimeToMs(gameTime.value)
     ) {
       gameTime.value = "00:00:01";
     }
@@ -206,19 +216,19 @@ export class CustomLevelPage {
 
   getCurrentOptions() {
     const highlightSpeed = this.page.htmlElement.querySelector(
-        "input[name='highlight-speed']"
+      "input[name='highlight-speed']"
     );
     const randomEffects = this.page.htmlElement.querySelector(
-        "input[name='random-effects']"
+      "input[name='random-effects']"
     );
     const fasterRate = this.page.htmlElement.querySelector(
-        "input[name='faster-rate']"
+      "input[name='faster-rate']"
     );
     const gameTime = this.page.htmlElement.querySelector(
-        "input[name='game-time']"
+      "input[name='game-time']"
     );
     const highlightType = this.page.htmlElement.querySelectorAll(
-        "input[name='highlight-type']"
+      "input[name='highlight-type']"
     );
 
     highlightType.forEach((el) => {
@@ -231,25 +241,25 @@ export class CustomLevelPage {
     this.level.fasterRate = fasterRate.checked;
     this.level.randomEffects = randomEffects.checked;
     this.level.options.highlightOptions.intervalTime = Number(
-        highlightSpeed.value
+      highlightSpeed.value
     );
   }
 
   highlightOptionsValidate() {
     const highlightSpeed = this.page.htmlElement.querySelector(
-        "input[name='highlight-speed']"
+      "input[name='highlight-speed']"
     );
     const randomEffects = this.page.htmlElement.querySelector(
-        "input[name='random-effects']"
+      "input[name='random-effects']"
     );
     const fasterRate = this.page.htmlElement.querySelector(
-        "input[name='faster-rate']"
+      "input[name='faster-rate']"
     );
 
     if (
-        !this.level.options.highlightOptions.random &&
-        !this.level.options.highlightOptions.reverse &&
-        !this.level.options.highlightOptions.normal
+      !this.level.options.highlightOptions.random &&
+      !this.level.options.highlightOptions.reverse &&
+      !this.level.options.highlightOptions.normal
     ) {
       if (!randomEffects.checked) {
         fasterRate.disabled = true;
@@ -287,14 +297,14 @@ export class CustomLevelPage {
     this.level.fasterRate = fasterRate.checked;
     this.level.randomEffects = randomEffects.checked;
     this.level.options.highlightOptions.intervalTime = Number(
-        highlightSpeed.value
+      highlightSpeed.value
     );
   }
 
   highlightOptions() {
     const highlightComponent = new Component()
-        .create("div")
-        .setClassList("highlight-options-component").htmlElement;
+      .create("div")
+      .setClassList("highlight-options-component").htmlElement;
     highlightComponent.innerHTML = "<p>Wybierz podświetlenie alfabetu</p>";
     const radio = this.createHighLightOption("standardowe", "normal", true);
     const radio1 = this.createHighLightOption("odwrócone", "reverse");
@@ -309,31 +319,31 @@ export class CustomLevelPage {
 
   generalOptions() {
     const generalOptionsComponent = new Component()
-        .create("div")
-        .setId("general-options").htmlElement;
+      .create("div")
+      .setId("general-options").htmlElement;
     this.page.htmlElement.appendChild(generalOptionsComponent);
 
     const option = this.createNumberOption(
-        "highlight-speed",
-        "Prędkość podświetlania wyrazów",
-        {
-          name: "data-highlight-speed",
-          value: 1000,
-        },
-        {
-          min: this.highlightSpeed.min,
-          max: this.highlightSpeed.max,
-          units: "ms",
-          defaultValue: 1000,
-        }
+      "highlight-speed",
+      "Prędkość podświetlania wyrazów",
+      {
+        name: "data-highlight-speed",
+        value: 1000,
+      },
+      {
+        min: this.highlightSpeed.min,
+        max: this.highlightSpeed.max,
+        units: "ms",
+        defaultValue: 1000,
+      }
     );
     const option1 = this.createCheckboxOption(
-        "random-effects",
-        "Randomowe zdarzenia podczas gry"
+      "random-effects",
+      "Randomowe zdarzenia podczas gry"
     );
     const option2 = this.createCheckboxOption(
-        "faster-rate",
-        "Przyspieszanie tempa gry"
+      "faster-rate",
+      "Przyspieszanie tempa gry"
     );
     const option3 = this.createTimeOption("game-time", "Czas gry", {
       min: "00:00:01",
@@ -362,38 +372,38 @@ export class CustomLevelPage {
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = false;
         this.level.options.highlightOptions.random = true;
-        this.level.effect = new RandomHighlightCharacters()
+        this.level.effect = new RandomHighlightCharacters();
         break;
       case "reverse":
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = true;
         this.level.options.highlightOptions.random = false;
-        this.level.effect = new ReverseHighlightCharacters()
+        this.level.effect = new ReverseHighlightCharacters();
         break;
       default:
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = false;
         this.level.options.highlightOptions.random = false;
-        this.level.effect = undefined
+        this.level.effect = undefined;
     }
   }
 
   actionsComponent() {
     const actionsComponent = new Component()
-        .create("div")
-        .setClassList("actions").htmlElement;
+      .create("div")
+      .setClassList("actions").htmlElement;
     const button = new Component()
-        .create("button")
-        .setClassList("custom-level-button")
-        .setTextContext("Powrót").htmlElement;
+      .create("button")
+      .setClassList("custom-level-button")
+      .setTextContext("Powrót").htmlElement;
     const button1 = new Component()
-        .create("button")
-        .setClassList("custom-level-button")
-        .setTextContext("Zapisz ustawienia").htmlElement;
+      .create("button")
+      .setClassList("custom-level-button")
+      .setTextContext("Zapisz ustawienia").htmlElement;
     const button2 = new Component()
-        .create("button")
-        .setClassList("custom-level-button")
-        .setTextContext("ZACZNIJ GRĘ").htmlElement;
+      .create("button")
+      .setClassList("custom-level-button")
+      .setTextContext("ZACZNIJ GRĘ").htmlElement;
 
     button2.addEventListener("click", this.startGameHandler.bind(this));
     button.addEventListener("click", this.changePageHandler.bind(this));
@@ -414,88 +424,85 @@ export class CustomLevelPage {
 
   createHighLightOption(label, name, checked = false) {
     const input = new Component()
-        .create("input")
-        .setAttributes(
-            {name: "type", value: "radio"},
-            {name: "name", value: "highlight-type"},
-            {name: "data-highlight-direction", value: name}
-        );
+      .create("input")
+      .setAttributes(
+        { name: "type", value: "radio" },
+        { name: "name", value: "highlight-type" },
+        { name: "data-highlight-direction", value: name }
+      );
     if (checked) {
-      input.setAttributes({name: "checked", value: ""});
+      input.setAttributes({ name: "checked", value: "" });
     }
     const inputLabel = new Component()
-        .create("label")
-        .setTextContext(label).htmlElement;
+      .create("label")
+      .setTextContext(label).htmlElement;
 
     return new Component()
-        .create("div")
-        .setClassList("radio-group")
-        .setChild(
-            {htmlElement: inputLabel},
-            {htmlElement: input.htmlElement}
-        ).htmlElement;
-
+      .create("div")
+      .setClassList("radio-group")
+      .setChild({ htmlElement: inputLabel }, { htmlElement: input.htmlElement })
+      .htmlElement;
   }
 
   createCheckboxOption(name, label) {
     const checkboxLabel = new Component()
-        .create("label")
-        .setTextContext(label).htmlElement;
+      .create("label")
+      .setTextContext(label).htmlElement;
 
     const checkbox = new Component()
-        .create("input")
-        .setClassList("input-style")
-        .setAttributes(
-            {name: "type", value: "checkbox"},
-            {name: `name`, value: name}
-        ).htmlElement;
+      .create("input")
+      .setClassList("input-style")
+      .setAttributes(
+        { name: "type", value: "checkbox" },
+        { name: `name`, value: name }
+      ).htmlElement;
 
     return new Component()
-        .create("div")
-        .setClassList("group-container")
-        .setChild({htmlElement: checkboxLabel}, {htmlElement: checkbox})
-        .htmlElement;
+      .create("div")
+      .setClassList("group-container")
+      .setChild({ htmlElement: checkboxLabel }, { htmlElement: checkbox })
+      .htmlElement;
   }
 
   createTimeOption(
-      name,
-      label,
-      options = {
-        min: undefined,
-        max: undefined,
-        step: undefined,
-        defaultValue: "00:01:00",
-      }
+    name,
+    label,
+    options = {
+      min: undefined,
+      max: undefined,
+      step: undefined,
+      defaultValue: "00:01:00",
+    }
   ) {
-    const {min, max, step, defaultValue} = options;
+    const { min, max, step, defaultValue } = options;
     const inputLabel = new Component()
-        .create("label")
-        .setTextContext(label).htmlElement;
+      .create("label")
+      .setTextContext(label).htmlElement;
 
     const inputTime = new Component()
-        .create("input")
-        .setClassList("input-style")
-        .setAttributes(
-            {name: "type", value: "time"},
-            {name: "name", value: name}
-        );
+      .create("input")
+      .setClassList("input-style")
+      .setAttributes(
+        { name: "type", value: "time" },
+        { name: "name", value: name }
+      );
 
     const timeCopmonent = new Component()
-        .create("div")
-        .setClassList("group-container")
-        .setChild(
-            {htmlElement: inputLabel},
-            {htmlElement: inputTime.htmlElement}
-        );
+      .create("div")
+      .setClassList("group-container")
+      .setChild(
+        { htmlElement: inputLabel },
+        { htmlElement: inputTime.htmlElement }
+      );
 
     if (step) {
-      inputTime.setAttributes({name: "step", value: step});
+      inputTime.setAttributes({ name: "step", value: step });
     }
     if (min) {
-      inputTime.setAttributes({name: "min", value: min});
+      inputTime.setAttributes({ name: "min", value: min });
     }
     if (max) {
-      inputTime.setAttributes({name: "max", value: max});
+      inputTime.setAttributes({ name: "max", value: max });
     }
 
     if (defaultValue) {
@@ -505,34 +512,34 @@ export class CustomLevelPage {
   }
 
   createNumberOption(
-      name,
-      label,
-      attr = {name: "", value: 0},
-      options = {min: 0, max: 2000, units: undefined, defaultValue: undefined}
+    name,
+    label,
+    attr = { name: "", value: 0 },
+    options = { min: 0, max: 2000, units: undefined, defaultValue: undefined }
   ) {
-    const {min, max, units, defaultValue} = options;
+    const { min, max, units, defaultValue } = options;
     const inputGroup = new Component()
-        .create("div")
-        .setClassList("group-container").htmlElement;
+      .create("div")
+      .setClassList("group-container").htmlElement;
 
     const inputNumber = new Component()
-        .create("input")
-        .setClassList("input-style")
-        .setAttributes(
-            {name: "type", value: "number"},
-            {name: "name", value: name},
-            {name: attr.name, value: attr.value}
-        );
+      .create("input")
+      .setClassList("input-style")
+      .setAttributes(
+        { name: "type", value: "number" },
+        { name: "name", value: name },
+        { name: attr.name, value: attr.value }
+      );
 
     const inputLabel = new Component()
-        .create("label")
-        .setTextContext(label).htmlElement;
+      .create("label")
+      .setTextContext(label).htmlElement;
 
     if (min) {
-      inputNumber.setAttributes({name: "min", value: min});
+      inputNumber.setAttributes({ name: "min", value: min });
     }
     if (max) {
-      inputNumber.setAttributes({name: "max", value: max});
+      inputNumber.setAttributes({ name: "max", value: max });
     }
     if (defaultValue) {
       inputNumber.htmlElement.value = defaultValue;
@@ -543,8 +550,8 @@ export class CustomLevelPage {
 
     if (units) {
       const unitsText = new Component()
-          .create("span")
-          .setTextContext(units).htmlElement;
+        .create("span")
+        .setTextContext(units).htmlElement;
       inputGroup.appendChild(unitsText);
     }
     return inputGroup;

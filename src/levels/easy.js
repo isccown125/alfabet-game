@@ -1,4 +1,4 @@
-import { NormalHighlightCharacters } from "../GameEffects/NormalHighlightCharacters.js";
+import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
 
 export class Easy {
   gameTime = 1000 * 60;
@@ -35,9 +35,8 @@ export class Easy {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effect.intervalTime = 1500
+    this.effect.intervalTime = 1500;
   }
-
 
   setCreatedCharacters(characters) {
     this.createdCharacters = characters;
@@ -50,5 +49,4 @@ export class Easy {
   setEffects(...effects) {
     effects.forEach((el) => this.effects.push(el));
   }
-
 }

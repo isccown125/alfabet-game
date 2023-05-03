@@ -1,6 +1,6 @@
 import { Component } from "../components.js";
-import { CreateGameSymbols } from "./CreateGameSymbols.js";
-import { gameAnswers } from "./GameAnswers.js";
+import { CreateGameSymbols } from "./create-game-symbols.js";
+import { gameAnswers } from "./game-answers.js";
 
 export class Board {
   boardHtmlElement = undefined;
@@ -10,10 +10,10 @@ export class Board {
   createdSymbols = [];
   alphabet = [];
   symbols = [];
-  gameAnswers = undefined
+  gameAnswers = undefined;
 
   constructor(alphabet, symbols) {
-    this.alphabet = alphabet
+    this.alphabet = alphabet;
     this.symbols = symbols;
     this.createdSymbols = new CreateGameSymbols(alphabet, symbols);
   }
@@ -38,6 +38,6 @@ export class Board {
     this.boardHtmlElement.append(this.boardHeaderHtmlElement);
     this.boardHtmlElement.append(charactersContainer.htmlElement);
     this.gameHtmlElement.append(this.boardHtmlElement);
-    this.gameAnswers.render(this.boardHtmlElement)
+    this.gameAnswers.render(this.boardHtmlElement);
   }
 }

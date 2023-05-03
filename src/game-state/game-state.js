@@ -1,11 +1,11 @@
-import { gameAnswers } from "../board/GameAnswers.js";
+import { gameAnswers } from "../board/game-answers.js";
 import { Board } from "../board/board.js";
 import { GameMenu } from "../game-menu.js";
 import { AlphabetGame } from "../game/alfabet-game.js";
-import { chooseLevelPage } from "../gameMenuPages/choose-level-page.js";
-import { CustomLevelPage } from "../gameMenuPages/custom-level-page.js";
-import { LevelFactory } from "../levels/LevelFactory.js";
-import { LevelManager } from "../levels/LevelManager.js";
+import { chooseLevelPage } from "../game-menu-pages/choose-level-page.js";
+import { CustomLevelPage } from "../game-menu-pages/custom-level-page.js";
+import { LevelFactory } from "../levels/level-factory.js";
+import { LevelManager } from "../levels/level-manager.js";
 import { showModal } from "../modal.js";
 import { keyBinder } from "../key-binder/key-binder.js";
 
