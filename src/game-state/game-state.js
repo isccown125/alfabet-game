@@ -1,5 +1,5 @@
-import { gameAnswers } from "../board/game-answers.js";
-import { Board } from "../board/board.js";
+import { gameAnswers } from "../Board/game-answers.js";
+import { Board } from "../Board/board.js";
 import { GameMenu } from "../game-menu.js";
 import { AlphabetGame } from "../game/alfabet-game.js";
 import { chooseLevelPage } from "../game-menu-pages/choose-level-page.js";
