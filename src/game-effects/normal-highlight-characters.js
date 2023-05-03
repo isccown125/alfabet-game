@@ -1,4 +1,4 @@
-import { gameAnswers } from "../board/game-answers.js";
+import { gameAnswers } from "../Board/game-answers.js";
 
 export class NormalHighlightCharacters {
   timerId = undefined;
