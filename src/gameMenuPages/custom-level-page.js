@@ -46,7 +46,7 @@ export class CustomLevelPage {
         intervalTime: 1000,
       },
     },
-    effects: [],
+    effect: undefined,
     gameTime: 0,
   };
   subscribers = [];
@@ -183,8 +183,7 @@ export class CustomLevelPage {
     const hours = Math.floor(ms / 1000 / 60 / 60);
     const minutes = Math.floor(ms / 1000 / 60) % 60;
     const seconds = Math.floor(ms / 1000) % 60;
-    return `${hours < 10 ? "0" + hours : hours}:${
-        minutes < 10 ? "0" + minutes : minutes
+    return `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes
     }:${seconds < 10 ? "0" + seconds : seconds}`;
   }
 
@@ -357,25 +356,25 @@ export class CustomLevelPage {
         this.level.options.highlightOptions.normal = true;
         this.level.options.highlightOptions.reverse = false;
         this.level.options.highlightOptions.random = false;
-        this.level.effects = [new NormalHighlightCharacters()];
+        this.level.effect = new NormalHighlightCharacters();
         break;
       case "random":
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = false;
         this.level.options.highlightOptions.random = true;
-        this.level.effects = [new RandomHighlightCharacters()];
+        this.level.effect = new RandomHighlightCharacters()
         break;
       case "reverse":
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = true;
         this.level.options.highlightOptions.random = false;
-        this.level.effects = [new ReverseHighlightCharacters()];
+        this.level.effect = new ReverseHighlightCharacters()
         break;
       default:
         this.level.options.highlightOptions.normal = false;
         this.level.options.highlightOptions.reverse = false;
         this.level.options.highlightOptions.random = false;
-        this.level.effects = [];
+        this.level.effect = undefined
     }
   }
 
@@ -428,14 +427,14 @@ export class CustomLevelPage {
         .create("label")
         .setTextContext(label).htmlElement;
 
-    const radioGroup = new Component()
+    return new Component()
         .create("div")
         .setClassList("radio-group")
         .setChild(
             {htmlElement: inputLabel},
             {htmlElement: input.htmlElement}
         ).htmlElement;
-    return radioGroup;
+
   }
 
   createCheckboxOption(name, label) {

@@ -1,4 +1,4 @@
-import { random } from "../utils.js";
+import { random } from "../utils/functions.js";
 import { Component } from "../components.js";
 
 export class CreateGameSymbols {

@@ -84,16 +84,16 @@ export class Timer {
       }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
   }
 
-  render() {
+  render(elementForRender) {
     this.createTimerHtmlElement();
     this.updateTimerHtmlElement();
-    return this.timerHtmlElement;
+    elementForRender.append(this.timerHtmlElement);
   }
 
   createInterval() {
     this.remainingMilliseconds = this.currentTimeInMilliseconds;
     this.timerId = setInterval(() => {
-      if (this.remainingMilliseconds >= 0) {
+      if (this.remainingMilliseconds > 0) {
         this.remainingMilliseconds -= 1000;
         this.updateTimerHtmlElement();
       } else {

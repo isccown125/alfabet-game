@@ -4,6 +4,7 @@ import { PageManager } from "./pageManager.js";
 export class GameMenu {
   gameMenu = undefined;
   actionsContainer = undefined;
+  pageManager = undefined;
 
   constructor() {
     const game = document.getElementById("alphabet-game");
@@ -14,12 +15,12 @@ export class GameMenu {
     game.append(this.gameMenu);
   }
 
-  static hideMenu() {
-    document.getElementById('main-menu').classList.add('d-none')
+  hideMenu() {
+    this.gameMenu.classList.add('d-none')
   }
 
-  static showMenu() {
-    document.getElementById('main-menu').classList.remove('d-none')
+  showMenu() {
+    this.gameMenu.classList.remove('d-none')
   }
 
   init() {

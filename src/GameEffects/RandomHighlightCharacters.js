@@ -1,5 +1,4 @@
 import { random } from "../utils/functions.js";
-import { points } from "../GameStats/Points.js";
 
 export class RandomHighlightCharacters {
   timerId = undefined;
@@ -61,10 +60,8 @@ export class RandomHighlightCharacters {
   }
 
   start() {
-    console.log("cos");
     const alphabetLength = this.characters.length - 1;
     if (this.firstStart) {
-      points.addPoints("normal-highlight", 0, 75);
       this.characterIndexForHighlight = random(0, alphabetLength);
       this.lastIndex = this.characterIndexForHighlight;
       this.highlight(this.characterIndexForHighlight);

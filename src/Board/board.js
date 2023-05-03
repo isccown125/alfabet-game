@@ -1,5 +1,6 @@
 import { Component } from "../components.js";
-import { GameAnswers } from "./GameAnswers.js";
+import { CreateGameSymbols } from "./CreateGameSymbols.js";
+import { gameAnswers } from "./GameAnswers.js";
 
 export class Board {
   boardHtmlElement = undefined;
@@ -11,20 +12,14 @@ export class Board {
   symbols = [];
   gameAnswers = undefined
 
-  constructor() { }
-
-  setAlphabet(alphabet) {
-    this.alphabet = alphabet;
-  }
-
-  setSymbols(symbols) {
+  constructor(alphabet, symbols) {
+    this.alphabet = alphabet
     this.symbols = symbols;
+    this.createdSymbols = new CreateGameSymbols(alphabet, symbols);
   }
 
   renderBoard() {
-    this.gameAnswers = new GameAnswers();
-
-
+    this.gameAnswers = gameAnswers;
     this.boardHtmlElement = document.createElement("div");
     this.boardHeaderHtmlElement = document.createElement("header");
     this.boardHtmlElement.id = "board";

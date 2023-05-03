@@ -6,6 +6,9 @@ export class GameAnswers {
   answers = ["L", "P", "O"];
   timeForAnswear = 1000;
   actionComponent = undefined;
+  leftHand = false;
+  rightHand = false;
+  twoKeyTimer = false;
 
   createAnswerButton(label, id) {
     return new Component()
@@ -19,26 +22,17 @@ export class GameAnswers {
   }
 
   checkAnswer() {
-    console.log(
-      "Answear",
-      "correct " + this.corretAnswear,
-      "incorr: " + this.userAnswear
-    );
-    if (!this.corretAnswear || !this.userAnswear) {
-      return false;
+    if (this.corretAnswear === 'O') {
+      if (this.userAnswear === 'LP' || this.userAnswear === 'PL') {
+        return true
+      }
+      return false
+    } else {
+      if (this.corretAnswear === this.userAnswear) {
+        return true
+      }
     }
-    this.answers.forEach((el) => {
-      if (this.corretAnswear !== el) return false;
-      if (this.userAnswear !== el) return false;
-    });
-    if (this.userAnswear === this.corretAnswear) {
-      this.corretAnswear = undefined;
-      this.userAnswear = undefined;
-      return true;
-    }
-    this.corretAnswear = undefined;
-    this.userAnswear = undefined;
-    return false;
+    return false
   }
 
   createActionsComponent() {
@@ -46,12 +40,9 @@ export class GameAnswers {
       .create("div")
       .setId("choose-answer").htmlElement;
     const button = this.createAnswerButton("lewa ręka", "L");
-    const button1 = this.createAnswerButton("obie ręce", "O");
     const button2 = this.createAnswerButton("prawa ręka", "P");
     this.actionComponent.append(button);
-    this.actionComponent.append(button1);
     this.actionComponent.append(button2);
-    this.actionComponent.addEventListener("click", () => {});
     return this.actionComponent;
   }
 
@@ -59,12 +50,41 @@ export class GameAnswers {
     if (typeof answer !== "string") {
       this.corretAnswear = undefined;
     }
+
     this.corretAnswear = answer;
   }
 
   setUserAnswear(answer) {
     if (typeof answer !== "string") {
-      this.corretAnswear = undefined;
+      this.userAnswear = undefined;
+    }
+    if (this.corretAnswear === 'O') {
+      if (answer === 'L') {
+        this.leftHand = true;
+      }
+      if (answer === 'P') {
+        this.rightHand = true;
+      }
+      if (this.rightHand && this.leftHand) {
+        clearTimeout(this.twoKeyTimer);
+        this.twoKeyTimer = false;
+        this.leftHand = false;
+        this.rightHand = false;
+        return this.userAnswear = 'LP';
+      }
+      if (this.rightHand || this.leftHand) {
+        this.twoKeyTimer = setTimeout(() => {
+          if (!this.rightHand || !this.leftHand) {
+            this.leftHand = false;
+            this.rightHand = false;
+            this.userAnswear = undefined;
+            console.log(this.checkAnswer());
+          }
+        }, 200);
+
+      }
+      this.userAnswear += answer;
+      return
     }
     this.userAnswear = answer;
   }
@@ -79,3 +99,5 @@ export class GameAnswers {
     }
   }
 }
+
+export const gameAnswers = new GameAnswers();
