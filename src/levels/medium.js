@@ -4,7 +4,7 @@ export class Medium {
   gameTime = 1000 * 60 * 2;
   name = "medium";
   effect = new NormalHighlightCharacters();
-  pointsMultipler = 0;
+  pointsMultipler = 2;
   alphabet = [
     "A",
     "B",

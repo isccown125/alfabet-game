@@ -8,6 +8,8 @@ import { LevelFactory } from "../levels/level-factory.js";
 import { LevelManager } from "../levels/level-manager.js";
 import { showModal } from "../modal.js";
 import { keyBinder } from "../key-binder/key-binder.js";
+import { GameFeedback } from "../board/game-feedback.js";
+import { points } from "../game-stats/points.js";
 
 class GameState {
   currentState = "main-menu";
@@ -19,7 +21,7 @@ class GameState {
     "customize-level",
     "default",
   ];
-  points = 0;
+  points = points.currentPoints;
   currentLevel = { name: "", instance: undefined };
   pointsMultipler = 1;
   subscribers = [];
@@ -86,7 +88,7 @@ class GameState {
     this.subscribers.push(subscriber);
   }
 
-  setDomRootForReneder() {
+  setDomRootForRender() {
     const root = document.getElementById("alphabet-game");
     if (root instanceof HTMLElement) {
       this.root = root;
@@ -123,20 +125,27 @@ class GameState {
       actionID: "cos",
       typeKeyEvent: "keyup",
       actionCB: () => {
+        console.log(points);
         if (answerState === "USER_CAN_CLICK") {
           gameAnswers.setCorrentAnswear(
             this.currentLevel.instance.effect.currentHighlightElementGroup
               .values.symbol
           );
           if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswear("P");
+            gameAnswers.setUserAnswer("P");
             if (!gameAnswers.twoKeyTimer) {
-              console.log(gameAnswers.checkAnswer());
+              new GameFeedback(gameAnswers.checkAnswer()).render(
+                this.currentLevel.instance.effect.currentHighlightElementGroup
+                  .character
+              );
               this.currentLevel.instance.effect.next();
             }
           } else {
-            gameAnswers.setUserAnswear("P");
-            console.log(gameAnswers.checkAnswer());
+            gameAnswers.setUserAnswer("P");
+            new GameFeedback(gameAnswers.checkAnswer()).render(
+              this.currentLevel.instance.effect.currentHighlightElementGroup
+                .character
+            );
             this.currentLevel.instance.effect.next();
           }
         }
@@ -147,26 +156,34 @@ class GameState {
       actionID: "cos",
       typeKeyEvent: "keyup",
       actionCB: () => {
+        console.log(points);
         if (answerState === "USER_CAN_CLICK") {
           gameAnswers.setCorrentAnswear(
             this.currentLevel.instance.effect.currentHighlightElementGroup
               .values.symbol
           );
           if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswear("L");
+            gameAnswers.setUserAnswer("L");
             if (!gameAnswers.twoKeyTimer) {
-              console.log(gameAnswers.checkAnswer());
+              new GameFeedback(gameAnswers.checkAnswer()).render(
+                this.currentLevel.instance.effect.currentHighlightElementGroup
+                  .character
+              );
               this.currentLevel.instance.effect.next();
             }
           } else {
-            gameAnswers.setUserAnswear("L");
-            console.log(gameAnswers.checkAnswer());
+            gameAnswers.setUserAnswer("L");
+            new GameFeedback(gameAnswers.checkAnswer()).render(
+              this.currentLevel.instance.effect.currentHighlightElementGroup
+                .character
+            );
             this.currentLevel.instance.effect.next();
           }
         }
       },
     });
     gameAnswers.addListener((e) => {
+      console.log(points);
       if (e.target.classList.value.includes("level-button")) {
         if (answerState === "USER_CAN_CLICK") {
           gameAnswers.setCorrentAnswear(
@@ -174,15 +191,20 @@ class GameState {
               .values.symbol
           );
           if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswear(e.target.dataset.answer);
-            console.log(gameAnswers.twoKeyTimer, gameAnswers)
+            console.log(gameAnswers.twoKeyTimer, gameAnswers);
             if (!gameAnswers.twoKeyTimer) {
-              console.log(gameAnswers.checkAnswer());
+              new GameFeedback(gameAnswers.checkAnswer()).render(
+                this.currentLevel.instance.effect.currentHighlightElementGroup
+                  .character
+              );
               this.currentLevel.instance.effect.next();
             }
           } else {
-            gameAnswers.setUserAnswear(e.target.dataset.answer);
-            console.log(gameAnswers.checkAnswer());
+            gameAnswers.setUserAnswer(e.target.dataset.answer);
+            new GameFeedback(gameAnswers.checkAnswer()).render(
+              this.currentLevel.instance.effect.currentHighlightElementGroup
+                .character
+            );
             this.currentLevel.instance.effect.next();
           }
         }
@@ -228,6 +250,8 @@ class GameState {
     board.cancelGameButton.addEventListener("click", () => {
       this.setState("clear-game");
     });
+    points.clear();
+    points.multipler = this.currentLevel.instance.pointsMultipler;
     this.game.setGameBoard(board);
     this.game.setTimer();
     this.game.loadGameScreen(() => {
@@ -235,10 +259,10 @@ class GameState {
     }, 3000);
   }
 
-  customizeLevel() { }
+  customizeLevel() {}
 
   initialize() {
-    this.setDomRootForReneder();
+    this.setDomRootForRender();
     this.levelManager = new LevelManager();
     const page1 = chooseLevelPage(this.levelManager.getRoot());
     const page2 = new CustomLevelPage();

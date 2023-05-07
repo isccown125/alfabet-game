@@ -5,4 +5,3 @@ window.addEventListener("load", () => {
   gameState.initialize();
   keyBinder.init();
 });
-

@@ -11,19 +11,19 @@ class Points {
   addPoints() {
     this.validateMultipler();
     const points = Number(
-      (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
+        (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
     );
     this.currentPoints += points;
     this.correctAnswers++;
     this.validatePoints();
     console.log("points added");
-    console.log(this.historyMultiplers)
+    console.log(this.historyMultiplers);
   }
 
   substractPoints() {
     this.validateMultipler();
     const points = Number(
-      (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
+        (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
     );
     this.currentPoints -= points;
     this.incorrectAnswers++;
@@ -31,31 +31,11 @@ class Points {
     console.log("points substract");
   }
 
-  incraseMultipler(id, value) {
-    if (value < 0) {
-      console.log("cannot incrase multipler");
-    }
-    this.historyMultiplers.push({ id, value });
-    this.sumHistoryMultipler();
-  }
-
-  reduceMultipler(id) {
-    this.historyMultiplers.forEach((el, index) => {
-      if (el.id === id) {
-        this.historyMultiplers.splice(index, 1);
-      }
-    });
-    this.sumHistoryMultipler();
-  }
-
-  sumHistoryMultipler() {
-    const multiplers = this.historyMultiplers.map((el) => el.value);
-    this.multiplerPoints = multiplers.reduce(
-      (prev, curr) => prev + curr,
-      this.multiplerDefaultValue
-    );
+  set multipler(multipler) {
+    this.multiplerPoints = multipler
     this.validateMultipler();
   }
+
 
   validateMultipler() {
     if (this.multiplerPoints <= 1) {
@@ -76,7 +56,7 @@ class Points {
     this.currentPoints = 0;
     this.correctAnswers = 0;
     this.incorrectAnswers = 0;
-    this.multiplerPoints = 0;
+    this.multiplerPoints = 1;
   }
 }
 
