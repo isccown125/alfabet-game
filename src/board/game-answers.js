@@ -1,4 +1,5 @@
 import { Component } from "../components.js";
+import { points } from "../game-stats/points.js";
 
 export class GameAnswers {
   corretAnswear = undefined;
@@ -22,17 +23,21 @@ export class GameAnswers {
   }
 
   checkAnswer() {
-    if (this.corretAnswear === 'O') {
-      if (this.userAnswear === 'LP' || this.userAnswear === 'PL') {
-        return true
+    if (this.corretAnswear === "O") {
+      if (this.userAnswear === "LP" || this.userAnswear === "PL") {
+        points.addPoints();
+        return "good-answer";
       }
-      return false
+      points.substractPoints();
+      return "bad-answer";
     } else {
       if (this.corretAnswear === this.userAnswear) {
-        return true
+        points.addPoints();
+        return "good-answer";
       }
     }
-    return false
+    points.substractPoints();
+    return "bad-answer";
   }
 
   createActionsComponent() {
@@ -54,15 +59,15 @@ export class GameAnswers {
     this.corretAnswear = answer;
   }
 
-  setUserAnswear(answer) {
+  setUserAnswer(answer) {
     if (typeof answer !== "string") {
       this.userAnswear = undefined;
     }
-    if (this.corretAnswear === 'O') {
-      if (answer === 'L') {
+    if (this.corretAnswear === "O") {
+      if (answer === "L") {
         this.leftHand = true;
       }
-      if (answer === 'P') {
+      if (answer === "P") {
         this.rightHand = true;
       }
       if (this.rightHand && this.leftHand) {
@@ -70,7 +75,7 @@ export class GameAnswers {
         this.twoKeyTimer = false;
         this.leftHand = false;
         this.rightHand = false;
-        return this.userAnswear = 'LP';
+        return (this.userAnswear = "LP");
       }
       if (this.rightHand || this.leftHand) {
         this.twoKeyTimer = setTimeout(() => {
@@ -81,10 +86,9 @@ export class GameAnswers {
             console.log(this.checkAnswer());
           }
         }, 200);
-
       }
       this.userAnswear += answer;
-      return
+      return;
     }
     this.userAnswear = answer;
   }

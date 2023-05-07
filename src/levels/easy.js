@@ -5,7 +5,7 @@ export class Easy {
   name = "easy";
   createdCharacters = [];
   effect = new NormalHighlightCharacters();
-  pointsMultipler = 0;
+  pointsMultipler = 1;
   alphabet = [
     "A",
     "B",
