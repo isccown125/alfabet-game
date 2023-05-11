@@ -2,6 +2,7 @@ import { Board } from "../board/board.js";
 import { Component } from "../components.js";
 import { backdrop } from "../modal.js";
 import { Timer } from "../timer.js";
+import { gameAnswers } from "../board/game-answers.js";
 
 export class AlphabetGame {
   timerHtmlElement = undefined;
@@ -16,6 +17,10 @@ export class AlphabetGame {
   gameLoopId = undefined;
   timer = undefined;
   gameRoot = undefined;
+  gameKeyMap = {
+    leftHand: "a",
+    rightHand: "b",
+  };
 
   constructor(level, root) {
     this.currentLevel = level;
@@ -58,6 +63,19 @@ export class AlphabetGame {
       timerContainer.remove();
       startGameCB();
     }, time + 10);
+  }
+
+  keybordHandler(e) {
+    if (e.key === this.gameKeyMap.leftHand) {
+    }
+    if (e.key === this.gameKeyMap.rightHand) {
+    }
+    if (gameAnswers.correctAnswer === "O") {
+    }
+  }
+
+  gameController() {
+    window.addEventListener("keyup");
   }
 
   initGame() {

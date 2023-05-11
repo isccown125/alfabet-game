@@ -24,11 +24,11 @@ export class NormalHighlightCharacters {
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
-    gameAnswers.setCorrentAnswear(
+    gameAnswers.setCorrectAnswer(
       this.currentHighlightElementGroup.values.symbol
     );
-    const elementPos = elementForHighlight.getBoundingClientRect();
-    window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
+    // const elementPos = elementForHighlight.getBoundingClientRect();
+    // window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
 
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -43,8 +43,20 @@ export class NormalHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
-  start() {
+  _increaseIndex() {
     const alphabetLength = this.characters.length - 1;
+    if (this.characterIndexForHighlight === alphabetLength) {
+      this.characterIndexForHighlight = 0;
+    } else {
+      this.characterIndexForHighlight++;
+    }
+  }
+
+  get currentHighlightSymbol() {
+    return this.currentHighlightElementGroup.values.symbol;
+  }
+
+  start() {
     if (this.firstStart) {
       this.highlight(this.characterIndexForHighlight);
       this.userCanClickTimer = setTimeout(() => {
@@ -52,24 +64,24 @@ export class NormalHighlightCharacters {
           el("USER_DISABLE_CLICK");
         });
       }, this.intervalTime - 200);
-      gameAnswers.setCorrentAnswear(
+      gameAnswers.setCorrectAnswer(
         this.currentHighlightElementGroup.values.symbol
       );
+      setTimeout(() => {
+        this.subscribers.forEach((el) => {
+          el("USER_CAN_CLICK");
+        });
+      }, 150);
       this.subscribers.forEach((el) => {
-        el("USER_CAN_CLICK");
+        el("USER_DISABLE_CLICK");
       });
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
       }, this.intervalTime);
     } else {
-      if (this.characterIndexForHighlight === alphabetLength) {
-        this.characterIndexForHighlight = 0;
-      } else {
-        this.characterIndexForHighlight++;
-      }
+      this._increaseIndex();
       this.highlight(this.characterIndexForHighlight);
-
       this.timerId = setTimeout(() => {
         this.next();
       }, this.intervalTime);
@@ -79,9 +91,7 @@ export class NormalHighlightCharacters {
           el("USER_DISABLE_CLICK");
         });
       }, this.intervalTime - 150);
-      gameAnswers.setCorrentAnswear(
-        this.currentHighlightElementGroup.values.symbol
-      );
+      gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
       this.subscribers.forEach((el) => {
         el("USER_CAN_CLICK");
       });

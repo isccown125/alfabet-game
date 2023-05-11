@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "hotkeys-js": "^3.10.2",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1"
   },

@@ -297,6 +297,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
+
 }
 
 .feedback-icon {
@@ -321,8 +322,7 @@ body {
     width: 100%;
     max-width: 600px;
     gap: 0 100px;
-    margin-bottom: 60px;
-    padding: 30px 8px 8px 8px;
+    padding: 30px 8px 0px 8px;
     display: grid;
     height: min-content;
     justify-items: center;
@@ -434,6 +434,30 @@ body {
     margin: -40px;
     background-color: rgba(0, 0, 0, 0.514);
     padding: 15px 20px;
+}
+
+.mobile-input-container {
+    width: 100vw;
+    height: min-content;
+    z-index: 20;
+    margin-top: 5px;
+    display: flex;
+    background: green;
+    opacity: 0.2;
+    align-items: flex-end;
+}
+
+.touch-panel {
+    width: 50%;
+    height: 50px;
+}
+
+.touch-panel:nth-child(even) {
+    background: red;
+}
+
+.touch-panel:nth-child(odd) {
+    background: blue;
 }
 
 /*================ modal ========================*/
@@ -597,7 +621,6 @@ body {
     #board {
         justify-content: flex-start;
         height: auto;
-        gap: 20px;
     }
 
     .game-header {
