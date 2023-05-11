@@ -24,7 +24,7 @@ export class GameController {
 
   keyboardListener = () => {
     window.addEventListener("keyup", (e) => {
-      if (this.#isActive) {
+      if (this.#isActive && (e.key === "a" || e.key === "d")) {
         if (e.key === "a") this.historyAnswers.push("L");
         if (e.key === "d") this.historyAnswers.push("P");
         this.subscribers.forEach((subscriber) => {

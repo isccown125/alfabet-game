@@ -129,12 +129,13 @@ class GameState {
     this.gameController.subscribe(
       debounce((data) => {
         gameAnswers.setUserAnswer(data);
+        console.log("debounce", this.gameController.historyAnswers);
         new GameFeedback(gameAnswers.checkAnswer()).render(
           this.currentLevel.instance.effect.currentHighlightElementGroup.symbol
         );
         this.currentLevel.instance.effect.next();
         this.gameController.resetHistory();
-      }, 30)
+      }, 50)
     );
   }
 
