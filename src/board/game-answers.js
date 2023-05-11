@@ -14,7 +14,7 @@ export class GameAnswers {
   createAnswerButton(label, id) {
     return new Component()
       .create("button")
-      .setClassList("level-button")
+      .setClassList("answer-button")
       .setTextContext(label)
       .setAttributes({
         name: "data-answer",
