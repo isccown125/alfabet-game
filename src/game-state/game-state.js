@@ -126,17 +126,6 @@ class GameState {
         this.setState("finish-game");
       }
     });
-    this.gameController.subscribe(
-      debounce((data) => {
-        gameAnswers.setUserAnswer(data);
-        console.log("debounce", this.gameController.historyAnswers);
-        new GameFeedback(gameAnswers.checkAnswer()).render(
-          this.currentLevel.instance.effect.currentHighlightElementGroup.symbol
-        );
-        this.currentLevel.instance.effect.next();
-        this.gameController.resetHistory();
-      }, 50)
-    );
   }
 
   finishGame() {
@@ -197,6 +186,17 @@ class GameState {
     this.gameMenu.init();
     this.gameController = new GameController();
     this.gameController.initListeners();
+    this.gameController.subscribe(
+      debounce((data) => {
+        gameAnswers.setUserAnswer(data);
+        console.log("debounce", this.gameController.historyAnswers);
+        new GameFeedback(gameAnswers.checkAnswer()).render(
+          this.currentLevel.instance.effect.currentHighlightElementGroup.symbol
+        );
+        this.currentLevel.instance.effect.next();
+        this.gameController.resetHistory();
+      }, 50)
+    );
     page2.subscribe((customLevel) => {
       if (customLevel === "choose-level") {
         this.gameMenu.pageManager.setCurrentPage(customLevel);
