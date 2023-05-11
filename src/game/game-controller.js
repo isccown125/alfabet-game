@@ -15,6 +15,7 @@ export class GameController {
 
   initListeners() {
     this.keyboardListener();
+    this.touchListener();
   }
 
   resetHistory() {
@@ -33,7 +34,18 @@ export class GameController {
     });
   };
 
-  touchListener() {}
+  touchListener() {
+    window.addEventListener("touchend", (e) => {
+      if (this.#isActive) {
+        console.log(e.target);
+        if (e.target.dataset.answer === "L") this.historyAnswers.push("L");
+        if (e.target.dataset.answer === "P") this.historyAnswers.push("P");
+        this.subscribers.forEach((subscriber) => {
+          subscriber(this.historyAnswers.join(""));
+        });
+      }
+    });
+  }
 
   subscribe(subscriber) {
     this.subscribers.push(subscriber);

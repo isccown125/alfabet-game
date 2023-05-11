@@ -10,32 +10,24 @@ class Points {
 
   addPoints() {
     this.validateMultipler();
-    const points = Number(
-        (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
-    );
+    const points = Number(this.defalutPointsValue * this.multiplerPoints);
     this.currentPoints += points;
     this.correctAnswers++;
     this.validatePoints();
-    console.log("points added");
-    console.log(this.historyMultiplers);
   }
 
   substractPoints() {
     this.validateMultipler();
-    const points = Number(
-        (this.defalutPointsValue * this.multiplerPoints).toFixed(2)
-    );
+    const points = Number(this.defalutPointsValue * this.multiplerPoints);
     this.currentPoints -= points;
     this.incorrectAnswers++;
     this.validatePoints();
-    console.log("points substract");
   }
 
   set multipler(multipler) {
-    this.multiplerPoints = multipler
+    this.multiplerPoints = multipler;
     this.validateMultipler();
   }
-
 
   validateMultipler() {
     if (this.multiplerPoints <= 1) {

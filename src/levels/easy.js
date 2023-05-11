@@ -1,7 +1,7 @@
 import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
 
 export class Easy {
-  gameTime = 1000 * 3;
+  gameTime = 1000 * 60;
   name = "easy";
   createdCharacters = [];
   effect = new NormalHighlightCharacters();

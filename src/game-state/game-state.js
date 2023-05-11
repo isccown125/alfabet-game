@@ -160,7 +160,6 @@ class GameState {
   }
 
   initGame() {
-    keyBinder.resetActions();
     if (this.game instanceof AlphabetGame || this.game) {
       this.setState("default-state");
     }
