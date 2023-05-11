@@ -36,8 +36,9 @@ export class GameController {
 
   touchListener() {
     window.addEventListener("touchend", (e) => {
-      if (this.#isActive) {
-        console.log(e.target);
+      if (this.#isActive && e.target.parentElement.id === "choose-answer") {
+        console.log(e.target.parentElement);
+
         if (e.target.dataset.answer === "L") this.historyAnswers.push("L");
         if (e.target.dataset.answer === "P") this.historyAnswers.push("P");
         this.subscribers.forEach((subscriber) => {
