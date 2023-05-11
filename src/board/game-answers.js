@@ -2,8 +2,8 @@ import { Component } from "../components.js";
 import { points } from "../game-stats/points.js";
 
 export class GameAnswers {
-  corretAnswear = undefined;
-  userAnswear = undefined;
+  correctAnswer = undefined;
+  userAnswer = undefined;
   answers = ["L", "P", "O"];
   timeForAnswear = 1000;
   actionComponent = undefined;
@@ -23,15 +23,15 @@ export class GameAnswers {
   }
 
   checkAnswer() {
-    if (this.corretAnswear === "O") {
-      if (this.userAnswear === "LP" || this.userAnswear === "PL") {
+    if (this.correctAnswer === "O") {
+      if (this.userAnswer === "LP" || this.userAnswer === "PL") {
         points.addPoints();
         return "good-answer";
       }
       points.substractPoints();
       return "bad-answer";
     } else {
-      if (this.corretAnswear === this.userAnswear) {
+      if (this.correctAnswer === this.userAnswer) {
         points.addPoints();
         return "good-answer";
       }
@@ -51,50 +51,19 @@ export class GameAnswers {
     return this.actionComponent;
   }
 
-  setCorrentAnswear(answer) {
+  setCorrectAnswer(answer) {
     if (typeof answer !== "string") {
-      this.corretAnswear = undefined;
+      this.correctAnswer = undefined;
     }
 
-    this.corretAnswear = answer;
+    this.correctAnswer = answer;
   }
 
   setUserAnswer(answer) {
     if (typeof answer !== "string") {
-      this.userAnswear = undefined;
+      this.userAnswer = undefined;
     }
-    if (this.corretAnswear === "O") {
-      if (answer === "L") {
-        this.leftHand = true;
-      }
-      if (answer === "P") {
-        this.rightHand = true;
-      }
-      if (this.rightHand && this.leftHand) {
-        clearTimeout(this.twoKeyTimer);
-        this.twoKeyTimer = false;
-        this.leftHand = false;
-        this.rightHand = false;
-        return (this.userAnswear = "LP");
-      }
-      if (this.rightHand || this.leftHand) {
-        this.twoKeyTimer = setTimeout(() => {
-          if (!this.rightHand || !this.leftHand) {
-            this.leftHand = false;
-            this.rightHand = false;
-            this.userAnswear = undefined;
-            console.log(this.checkAnswer());
-          }
-        }, 200);
-      }
-      this.userAnswear += answer;
-      return;
-    }
-    this.userAnswear = answer;
-  }
-
-  addListener(cb) {
-    this.actionComponent.addEventListener("click", cb.bind(this));
+    this.userAnswer = answer;
   }
 
   render(parent) {

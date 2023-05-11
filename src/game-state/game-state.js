@@ -7,9 +7,10 @@ import { CustomLevelPage } from "../game-menu-pages/custom-level-page.js";
 import { LevelFactory } from "../levels/level-factory.js";
 import { LevelManager } from "../levels/level-manager.js";
 import { showModal } from "../modal.js";
-import { keyBinder } from "../key-binder/key-binder.js";
 import { GameFeedback } from "../board/game-feedback.js";
 import { points } from "../game-stats/points.js";
+import { GameController } from "../game/game-controller.js";
+import { debounce } from "../utils/functions.js";
 
 class GameState {
   currentState = "main-menu";
@@ -21,13 +22,12 @@ class GameState {
     "customize-level",
     "default",
   ];
-  points = points.currentPoints;
   currentLevel = { name: "", instance: undefined };
-  pointsMultipler = 1;
   subscribers = [];
   gameMenu = undefined;
   levelManager = undefined;
   game = undefined;
+  gameController = undefined;
 
   setState(state) {
     if (!state || typeof state !== "string") {
@@ -114,116 +114,40 @@ class GameState {
   }
 
   startGame() {
-    let answerState = "USER_DISABLE_CLICK";
-
+    console.log(this.gameController);
     this.currentLevel.instance.effect.subscribe((data) => {
-      answerState = data;
+      data === "USER_CAN_CLICK"
+        ? this.gameController.on()
+        : this.gameController.off();
     });
 
-    keyBinder.addAction({
-      key: "d",
-      actionID: "cos",
-      typeKeyEvent: "keyup",
-      actionCB: () => {
-        console.log(points);
-        if (answerState === "USER_CAN_CLICK") {
-          gameAnswers.setCorrentAnswear(
-            this.currentLevel.instance.effect.currentHighlightElementGroup
-              .values.symbol
-          );
-          if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswer("P");
-            if (!gameAnswers.twoKeyTimer) {
-              new GameFeedback(gameAnswers.checkAnswer()).render(
-                this.currentLevel.instance.effect.currentHighlightElementGroup
-                  .character
-              );
-              this.currentLevel.instance.effect.next();
-            }
-          } else {
-            gameAnswers.setUserAnswer("P");
-            new GameFeedback(gameAnswers.checkAnswer()).render(
-              this.currentLevel.instance.effect.currentHighlightElementGroup
-                .character
-            );
-            this.currentLevel.instance.effect.next();
-          }
-        }
-      },
-    });
-    keyBinder.addAction({
-      key: "a",
-      actionID: "cos",
-      typeKeyEvent: "keyup",
-      actionCB: () => {
-        console.log(points);
-        if (answerState === "USER_CAN_CLICK") {
-          gameAnswers.setCorrentAnswear(
-            this.currentLevel.instance.effect.currentHighlightElementGroup
-              .values.symbol
-          );
-          if (gameAnswers.corretAnswear === "O") {
-            gameAnswers.setUserAnswer("L");
-            if (!gameAnswers.twoKeyTimer) {
-              new GameFeedback(gameAnswers.checkAnswer()).render(
-                this.currentLevel.instance.effect.currentHighlightElementGroup
-                  .character
-              );
-              this.currentLevel.instance.effect.next();
-            }
-          } else {
-            gameAnswers.setUserAnswer("L");
-            new GameFeedback(gameAnswers.checkAnswer()).render(
-              this.currentLevel.instance.effect.currentHighlightElementGroup
-                .character
-            );
-            this.currentLevel.instance.effect.next();
-          }
-        }
-      },
-    });
-    gameAnswers.addListener((e) => {
-      console.log(points);
-      if (e.target.classList.value.includes("level-button")) {
-        if (answerState === "USER_CAN_CLICK") {
-          gameAnswers.setCorrentAnswear(
-            this.currentLevel.instance.effect.currentHighlightElementGroup
-              .values.symbol
-          );
-          if (gameAnswers.corretAnswear === "O") {
-            console.log(gameAnswers.twoKeyTimer, gameAnswers);
-            if (!gameAnswers.twoKeyTimer) {
-              new GameFeedback(gameAnswers.checkAnswer()).render(
-                this.currentLevel.instance.effect.currentHighlightElementGroup
-                  .character
-              );
-              this.currentLevel.instance.effect.next();
-            }
-          } else {
-            gameAnswers.setUserAnswer(e.target.dataset.answer);
-            new GameFeedback(gameAnswers.checkAnswer()).render(
-              this.currentLevel.instance.effect.currentHighlightElementGroup
-                .character
-            );
-            this.currentLevel.instance.effect.next();
-          }
-        }
-      }
-    });
     this.game.start((e) => {
       if (e === "GAME_FINISH") {
         this.setState("finish-game");
       }
     });
+    this.gameController.subscribe(
+      debounce((data) => {
+        gameAnswers.setUserAnswer(data);
+        new GameFeedback(gameAnswers.checkAnswer()).render(
+          this.currentLevel.instance.effect.currentHighlightElementGroup.symbol
+        );
+        this.currentLevel.instance.effect.next();
+        this.gameController.resetHistory();
+      }, 30)
+    );
   }
 
   finishGame() {
     this.game.finishGame();
     showModal("Koniec gry!", (content) => {
       content.innerHTML = `
-        :)
+       <p>Świetnie ci poszło!</p>
+       <div>Twoje punkty: ${points.currentPoints}</div>
+       <div>Złe odpowiedzi: ${points.incorrectAnswers} <br> Dobre odpowiedzi: ${points.correctAnswers}</div>
       `;
     });
+    this.gameController.off();
     this.setState("clear-game");
   }
 
@@ -254,6 +178,7 @@ class GameState {
     points.multipler = this.currentLevel.instance.pointsMultipler;
     this.game.setGameBoard(board);
     this.game.setTimer();
+
     this.game.loadGameScreen(() => {
       this.setState("start-game");
     }, 3000);
@@ -270,6 +195,8 @@ class GameState {
     this.gameMenu.pageManager.registerPage(page1);
     this.gameMenu.pageManager.registerPage(page2.page);
     this.gameMenu.init();
+    this.gameController = new GameController();
+    this.gameController.initListeners();
     page2.subscribe((customLevel) => {
       if (customLevel === "choose-level") {
         this.gameMenu.pageManager.setCurrentPage(customLevel);
