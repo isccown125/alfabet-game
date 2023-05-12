@@ -16,7 +16,6 @@ export class GameFeedback {
 
   constructor(answerFlag) {
     this.answerFlag = answerFlag;
-    console.log(answerFlag);
     this.iconsPath.forEach((el) => {
       if (!answerFlag) {
         this.answerFlag = "bad-answer";

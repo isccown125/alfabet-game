@@ -1,9 +1,11 @@
+import { GameFeedback } from "../board/game-feedback.js";
+import { gameAnswers } from "../board/game-answers.js";
+
 export class ReverseHighlightCharacters {
   timerId = undefined;
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
-  fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
   effectName = "REVERSE_HIGHLIGHT";
@@ -19,8 +21,7 @@ export class ReverseHighlightCharacters {
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
-    const elementPos = elementForHighlight.getBoundingClientRect();
-    window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
+    gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
 
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -35,55 +36,69 @@ export class ReverseHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
-  getCurrentHighlightElement() {
-    return this.currentHighlightElementGroup;
+  get currentHighlightSymbol() {
+    return this.currentHighlightElementGroup.values.symbol;
   }
 
-  next() {
-    if (this.firstStart) {
-      clearTimeout(this.timerId);
-      this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup);
-      });
-      this.firstStart = false;
-      this.start();
-      return;
+  _increaseIndex() {
+    const alphabetLength = this.characters.length - 1;
+    if (this.characterIndexForHighlight === 0) {
+      this.characterIndexForHighlight = alphabetLength;
+    } else {
+      this.characterIndexForHighlight--;
     }
-    clearTimeout(this.timerId);
+  }
+
+  userClickManagement() {
+    this.userCanClickTimer = setTimeout(() => {
+      this.subscribers.forEach((el) => {
+        el("USER_DISABLE_CLICK");
+      });
+    }, this.intervalTime - 50);
+    setTimeout(() => {
+      this.subscribers.forEach((el) => {
+        el("USER_CAN_CLICK");
+      });
+    }, 50);
     this.subscribers.forEach((el) => {
-      el(this.currentHighlightElementGroup);
+      el("USER_DISABLE_CLICK");
     });
-    this.start();
   }
 
   start() {
-    const alphabetLength = this.characters.length - 1;
     if (this.firstStart) {
-      this.characterIndexForHighlight = alphabetLength;
+      this.characterIndexForHighlight = this.characters.length - 1;
       this.highlight(this.characterIndexForHighlight);
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
       }, this.intervalTime);
-    } else {
-      // sprawdzenie indexu
-      if (this.characterIndexForHighlight === 0) {
-        this.characterIndexForHighlight = alphabetLength;
-      } else {
-        this.characterIndexForHighlight--;
-      }
-      // podświetlenie następnej literki
-      this.highlight(this.characterIndexForHighlight);
-
-      // ustawienie czasu na odp
-      this.timerId = setTimeout(() => {
-        this.next();
-      }, this.intervalTime);
+      this.userClickManagement();
+      return;
     }
+    this._increaseIndex();
+    this.highlight(this.characterIndexForHighlight);
+    this.timerId = setTimeout(() => {
+      this.next();
+    }, this.intervalTime);
+    this.userClickManagement();
   }
 
-  update() {
-    clearInterval(this.timerId);
+  next() {
+    clearTimeout(this.userCanClickTimer);
+    if (this.firstStart) {
+      clearTimeout(this.timerId);
+      this.firstStart = false;
+      new GameFeedback(gameAnswers.checkAnswer()).render(
+        this.currentHighlightElementGroup.symbol
+      );
+      this.start();
+      return;
+    }
+    clearTimeout(this.timerId);
+    new GameFeedback(gameAnswers.checkAnswer()).render(
+      this.currentHighlightElementGroup.symbol
+    );
     this.start();
   }
 

@@ -1,4 +1,6 @@
 import { random } from "../utils/functions.js";
+import { gameAnswers } from "../board/game-answers.js";
+import { GameFeedback } from "../board/game-feedback.js";
 
 export class RandomHighlightCharacters {
   timerId = undefined;
@@ -13,6 +15,7 @@ export class RandomHighlightCharacters {
   lastIndex = 0;
   currentHighlightElementGroup = undefined;
   subscribers = [];
+  userCanClickTimer = false;
   firstStart = true;
 
   setCharacters(characters) {
@@ -22,8 +25,7 @@ export class RandomHighlightCharacters {
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
-    const elementPos = elementForHighlight.getBoundingClientRect();
-    window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
+    gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
 
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -38,58 +40,81 @@ export class RandomHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
-  getCurrentHighlightElement() {
-    return this.currentHighlightElementGroup;
+  get currentHighlightSymbol() {
+    return this.currentHighlightElementGroup.values.symbol;
   }
 
-  next() {
-    if (this.firstStart) {
-      clearTimeout(this.timerId);
-      this.subscribers.forEach((el) => {
-        el(this.currentHighlightElementGroup);
-      });
-      this.firstStart = false;
-      this.start();
+  _incraseIndex() {
+    const alphabetLength = this.characters.length - 1;
+    if (!this.lastIndex) {
+      this.characterIndexForHighlight = random(0, alphabetLength);
+      this.lastIndex = this.characterIndexForHighlight;
       return;
     }
-    clearTimeout(this.timerId);
+    this.lastIndex = this.characterIndexForHighlight;
+    this.characterIndexForHighlight = random(0, alphabetLength);
+    if (this.characterIndexForHighlight === this.lastIndex) {
+      while (this.characterIndexForHighlight === this.lastIndex) {
+        this.characterIndexForHighlight = random(0, alphabetLength);
+        console.log("loop");
+      }
+    }
+  }
+
+  userClickManagement() {
+    this.userCanClickTimer = setTimeout(() => {
+      this.subscribers.forEach((el) => {
+        el("USER_DISABLE_CLICK");
+      });
+    }, this.intervalTime - 50);
+    setTimeout(() => {
+      this.subscribers.forEach((el) => {
+        el("USER_CAN_CLICK");
+      });
+    }, 50);
     this.subscribers.forEach((el) => {
-      el(this.currentHighlightElementGroup);
+      el("USER_DISABLE_CLICK");
     });
-    this.start();
   }
 
   start() {
-    const alphabetLength = this.characters.length - 1;
     if (this.firstStart) {
-      this.characterIndexForHighlight = random(0, alphabetLength);
-      this.lastIndex = this.characterIndexForHighlight;
+      this._incraseIndex();
       this.highlight(this.characterIndexForHighlight);
+
+      this.userClickManagement();
+
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
       }, this.intervalTime);
-    } else {
-      // sprawdzenie indexu
-      if (this.characterIndexForHighlight === this.lastIndex) {
-        while (this.characterIndexForHighlight === this.lastIndex) {
-          this.characterIndexForHighlight = random(0, alphabetLength);
-        }
-      } else {
-        this.characterIndexForHighlight = random(0, alphabetLength);
-      }
-      // podświetlenie następnej literki
-      this.highlight(this.characterIndexForHighlight);
-
-      // ustawienie czasu na odp
-      this.timerId = setTimeout(() => {
-        this.next();
-      }, this.intervalTime);
+      return;
     }
+    this._incraseIndex();
+    this.highlight(this.characterIndexForHighlight);
+
+    this.timerId = setTimeout(() => {
+      this.next();
+    }, this.intervalTime);
+
+    this.userClickManagement();
   }
 
-  update() {
-    clearInterval(this.timerId);
+  next() {
+    clearTimeout(this.userCanClickTimer);
+    if (this.firstStart) {
+      clearTimeout(this.timerId);
+      this.firstStart = false;
+      new GameFeedback(gameAnswers.checkAnswer()).render(
+        this.currentHighlightElementGroup.symbol
+      );
+      this.start();
+      return;
+    }
+    new GameFeedback(gameAnswers.checkAnswer()).render(
+      this.currentHighlightElementGroup.symbol
+    );
+    clearTimeout(this.timerId);
     this.start();
   }
 

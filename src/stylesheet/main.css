@@ -64,7 +64,6 @@ body {
     padding: 20px 0;
     width: 700px;
     height: min-content;
-
     gap: 20px;
     position: relative;
     top: 10px;
@@ -284,6 +283,8 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
+    max-width: 540px;
+    width: 100%;
 
 }
 

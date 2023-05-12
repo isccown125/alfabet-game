@@ -1,11 +1,11 @@
 import { gameAnswers } from "../board/game-answers.js";
+import { GameFeedback } from "../board/game-feedback.js";
 
 export class NormalHighlightCharacters {
   timerId = undefined;
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
-  fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
   effectName = "NORMAL_HIGHLIGHT";
@@ -13,7 +13,6 @@ export class NormalHighlightCharacters {
   subscribers = [];
   characterIndexForHighlight = 0;
   nextCharacterIndexForHighlight = 1;
-  answearTimer = undefined;
   firstStart = true;
   userCanClickTimer = undefined;
 
@@ -24,12 +23,7 @@ export class NormalHighlightCharacters {
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
-    gameAnswers.setCorrectAnswer(
-      this.currentHighlightElementGroup.values.symbol
-    );
-    // const elementPos = elementForHighlight.getBoundingClientRect();
-    // window.scrollBy(window.innerHeight / 2, Math.floor(elementPos.y) - 50);
-
+    gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
       this.currentHighlightElement.classList.add(this.className);
@@ -56,56 +50,57 @@ export class NormalHighlightCharacters {
     return this.currentHighlightElementGroup.values.symbol;
   }
 
-  start() {
-    if (this.firstStart) {
-      this.highlight(this.characterIndexForHighlight);
-      this.userCanClickTimer = setTimeout(() => {
-        this.subscribers.forEach((el) => {
-          el("USER_DISABLE_CLICK");
-        });
-      }, this.intervalTime - 200);
-      gameAnswers.setCorrectAnswer(
-        this.currentHighlightElementGroup.values.symbol
-      );
-      setTimeout(() => {
-        this.subscribers.forEach((el) => {
-          el("USER_CAN_CLICK");
-        });
-      }, 150);
+  userClickManagement() {
+    this.userCanClickTimer = setTimeout(() => {
       this.subscribers.forEach((el) => {
         el("USER_DISABLE_CLICK");
       });
+    }, this.intervalTime - 50);
+    setTimeout(() => {
+      this.subscribers.forEach((el) => {
+        el("USER_CAN_CLICK");
+      });
+    }, 50);
+    this.subscribers.forEach((el) => {
+      el("USER_DISABLE_CLICK");
+    });
+  }
+
+  start() {
+    if (this.firstStart) {
+      this.highlight(this.characterIndexForHighlight);
+
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
       }, this.intervalTime);
-    } else {
-      this._increaseIndex();
-      this.highlight(this.characterIndexForHighlight);
-      this.timerId = setTimeout(() => {
-        this.next();
-      }, this.intervalTime);
-
-      this.userCanClickTimer = setTimeout(() => {
-        this.subscribers.forEach((el) => {
-          el("USER_DISABLE_CLICK");
-        });
-      }, this.intervalTime - 150);
-      gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
-      this.subscribers.forEach((el) => {
-        el("USER_CAN_CLICK");
-      });
+      this.userClickManagement();
+      return;
     }
+
+    this._increaseIndex();
+    this.highlight(this.characterIndexForHighlight);
+    this.timerId = setTimeout(() => {
+      this.next();
+    }, this.intervalTime);
+
+    this.userClickManagement();
   }
 
   next() {
     clearTimeout(this.userCanClickTimer);
     if (this.firstStart) {
       clearTimeout(this.timerId);
+      new GameFeedback(gameAnswers.checkAnswer()).render(
+        this.currentHighlightElementGroup.symbol
+      );
       this.firstStart = false;
       this.start();
       return;
     }
+    new GameFeedback(gameAnswers.checkAnswer()).render(
+      this.currentHighlightElementGroup.symbol
+    );
     clearTimeout(this.timerId);
     this.start();
   }

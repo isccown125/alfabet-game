@@ -1,5 +1,5 @@
-import { Component } from "../components.js";
-import { points } from "../game-stats/points.js";
+import {Component} from "../components.js";
+import {points} from "../game-stats/points.js";
 
 export class GameAnswers {
   correctAnswer = undefined;
@@ -13,37 +13,46 @@ export class GameAnswers {
 
   createAnswerButton(label, id) {
     return new Component()
-      .create("button")
-      .setClassList("answer-button")
-      .setTextContext(label)
-      .setAttributes({
-        name: "data-answer",
-        value: id,
-      }).htmlElement;
+        .create("button")
+        .setClassList("answer-button")
+        .setTextContext(label)
+        .setAttributes({
+          name: "data-answer",
+          value: id,
+        }).htmlElement;
   }
 
   checkAnswer() {
     if (this.correctAnswer === "O") {
       if (this.userAnswer === "LP" || this.userAnswer === "PL") {
         points.addPoints();
+        this.resetAnswers()
         return "good-answer";
       }
       points.substractPoints();
+      this.resetAnswers()
       return "bad-answer";
     } else {
       if (this.correctAnswer === this.userAnswer) {
         points.addPoints();
+        this.resetAnswers()
         return "good-answer";
       }
     }
     points.substractPoints();
+    this.resetAnswers()
     return "bad-answer";
+  }
+
+  resetAnswers() {
+    this.userAnswer = undefined;
+    this.correctAnswer = undefined
   }
 
   createActionsComponent() {
     this.actionComponent = new Component()
-      .create("div")
-      .setId("choose-answer").htmlElement;
+        .create("div")
+        .setId("choose-answer").htmlElement;
     const button = this.createAnswerButton("lewa ręka", "L");
     const button2 = this.createAnswerButton("prawa ręka", "P");
     this.actionComponent.append(button);
