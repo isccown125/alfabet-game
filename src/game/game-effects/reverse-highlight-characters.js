@@ -1,5 +1,5 @@
-import { GameFeedback } from "../board/game-feedback.js";
-import { gameAnswers } from "../board/game-answers.js";
+import { GameFeedback } from "../../board/game-feedback.js";
+import { gameAnswers } from "../../board/game-answers.js";
 
 export class ReverseHighlightCharacters {
   timerId = undefined;

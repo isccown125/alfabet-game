@@ -1,7 +1,7 @@
-import { Component } from "../components.js";
-import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
-import { RandomHighlightCharacters } from "../game-effects/random-highlight-characters.js";
-import { ReverseHighlightCharacters } from "../game-effects/reverse-highlight-characters.js";
+import { Component } from "../../components/components.js";
+import { NormalHighlightCharacters } from "../../game/game-effects/normal-highlight-characters.js";
+import { RandomHighlightCharacters } from "../../game/game-effects/random-highlight-characters.js";
+import { ReverseHighlightCharacters } from "../../game/game-effects/reverse-highlight-characters.js";
 
 export class CustomLevelPage {
   page = {
@@ -120,41 +120,27 @@ export class CustomLevelPage {
     if (this.level.randomEffects) {
       randomEffects.checked = this.level.randomEffects;
     }
-    if (
-      !this.level.options.highlightOptions.normal &&
-      !this.level.options.highlightOptions.reverse &&
-      !this.level.options.highlightOptions.random
-    ) {
-      highlightType.forEach((el) => {
-        console.log(el);
-        if (el.dataset.highlightDirection === "off") {
-          el.checked = true;
-        } else {
-          el.checked = false;
-        }
-      });
-    } else {
-      highlightType.forEach((el) => {
-        if (
-          this.level.options.highlightOptions.normal &&
-          el.dataset.highlightDirection === "normal"
-        ) {
-          el.checked = true;
-        }
-        if (
-          this.level.options.highlightOptions.random &&
-          el.dataset.highlightDirection === "random"
-        ) {
-          el.checked = true;
-        }
-        if (
-          this.level.options.highlightOptions.reverse &&
-          el.dataset.highlightDirection === "reverse"
-        ) {
-          el.checked = true;
-        }
-      });
-    }
+
+    highlightType.forEach((el) => {
+      if (
+        this.level.options.highlightOptions.normal &&
+        el.dataset.highlightDirection === "normal"
+      ) {
+        el.checked = true;
+      }
+      if (
+        this.level.options.highlightOptions.random &&
+        el.dataset.highlightDirection === "random"
+      ) {
+        el.checked = true;
+      }
+      if (
+        this.level.options.highlightOptions.reverse &&
+        el.dataset.highlightDirection === "reverse"
+      ) {
+        el.checked = true;
+      }
+    });
     this.highlightOptionsValidate();
     this.timeOptionValidate();
   }
@@ -305,11 +291,21 @@ export class CustomLevelPage {
     const highlightComponent = new Component()
       .create("div")
       .setClassList("highlight-options-component").htmlElement;
-    highlightComponent.innerHTML = "<p>Wybierz podświetlenie alfabetu</p>";
-    const radio = this.createHighLightOption("standardowe", "normal", true);
-    const radio1 = this.createHighLightOption("odwrócone", "reverse");
-    const radio2 = this.createHighLightOption("randomowe", "random");
-    const radio3 = this.createHighLightOption("wyłączone", "off");
+    highlightComponent.innerHTML =
+      "<p>Wybierz rodzaj podświetlenia alfabetu</p>";
+    const radio = this.createHighLightOption("standardowe", "normal", {
+      checked: true,
+      tooltipContent: "Alfabet podświetla się od początku.",
+    });
+    const radio1 = this.createHighLightOption("odwrócone", "reverse", {
+      tooltipContent: "Alfabet zaczyna podświetlać od tyłu.",
+    });
+    const radio2 = this.createHighLightOption("randomowe", "random", {
+      tooltipContent: "Alfabet jest podświetlany randomowo.",
+    });
+    const radio3 = this.createHighLightOption("wyłączone", "off", {
+      tooltipContent: "Podświetlenie alfabetu jest wyłączone.",
+    });
     highlightComponent.appendChild(radio);
     highlightComponent.appendChild(radio1);
     highlightComponent.appendChild(radio2);
@@ -422,7 +418,11 @@ export class CustomLevelPage {
     });
   }
 
-  createHighLightOption(label, name, checked = false) {
+  createHighLightOption(label, name, { tooltipContent = "", checked = false }) {
+    const highlightComponent = new Component()
+      .create("div")
+      .setClassList("radio-group");
+
     const input = new Component()
       .create("input")
       .setAttributes(
@@ -437,11 +437,39 @@ export class CustomLevelPage {
       .create("label")
       .setTextContext(label).htmlElement;
 
-    return new Component()
-      .create("div")
-      .setClassList("radio-group")
-      .setChild({ htmlElement: inputLabel }, { htmlElement: input.htmlElement })
-      .htmlElement;
+    highlightComponent.setChild(
+      { htmlElement: inputLabel },
+      { htmlElement: input.htmlElement }
+    );
+    if (tooltipContent.length > 0) {
+      const tooltip = new Component()
+        .create("span")
+        .setClassList("tooltip-icon")
+        .setAttributes({
+          name: "data-tippy-content",
+          value: tooltipContent,
+        })
+        .setClassList("tooltip-icon").htmlElement;
+      const tooltipImg = new Component()
+        .create("img")
+        .setClassList("tooltip-icon__img")
+        .setAttributes({
+          name: "src",
+          value: "./src/assets/icons/icons8-info.svg",
+        })
+        .setClassList("tooltip-icon").htmlElement;
+
+      tooltip.append(tooltipImg);
+      highlightComponent.setChild({ htmlElement: tooltip });
+      tippy(tooltip, {
+        allowHTML: false,
+        arrow: true,
+        placement: "right",
+        zIndex: 20,
+      });
+    }
+
+    return highlightComponent.htmlElement;
   }
 
   createCheckboxOption(name, label) {

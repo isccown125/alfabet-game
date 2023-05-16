@@ -1,4 +1,4 @@
-import { Component } from "./components.js";
+import { Component } from "../components/components.js";
 import { PageManager } from "./page-manager.js";
 
 export class GameMenu {

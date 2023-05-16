@@ -276,6 +276,18 @@ body {
     width: 60px;
 }
 
+.click-button {
+    box-sizing: border-box;
+    opacity: 0.6 !important;
+    background: #d33939 !important;
+
+}
+
+.answer-button {
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+
 /*================ board ========================*/
 #board {
     display: flex;
@@ -286,6 +298,15 @@ body {
     max-width: 540px;
     width: 100%;
 
+}
+
+.load-screen__label {
+    margin-right: 4px;
+    word-break: normal;
+}
+
+.initialTimer span {
+    font-size: 40px !important;
 }
 
 .feedback-icon {
@@ -465,6 +486,14 @@ body {
     background: blue;
 }
 
+.game-loader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: max-content;
+    min-height: 130px;
+}
+
 /*================ modal ========================*/
 #modal {
     position: absolute;
@@ -506,6 +535,7 @@ body {
 }
 
 .modal-button {
+    margin-top: 3px;
     padding: 10px 15px;
     color: white;
     background: #cb3b3b;
@@ -534,10 +564,28 @@ body {
     }
 }
 
-@media screen and (max-height: 600px) {
+/*================ tooltip ========================*/
+
+.tooltip-icon {
+    display: flex;
+    margin-left: 5px;
+}
+
+
+.tooltip-icon__img {
+    margin-top: 3px;
+    width: 23px;
 }
 
 @media screen and (max-width: 700px) {
+    .board-container {
+        padding: 12px 8px 8px 8px;
+    }
+
+    .feedback-icon {
+        width: 20px;
+    }
+
     #alphabet-game {
     }
 
@@ -585,6 +633,7 @@ body {
 
     .text-style,
     .list li:first-letter,
+    #rules p,
     .list li {
         font-size: clamp(8px, 3vw, 18px);
     }
@@ -607,7 +656,7 @@ body {
     }
 
     .character-group .character {
-        font-size: clamp(30px, 10vw, 70px);
+        font-size: clamp(30px, 10vw, 60px);
     }
 
     .character-group .symbol {
@@ -616,7 +665,12 @@ body {
 
     .timer span,
     .timer {
-        font-size: clamp(10px, 10vw, 60px);
+        font-size: clamp(10px, 10vw, 60px) !important;
+    }
+
+    .load-screen__label,
+    .initialTimer span {
+        font-size: clamp(10px, 10vw, 40px) !important;
     }
 
     .board-container {

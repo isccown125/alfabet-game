@@ -1,11 +1,11 @@
-import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
+import { NormalHighlightCharacters } from "../game/game-effects/normal-highlight-characters.js";
 
 export class Easy {
-  gameTime = 1000 * 60;
+  gameTime = 1000 * 60 * 2;
   name = "easy";
   createdCharacters = [];
   effect = new NormalHighlightCharacters();
-  pointsMultipler = 1;
+  pointsMultiplier = 1;
   alphabet = [
     "A",
     "B",
@@ -35,7 +35,7 @@ export class Easy {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effect.intervalTime = 1500;
+    this.effect.intervalTime = 900;
   }
 
   setCreatedCharacters(characters) {

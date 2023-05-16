@@ -1,58 +1,67 @@
-import {Component} from "../components.js";
-import {points} from "../game-stats/points.js";
+import { Component } from "../components/components.js";
 
 export class GameAnswers {
   correctAnswer = undefined;
   userAnswer = undefined;
-  answers = ["L", "P", "O"];
-  timeForAnswear = 1000;
   actionComponent = undefined;
-  leftHand = false;
-  rightHand = false;
-  twoKeyTimer = false;
+  goodAnswers = 0;
+  badAnswers = 0;
+
+  get badAnswers() {
+    return this.badAnswers >= 0 ? this.badAnswers : 0;
+  }
+
+  get goodAnswers() {
+    return this.goodAnswers >= 0 ? this.goodAnswers : 0;
+  }
+
+  reset() {
+    this.goodAnswers = 0;
+    this.badAnswers = 0;
+  }
 
   createAnswerButton(label, id) {
     return new Component()
-        .create("button")
-        .setClassList("answer-button")
-        .setTextContext(label)
-        .setAttributes({
-          name: "data-answer",
-          value: id,
-        }).htmlElement;
+      .create("button")
+      .setClassList("answer-button")
+      .setTextContext(label)
+      .setAttributes({
+        name: "data-answer",
+        value: id,
+      }).htmlElement;
   }
 
   checkAnswer() {
     if (this.correctAnswer === "O") {
       if (this.userAnswer === "LP" || this.userAnswer === "PL") {
-        points.addPoints();
-        this.resetAnswers()
+        this.resetAnswers();
+        this.goodAnswers++;
         return "good-answer";
       }
-      points.substractPoints();
-      this.resetAnswers()
+      this.resetAnswers();
+      this.badAnswers++;
       return "bad-answer";
     } else {
       if (this.correctAnswer === this.userAnswer) {
-        points.addPoints();
-        this.resetAnswers()
+        this.resetAnswers();
+        this.goodAnswers++;
         return "good-answer";
       }
     }
-    points.substractPoints();
-    this.resetAnswers()
+    this.resetAnswers();
+    this.badAnswers++;
     return "bad-answer";
   }
 
   resetAnswers() {
     this.userAnswer = undefined;
-    this.correctAnswer = undefined
+    this.correctAnswer = undefined;
   }
 
   createActionsComponent() {
     this.actionComponent = new Component()
-        .create("div")
-        .setId("choose-answer").htmlElement;
+      .create("div")
+      .setId("choose-answer").htmlElement;
     const button = this.createAnswerButton("lewa ręka", "L");
     const button2 = this.createAnswerButton("prawa ręka", "P");
     this.actionComponent.append(button);

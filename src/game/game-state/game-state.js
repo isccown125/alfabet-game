@@ -1,16 +1,15 @@
-import { gameAnswers } from "../board/game-answers.js";
-import { Board } from "../board/board.js";
-import { GameMenu } from "../game-menu.js";
-import { AlphabetGame } from "../game/alfabet-game.js";
-import { chooseLevelPage } from "../game-menu-pages/choose-level-page.js";
-import { CustomLevelPage } from "../game-menu-pages/custom-level-page.js";
-import { LevelFactory } from "../levels/level-factory.js";
-import { LevelManager } from "../levels/level-manager.js";
-import { showModal } from "../modal.js";
-import { GameFeedback } from "../board/game-feedback.js";
-import { points } from "../game-stats/points.js";
-import { GameController } from "../game/game-controller.js";
-import { debounce } from "../utils/functions.js";
+import { gameAnswers } from "../../board/game-answers.js";
+import { Board } from "../../board/board.js";
+import { GameMenu } from "../../game-menu/game-menu.js";
+import { AlphabetGame } from "../alfabet-game.js";
+import { chooseLevelPage } from "../../game-menu/game-menu-pages/choose-level-page.js";
+import { CustomLevelPage } from "../../game-menu/game-menu-pages/custom-level-page.js";
+import { LevelFactory } from "../../levels/level-factory.js";
+import { LevelManager } from "../../levels/level-manager.js";
+import { showModal } from "../../components/modal.js";
+import { Points } from "../game-stats/points.js";
+import { GameController } from "../game-controller.js";
+import { calculatePercentage, debounce } from "../../utils/functions.js";
 
 class GameState {
   currentState = "main-menu";
@@ -28,6 +27,8 @@ class GameState {
   levelManager = undefined;
   game = undefined;
   gameController = undefined;
+  loadGameScreenTime = 3000;
+  keyboardDelay = 50;
 
   setState(state) {
     if (!state || typeof state !== "string") {
@@ -41,7 +42,7 @@ class GameState {
       subscriber({
         currentState: this.currentState,
         points: this.points,
-        pointsMultipler: this.pointsMultipler,
+        pointsMultiplier: this.pointsMultiplier,
       });
     });
     this.runState();
@@ -54,9 +55,6 @@ class GameState {
         break;
       case "start-game":
         this.startGame();
-        break;
-      case "customize-level":
-        this.customizeLevel();
         break;
       case "init-game":
         this.initGame();
@@ -109,12 +107,11 @@ class GameState {
     }
     this.game = undefined;
     this.points = 0;
-    this.pointsMultipler = 1;
+    this.pointsMultiplier = 1;
     this.setState("main-menu");
   }
 
   startGame() {
-    console.log(this.gameController);
     this.currentLevel.instance.effect.subscribe((data) => {
       data === "USER_CAN_CLICK"
         ? this.gameController.on()
@@ -123,6 +120,26 @@ class GameState {
 
     this.game.start((e) => {
       if (e === "GAME_FINISH") {
+        const points = new Points(
+          gameAnswers.badAnswers,
+          gameAnswers.goodAnswers,
+          this.currentLevel.instance.pointsMultiplier
+        );
+        const customEvent = new CustomEvent("alphabetgame-finish", {
+          detail: {
+            gameData: JSON.stringify({
+              badAnswers: gameAnswers.badAnswers,
+              goodAnswers: gameAnswers.goodAnswers,
+              points: points.points,
+              correctly: calculatePercentage(
+                gameAnswers.goodAnswers,
+                gameAnswers.goodAnswers,
+                gameAnswers.badAnswers
+              ).toFixed(2),
+            }),
+          },
+        });
+        window.dispatchEvent(customEvent);
         this.setState("finish-game");
       }
     });
@@ -130,11 +147,24 @@ class GameState {
 
   finishGame() {
     this.game.finishGame();
+    const points = new Points(
+      gameAnswers.badAnswers,
+      gameAnswers.goodAnswers,
+      this.currentLevel.instance.pointsMultiplier
+    );
+
     showModal("Koniec gry!", (content) => {
       content.innerHTML = `
        <p>Świetnie ci poszło!</p>
-       <div>Twoje punkty: ${points.currentPoints}</div>
-       <div>Złe odpowiedzi: ${points.incorrectAnswers} <br> Dobre odpowiedzi: ${points.correctAnswers}</div>
+       <div>Twoje punkty: ${points.points}</div>
+       <div>Złe odpowiedzi: ${gameAnswers.badAnswers} <br> Dobre odpowiedzi: ${
+        gameAnswers.goodAnswers
+      }</div>
+       <div>Poprawność odpowiedzi ${calculatePercentage(
+         gameAnswers.goodAnswers,
+         gameAnswers.goodAnswers,
+         gameAnswers.badAnswers
+       ).toFixed(2)}%</div>
       `;
     });
     this.gameController.off();
@@ -145,7 +175,7 @@ class GameState {
     this.currentLevel = { name: "", instance: undefined };
     this.game.clearGame();
     this.points = 0;
-    this.pointsMultipler = 1;
+    this.pointsMultiplier = 1;
     this.setState("main-menu");
   }
 
@@ -163,17 +193,13 @@ class GameState {
     board.cancelGameButton.addEventListener("click", () => {
       this.setState("clear-game");
     });
-    points.clear();
-    points.multipler = this.currentLevel.instance.pointsMultipler;
     this.game.setGameBoard(board);
     this.game.setTimer();
-
+    gameAnswers.reset();
     this.game.loadGameScreen(() => {
       this.setState("start-game");
-    }, 3000);
+    }, this.loadGameScreenTime);
   }
-
-  customizeLevel() {}
 
   initialize() {
     this.setDomRootForRender();
@@ -191,7 +217,7 @@ class GameState {
         gameAnswers.setUserAnswer(data);
         this.currentLevel.instance.effect.next();
         this.gameController.resetHistory();
-      }, 50)
+      }, this.keyboardDelay)
     );
     page2.subscribe((customLevel) => {
       if (customLevel === "choose-level") {

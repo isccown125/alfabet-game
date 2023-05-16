@@ -1,20 +1,25 @@
-import { gameAnswers } from "../board/game-answers.js";
-import { GameFeedback } from "../board/game-feedback.js";
+import { gameAnswers } from "../../board/game-answers.js";
+import { GameFeedback } from "../../board/game-feedback.js";
+import { random } from "../../utils/functions.js";
 
-export class NormalHighlightCharacters {
+export class RandomizeHighlightGameEffect {
   timerId = undefined;
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
   intervalTime = 1000;
+  effectChangeTime = 5000;
   className = "highlight";
-  effectName = "NORMAL_HIGHLIGHT";
+  effectName = "REVERSE_HIGHLIGHT";
+  characterIndexForHighlight = 0;
+  lastIndex = undefined;
   currentHighlightElementGroup = undefined;
   subscribers = [];
-  characterIndexForHighlight = 0;
-  nextCharacterIndexForHighlight = 1;
   firstStart = true;
-  userCanClickTimer = undefined;
+  currentEffectIndex = 0;
+  lastEffectIndex;
+  nextEffect = true;
+  effectTimer = undefined;
 
   setCharacters(characters) {
     this.characters = characters;
@@ -24,6 +29,7 @@ export class NormalHighlightCharacters {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
     gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
+
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
       this.currentHighlightElement.classList.add(this.className);
@@ -37,8 +43,13 @@ export class NormalHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
+  get currentHighlightSymbol() {
+    return this.currentHighlightElementGroup.values.symbol;
+  }
+
   _increaseIndex() {
     const alphabetLength = this.characters.length - 1;
+    this.lastIndex = this.characterIndexForHighlight;
     if (this.characterIndexForHighlight === alphabetLength) {
       this.characterIndexForHighlight = 0;
     } else {
@@ -46,8 +57,30 @@ export class NormalHighlightCharacters {
     }
   }
 
-  get currentHighlightSymbol() {
-    return this.currentHighlightElementGroup.values.symbol;
+  _decreaseIndex() {
+    const alphabetLength = this.characters.length - 1;
+    this.lastIndex = this.characterIndexForHighlight;
+    if (this.characterIndexForHighlight === 0) {
+      this.characterIndexForHighlight = alphabetLength;
+    } else {
+      this.characterIndexForHighlight--;
+    }
+  }
+
+  _randomIndex() {
+    const alphabetLength = this.characters.length - 1;
+    if (!this.lastIndex) {
+      this.characterIndexForHighlight = random(0, alphabetLength);
+      this.lastIndex = this.characterIndexForHighlight;
+      return;
+    }
+    this.lastIndex = this.characterIndexForHighlight;
+    this.characterIndexForHighlight = random(0, alphabetLength);
+    if (this.characterIndexForHighlight === this.lastIndex) {
+      while (this.characterIndexForHighlight === this.lastIndex) {
+        this.characterIndexForHighlight = random(0, alphabetLength);
+      }
+    }
   }
 
   userClickManagement() {
@@ -66,10 +99,44 @@ export class NormalHighlightCharacters {
     });
   }
 
+  _changeEffects() {
+    if (this.firstStart) {
+      this.currentEffectIndex = 0;
+      this.lastEffectIndex = 0;
+      this.currentEffectIndex = random(0, 2);
+      this.lastEffectIndex = this.currentEffectIndex;
+    }
+    if (this.nextEffect) {
+      this.nextEffect = false;
+      this.effectTimer = setTimeout(() => {
+        this.lastIndex = this.currentEffectIndex;
+        this.currentEffectIndex = random(0, 2);
+        if (this.currentEffectIndex === this.lastIndex) {
+          while (this.currentEffectIndex === this.lastIndex) {
+            this.currentEffectIndex = random(0, 2);
+          }
+        }
+        this.nextEffect = true;
+      }, this.effectChangeTime);
+    }
+    switch (this.currentEffectIndex) {
+      case 0:
+        this._increaseIndex();
+        break;
+      case 1:
+        this._decreaseIndex();
+        break;
+      case 2:
+        this._randomIndex();
+        break;
+    }
+  }
+
   start() {
     if (this.firstStart) {
+      this._changeEffects();
+      this.characterIndexForHighlight = this.characters.length - 1;
       this.highlight(this.characterIndexForHighlight);
-
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
@@ -77,13 +144,11 @@ export class NormalHighlightCharacters {
       this.userClickManagement();
       return;
     }
-
-    this._increaseIndex();
+    this._changeEffects();
     this.highlight(this.characterIndexForHighlight);
     this.timerId = setTimeout(() => {
       this.next();
     }, this.intervalTime);
-
     this.userClickManagement();
   }
 
@@ -91,40 +156,33 @@ export class NormalHighlightCharacters {
     clearTimeout(this.userCanClickTimer);
     if (this.firstStart) {
       clearTimeout(this.timerId);
+      this.firstStart = false;
       new GameFeedback(gameAnswers.checkAnswer()).render(
         this.currentHighlightElementGroup.symbol
       );
-      this.firstStart = false;
       this.start();
       return;
     }
+    clearTimeout(this.timerId);
     new GameFeedback(gameAnswers.checkAnswer()).render(
       this.currentHighlightElementGroup.symbol
     );
-    clearTimeout(this.timerId);
-    this.start();
-  }
-
-  update() {
-    clearTimeout(this.timerId);
     this.start();
   }
 
   stop() {
     clearTimeout(this.timerId);
+    clearTimeout(this.effectTimer);
     if (this.currentHighlightElement) {
       this.currentHighlightElement.classList.remove(this.className);
     }
     if (this.lastHighlightElement) {
       this.lastHighlightElement.classList.remove(this.className);
     }
+    this.index = 0;
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
-    this.characterIndexForHighlight = 0;
-    this.nextCharacterIndexForHighlight = 1;
-    this.firstStart = true;
     this.subscribers = [];
-    this.options = { randomize: false, reverse: false };
   }
 
   subscribe(subscriber) {

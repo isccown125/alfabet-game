@@ -1,4 +1,4 @@
-import { Component } from "../components.js";
+import { Component } from "../components/components.js";
 import { CreateGameSymbols } from "./create-game-symbols.js";
 import { gameAnswers } from "./game-answers.js";
 

@@ -1,4 +1,4 @@
-import { Component } from "../components.js";
+import { Component } from "../../components/components.js";
 
 export class Statistics {
   stats = [];
