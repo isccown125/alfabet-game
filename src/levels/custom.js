@@ -2,6 +2,7 @@ export class Custom {
   gameTime = 1000 * 60;
   name = "custom";
   effects = [];
+  pointsMultiplier = 3;
   randomEffects = [];
   alphabet = [
     "A",

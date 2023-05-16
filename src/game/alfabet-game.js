@@ -1,26 +1,14 @@
 import { Board } from "../board/board.js";
-import { Component } from "../components.js";
-import { backdrop } from "../modal.js";
+import { Component } from "../components/components.js";
+import { backdrop } from "../components/modal.js";
 import { Timer } from "../timer.js";
-import { gameAnswers } from "../board/game-answers.js";
 
 export class AlphabetGame {
-  timerHtmlElement = undefined;
   currentLevel = undefined;
-  currentGameEffect = undefined;
-  randomEffectTime = {
-    min: 1000 * 24,
-    max: 1000 * 30,
-  };
-  effectStarted = false;
   board = undefined;
   gameLoopId = undefined;
   timer = undefined;
   gameRoot = undefined;
-  gameKeyMap = {
-    leftHand: "a",
-    rightHand: "b",
-  };
 
   constructor(level, root) {
     this.currentLevel = level;
@@ -47,9 +35,12 @@ export class AlphabetGame {
     const timerContainer = new Component()
       .create("div")
       .setClassList("timer-container").htmlElement;
-    const card = new Component().create("div").setClassList("card").htmlElement;
+    const card = new Component()
+      .create("div")
+      .setClassList("card", "game-loader").htmlElement;
     const label = new Component()
       .create("label")
+      .setClassList("load-screen__label")
       .setTextContext("Przygotuj się").htmlElement;
     card.append(label);
     timerContainer.append(card);
@@ -63,19 +54,6 @@ export class AlphabetGame {
       timerContainer.remove();
       startGameCB();
     }, time + 10);
-  }
-
-  keybordHandler(e) {
-    if (e.key === this.gameKeyMap.leftHand) {
-    }
-    if (e.key === this.gameKeyMap.rightHand) {
-    }
-    if (gameAnswers.correctAnswer === "O") {
-    }
-  }
-
-  gameController() {
-    window.addEventListener("keyup");
   }
 
   initGame() {

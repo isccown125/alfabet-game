@@ -10,3 +10,9 @@ export const debounce = (func, delay) => {
     inDebounce = setTimeout(() => func.apply(context, args), delay);
   };
 };
+export const calculatePercentage = (numberOfTotalValue, ...valuesForSum) => {
+  const totalValue = valuesForSum.reduce((prev, curr) => {
+    return Number(prev) + Number(curr);
+  }, []);
+  return Number((numberOfTotalValue / totalValue) * 100);
+};

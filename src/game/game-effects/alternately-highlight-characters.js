@@ -1,22 +1,21 @@
-import { random } from "../utils/functions.js";
-import { gameAnswers } from "../board/game-answers.js";
-import { GameFeedback } from "../board/game-feedback.js";
+import { gameAnswers } from "../../board/game-answers.js";
+import { GameFeedback } from "../../board/game-feedback.js";
 
-export class RandomHighlightCharacters {
+export class AlternatelyHighlightCharacters {
   timerId = undefined;
   characters = [];
   lastHighlightElement = undefined;
   currentHighlightElement = undefined;
-  fasterRate = false;
   intervalTime = 1000;
   className = "highlight";
-  effectName = "RANDOM_HIGHLIGHT";
-  characterIndexForHighlight = 0;
-  lastIndex = 0;
+  effectName = "NORMAL_HIGHLIGHT";
   currentHighlightElementGroup = undefined;
   subscribers = [];
-  userCanClickTimer = false;
+  characterIndexForHighlight = 0;
+  nextCharacterIndexForHighlight = 1;
   firstStart = true;
+  userCanClickTimer = undefined;
+  effectDirection;
 
   setCharacters(characters) {
     this.characters = characters;
@@ -26,7 +25,6 @@ export class RandomHighlightCharacters {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
     gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
-
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
       this.currentHighlightElement.classList.add(this.className);
@@ -40,25 +38,24 @@ export class RandomHighlightCharacters {
     this.lastHighlightElement = this.currentHighlightElement;
   }
 
-  get currentHighlightSymbol() {
-    return this.currentHighlightElementGroup.values.symbol;
+  _increaseIndex() {
+    const alphabetLength = this.characters.length - 1;
+
+    if (this.characterIndexForHighlight === 0) {
+      this.effectDirection = "forward";
+    }
+    if (this.characterIndexForHighlight === alphabetLength) {
+      this.effectDirection = "backward";
+    }
+    if (this.effectDirection === "forward") {
+      this.characterIndexForHighlight++;
+    } else {
+      this.characterIndexForHighlight--;
+    }
   }
 
-  _incraseIndex() {
-    const alphabetLength = this.characters.length - 1;
-    if (!this.lastIndex) {
-      this.characterIndexForHighlight = random(0, alphabetLength);
-      this.lastIndex = this.characterIndexForHighlight;
-      return;
-    }
-    this.lastIndex = this.characterIndexForHighlight;
-    this.characterIndexForHighlight = random(0, alphabetLength);
-    if (this.characterIndexForHighlight === this.lastIndex) {
-      while (this.characterIndexForHighlight === this.lastIndex) {
-        this.characterIndexForHighlight = random(0, alphabetLength);
-        console.log("loop");
-      }
-    }
+  get currentHighlightSymbol() {
+    return this.currentHighlightElementGroup.values.symbol;
   }
 
   userClickManagement() {
@@ -79,20 +76,18 @@ export class RandomHighlightCharacters {
 
   start() {
     if (this.firstStart) {
-      this._incraseIndex();
       this.highlight(this.characterIndexForHighlight);
-
-      this.userClickManagement();
 
       this.timerId = setTimeout(() => {
         this.next();
         this.firstStart = false;
       }, this.intervalTime);
+      this.userClickManagement();
       return;
     }
-    this._incraseIndex();
-    this.highlight(this.characterIndexForHighlight);
 
+    this._increaseIndex();
+    this.highlight(this.characterIndexForHighlight);
     this.timerId = setTimeout(() => {
       this.next();
     }, this.intervalTime);
@@ -104,10 +99,10 @@ export class RandomHighlightCharacters {
     clearTimeout(this.userCanClickTimer);
     if (this.firstStart) {
       clearTimeout(this.timerId);
-      this.firstStart = false;
       new GameFeedback(gameAnswers.checkAnswer()).render(
         this.currentHighlightElementGroup.symbol
       );
+      this.firstStart = false;
       this.start();
       return;
     }
@@ -119,18 +114,20 @@ export class RandomHighlightCharacters {
   }
 
   stop() {
-    clearInterval(this.timerId);
+    clearTimeout(this.timerId);
     if (this.currentHighlightElement) {
       this.currentHighlightElement.classList.remove(this.className);
     }
     if (this.lastHighlightElement) {
       this.lastHighlightElement.classList.remove(this.className);
     }
-    this.lastIndex = 0;
-    this.index = 0;
     this.currentHighlightElement = undefined;
     this.lastHighlightElement = undefined;
+    this.characterIndexForHighlight = 0;
+    this.nextCharacterIndexForHighlight = 1;
+    this.firstStart = true;
     this.subscribers = [];
+    this.options = { randomize: false, reverse: false };
   }
 
   subscribe(subscriber) {

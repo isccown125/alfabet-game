@@ -1,10 +1,10 @@
-import { NormalHighlightCharacters } from "../game-effects/normal-highlight-characters.js";
+import { NormalHighlightCharacters } from "../game/game-effects/normal-highlight-characters.js";
 
 export class Hard {
-  gameTime = 1000 * 60 * 3;
+  gameTime = 1000 * 60 * 2;
   name = "hard";
   effect = new NormalHighlightCharacters();
-  pointsMultipler = 3;
+  pointsMultiplier = 3;
   alphabet = [
     "A",
     "B",

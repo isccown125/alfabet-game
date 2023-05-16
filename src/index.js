@@ -1,4 +1,4 @@
-import { gameState } from "./game-state/game-state.js";
+import { gameState } from "./game/game-state/game-state.js";
 
 window.addEventListener("load", () => {
   gameState.initialize();

@@ -1,4 +1,4 @@
-import { Component } from "../components.js";
+import { Component } from "../../components/components.js";
 
 export const chooseLevelPage = (buttonsContainer) => {
   const chooseLevelPage = new Component().create("div").setId("choose-level");
@@ -12,10 +12,11 @@ export const chooseLevelPage = (buttonsContainer) => {
         <p>Postaraj się przejść jak najwięcej razy cały alfabet w czasie który pokazuje zegar.</p>
         <ul class="list">
             <p class="list-head">Oznaczenia</p>
-            <li>L - gdy widzisz ten symbol podnosisz do góry lewą ręke.</li>
-            <li>P - gdy widzisz ten symbol podnosisz do góry prawą ręke.</li>
-            <li>O - gdy widzisz ten symbol podnosisz do góry obie ręce.</li>
+            <li>L - gdy widzisz ten symbol naciskasz na klawiaturze <strong>A</strong>.</li>
+            <li>P - gdy widzisz ten symbol naciskasz na klawiaturze <strong>D</strong>.</li>
+            <li>O - gdy widzisz ten symbol naciskasz na klawiaturze jednocześnie <strong>A</strong> oraz <strong>D</strong>.</li>
         </ul>
+        <p>Urządzeń z ekranem dotykowym mają specjalne przyciski z napisami <strong>Lewa ręka</strong> oraz <strong>Prawa ręka</strong> w ich przypadku jest podobnie jak z przyciskami na klawiaturze</p>
     </div>
     <p class="main-menu-headers">Wybierz poziom</p>
   `;

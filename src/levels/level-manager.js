@@ -1,4 +1,4 @@
-import {Component} from "../components.js";
+import { Component } from "../components/components.js";
 
 export class LevelManager {
   subscribers = [];
@@ -6,7 +6,7 @@ export class LevelManager {
 
   constructor(root) {
     this.root =
-        root || new Component().create("div").setClassList("actions").htmlElement;
+      root || new Component().create("div").setClassList("actions").htmlElement;
     this.createButtons();
   }
 
@@ -14,7 +14,7 @@ export class LevelManager {
     this.root.appendChild(this.createButton("easy", "Łatwy"));
     this.root.appendChild(this.createButton("medium", "Średni"));
     this.root.appendChild(this.createButton("hard", "Trudny"));
-    this.root.appendChild(this.createButton("custom", "Niestandardowy"));
+    // this.root.appendChild(this.createButton("custom", "Niestandardowy"));
   }
 
   getRoot() {
@@ -23,10 +23,10 @@ export class LevelManager {
 
   createButton(name, label) {
     const button = new Component()
-        .create("button")
-        .setClassList("level-button")
-        .setAttributes({name: "data-level", value: name})
-        .setTextContext(label).htmlElement;
+      .create("button")
+      .setClassList("level-button")
+      .setAttributes({ name: "data-level", value: name })
+      .setTextContext(label).htmlElement;
     button.addEventListener("click", () => {
       this.subscribers.forEach((s) => {
         s(name);

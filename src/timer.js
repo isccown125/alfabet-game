@@ -1,4 +1,4 @@
-import { Component } from "./components.js";
+import { Component } from "./components/components.js";
 
 export class Timer {
   timerId = undefined;
@@ -11,7 +11,7 @@ export class Timer {
     intervalTime: 1000,
     parent: undefined,
   };
-  elementForUpdate = undefined
+  elementForUpdate = undefined;
 
   constructor(
     time,
@@ -59,16 +59,15 @@ export class Timer {
 
   createTimerHtmlElement() {
     const { parent } = this.options;
-    this.elementForUpdate = new Component().create('span').htmlElement
+    this.elementForUpdate = new Component().create("span").htmlElement;
     this.timerHtmlElement = new Component()
       .create("div")
       .setClassList("timer").htmlElement;
-    this.timerHtmlElement.appendChild(this.elementForUpdate)
+    this.timerHtmlElement.appendChild(this.elementForUpdate);
     if (parent) {
       parent.appendChild(this.timerHtmlElement);
     }
   }
-
 
   updateTimerHtmlElement() {
     if (this.remainingMilliseconds <= 1000 * 60) {
@@ -76,12 +75,14 @@ export class Timer {
         this.elementForUpdate.textContent = `60s`;
         return;
       }
-      this.elementForUpdate.textContent = `${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
-        }s`;
+      this.elementForUpdate.textContent = `${
+        this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()
+      }s`;
       return;
     }
-    this.elementForUpdate.textContent = `${this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
-      }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
+    this.elementForUpdate.textContent = `${
+      this.getMinutes() < 10 ? `0${this.getMinutes()}` : this.getMinutes()
+    }m${this.getSeconds() < 10 ? `0${this.getSeconds()}` : this.getSeconds()}s`;
   }
 
   render(elementForRender) {
@@ -100,6 +101,5 @@ export class Timer {
         this.stopTimer();
       }
     }, 1000);
-
   }
 }

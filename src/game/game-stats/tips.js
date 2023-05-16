@@ -9,7 +9,6 @@ export class Tips {
   }
 
   getCurrentTip() {
-    console.log("points");
     if (this.points <= 30 && this.points >= 0) {
       this.currentTip =
         "Musisz jeszcze troche popracować, ale nie poddawaj się!";
