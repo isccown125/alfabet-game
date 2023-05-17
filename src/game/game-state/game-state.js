@@ -189,6 +189,7 @@ class GameState {
       this.currentLevel.instance.alphabet,
       this.currentLevel.instance.symbols
     );
+    this.pointsMultiplier = this.currentLevel.instance.pointsMultiplier;
     board.renderBoard(board.boardHtmlElement);
     board.cancelGameButton.addEventListener("click", () => {
       this.setState("clear-game");

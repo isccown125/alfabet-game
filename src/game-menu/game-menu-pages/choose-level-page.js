@@ -4,7 +4,10 @@ export const chooseLevelPage = (buttonsContainer) => {
   const chooseLevelPage = new Component().create("div").setId("choose-level");
   chooseLevelPage.htmlElement.innerHTML += `
     <p id="game-title">AlphabetGame</p>
-     <div id="rules">
+     <div class="rules">
+     <div class="rules-content">
+     
+
         <p><strong>Alfabet Game to gra podnosząca koncentrację dzięki której możesz wejść w stan flow.</strong></p>
         <p class="main-menu-headers">Zasady gry.</p>
         <p>Twoim zadaniem jest czytać kolejne litery Alfabetu (najlepiej na głos) i jednocześnie podnosić ręce do góry w zależności od symbolu.</p>
@@ -17,6 +20,7 @@ export const chooseLevelPage = (buttonsContainer) => {
             <li>O - gdy widzisz ten symbol naciskasz na klawiaturze jednocześnie <strong>A</strong> oraz <strong>D</strong>.</li>
         </ul>
         <p>Urządzeń z ekranem dotykowym mają specjalne przyciski z napisami <strong>Lewa ręka</strong> oraz <strong>Prawa ręka</strong> w ich przypadku jest podobnie jak z przyciskami na klawiaturze</p>
+    </div>
     </div>
     <p class="main-menu-headers">Wybierz poziom</p>
   `;

@@ -110,15 +110,21 @@ body {
     padding: 0;
 }
 
-#rules {
+.rules {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 90%;
-    overflow: hidden;
+    overflow: auto;
     max-width: 700px;
+    max-height: 600px;
+}
+
+.rules-content {
+    height: max-content;
+    padding-top: 30px;
 }
 
 .text-style {
@@ -633,12 +639,12 @@ body {
 
     .text-style,
     .list li:first-letter,
-    #rules p,
+    .rules p,
     .list li {
         font-size: clamp(8px, 3vw, 18px);
     }
 
-    #rules {
+    .rules {
         max-width: 700px;
         width: 90%;
     }
