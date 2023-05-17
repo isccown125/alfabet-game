@@ -1,22 +1,12 @@
+import {getAbsoluteUrl} from "../utils/functions";
+
 export class GameFeedback {
-  iconsPath = [
-    {
-      id: "good-answer",
-      src: "./src/assets/icons/check-solid-green.svg",
-      classList: "feedback-icon good-answer",
-    },
-    {
-      id: "bad-answer",
-      src: "./src/assets/icons/xmark-solid-red.svg",
-      classList: "feedback-icon bad-answer",
-    },
-  ];
   answerFlag = null;
   feedbackForRender = null;
 
   constructor(answerFlag) {
     this.answerFlag = answerFlag;
-    this.iconsPath.forEach((el) => {
+    this.iconsPath().forEach((el) => {
       if (!answerFlag) {
         this.answerFlag = "bad-answer";
       }
@@ -24,6 +14,21 @@ export class GameFeedback {
         this.feedbackForRender = el;
       }
     });
+  }
+
+  iconsPath() {
+    return [
+      {
+        id: "good-answer",
+        src: getAbsoluteUrl("/assets/icons/check-solid-green.svg"),
+        classList: "feedback-icon good-answer",
+      },
+      {
+        id: "bad-answer",
+        src: getAbsoluteUrl("/assets/icons/xmark-solid-red.svg"),
+        classList: "feedback-icon bad-answer",
+      }
+    ];
   }
 
   render(rootEl) {

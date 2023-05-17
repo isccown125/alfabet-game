@@ -2,6 +2,7 @@ import { Component } from "../../components/components.js";
 import { NormalHighlightCharacters } from "../../game/game-effects/normal-highlight-characters.js";
 import { RandomHighlightCharacters } from "../../game/game-effects/random-highlight-characters.js";
 import { ReverseHighlightCharacters } from "../../game/game-effects/reverse-highlight-characters.js";
+import {getAbsoluteUrl} from "../../utils/functions";
 
 export class CustomLevelPage {
   page = {
@@ -455,7 +456,7 @@ export class CustomLevelPage {
         .setClassList("tooltip-icon__img")
         .setAttributes({
           name: "src",
-          value: "./src/assets/icons/icons8-info.svg",
+          value: getAbsoluteUrl("/assets/icons/icons8-info.svg"),
         })
         .setClassList("tooltip-icon").htmlElement;
 
