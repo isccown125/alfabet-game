@@ -1,4 +1,4 @@
-import {getAbsoluteUrl} from "../utils/functions";
+import { getAbsoluteUrl } from "../utils/functions.js";
 
 export class GameFeedback {
   answerFlag = null;
@@ -27,7 +27,7 @@ export class GameFeedback {
         id: "bad-answer",
         src: getAbsoluteUrl("/assets/icons/xmark-solid-red.svg"),
         classList: "feedback-icon bad-answer",
-      }
+      },
     ];
   }
 

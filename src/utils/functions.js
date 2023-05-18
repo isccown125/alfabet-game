@@ -1,4 +1,4 @@
-import config from '../config';
+import config from "../config.js";
 
 export const random = (min, max) => {
   return Math.round(Math.random() * (max - min)) + min;
@@ -20,6 +20,6 @@ export const calculatePercentage = (numberOfTotalValue, ...valuesForSum) => {
 };
 
 export function getAbsoluteUrl(relativeUrl) {
-  const coreUrl = config().coreUrl ?? '.';
+  const coreUrl = config().coreUrl ?? ".";
   return coreUrl + relativeUrl;
 }
