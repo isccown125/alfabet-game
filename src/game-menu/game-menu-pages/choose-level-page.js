@@ -3,7 +3,7 @@ import { Component } from "../../components/components.js";
 export const chooseLevelPage = (buttonsContainer) => {
   const chooseLevelPage = new Component().create("div").setId("choose-level");
   chooseLevelPage.htmlElement.innerHTML += `
-    <p id="game-title">AlphabetGame</p>
+    <p id="game-title">Alfabet Game</p>
      <div class="rules">
      <div class="rules-content">
         <p><strong>Alfabet Game to gra podnosząca koncentrację dzięki której możesz wejść w stan flow.</strong></p>
