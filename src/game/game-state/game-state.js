@@ -10,6 +10,7 @@ import { showModal } from "../../components/modal.js";
 import { Points } from "../game-stats/points.js";
 import { GameController } from "../game-controller.js";
 import { calculatePercentage, debounce } from "../../utils/functions.js";
+import config from "../../config";
 
 class GameState {
   currentState = "main-menu";
@@ -29,8 +30,17 @@ class GameState {
   gameController = undefined;
   loadGameScreenTime = 3000;
   keyboardDelay = 50;
+  userClubData;
 
-  setState(state) {
+  setDefaultUserClubData(isShowGlobalPoints = false) {
+    this.userClubData = {
+      beatRecord: false,
+      globalPoints: isShowGlobalPoints ? 0 : null,
+      minimumPoints: 0
+    };
+  }
+
+  async setState(state) {
     if (!state || typeof state !== "string") {
       this.currentState = "main-menu";
     }
@@ -45,10 +55,10 @@ class GameState {
         pointsMultiplier: this.pointsMultiplier,
       });
     });
-    this.runState();
+    await this.runState();
   }
 
-  runState() {
+  async runState() {
     switch (this.currentState) {
       case "main-menu":
         this.showMenu();
@@ -57,16 +67,16 @@ class GameState {
         this.startGame();
         break;
       case "init-game":
-        this.initGame();
+        await this.initGame();
         break;
       case "finish-game":
-        this.finishGame();
+        await this.finishGame();
         break;
       case "clear-game":
-        this.clearGame();
+        await this.clearGame();
         break;
       case "default":
-        this.setDefaultState();
+        await this.setDefaultState();
         break;
     }
   }
@@ -100,88 +110,131 @@ class GameState {
     this.gameMenu.showMenu();
   }
 
-  setDefaultState() {
+  async setDefaultState() {
     if (this.game instanceof AlphabetGame) {
-      this.setState("clear-game");
+      await this.setState("clear-game");
       return;
     }
     this.game = undefined;
     this.points = 0;
     this.pointsMultiplier = 1;
-    this.setState("main-menu");
+    await this.setState("main-menu");
   }
 
   startGame() {
+    this.setDefaultUserClubData();
     this.currentLevel.instance.effect.subscribe((data) => {
       data === "USER_CAN_CLICK"
         ? this.gameController.on()
         : this.gameController.off();
     });
 
-    this.game.start((e) => {
+    this.game.start(async (e) => {
       if (e === "GAME_FINISH") {
         const points = new Points(
           gameAnswers.badAnswers,
           gameAnswers.goodAnswers,
           this.currentLevel.instance.pointsMultiplier
         );
-        const customEvent = new CustomEvent("alphabetgame-finish", {
-          detail: {
-            gameData: JSON.stringify({
-              badAnswers: gameAnswers.badAnswers,
-              goodAnswers: gameAnswers.goodAnswers,
-              points: points.points,
-              correctly: calculatePercentage(
-                gameAnswers.goodAnswers,
-                gameAnswers.goodAnswers,
-                gameAnswers.badAnswers
-              ).toFixed(2),
-            }),
-          },
-        });
-        window.dispatchEvent(customEvent);
-        this.setState("finish-game");
+        await this.setState("finish-game");
       }
     });
   }
 
-  finishGame() {
+  async finishGame() {
     this.game.finishGame();
+
     const points = new Points(
       gameAnswers.badAnswers,
       gameAnswers.goodAnswers,
       this.currentLevel.instance.pointsMultiplier
     );
 
-    showModal("Koniec gry!", (content) => {
-      content.innerHTML = `
+    this.gameController.off();
+
+    const gameData = JSON.stringify({
+      difficulty: this.currentLevel.instance.difficulty,
+      badAnswers: gameAnswers.badAnswers,
+      goodAnswers: gameAnswers.goodAnswers,
+      points: points.points,
+      correctly: Math.round(calculatePercentage(
+          gameAnswers.goodAnswers,
+          gameAnswers.goodAnswers,
+          gameAnswers.badAnswers
+      ))
+    });
+
+    const modalContent = showModal("Koniec gry!", (content) => {
+      content.innerHTML = `<div>Proszę czekać... Za chwilę zobaczysz podsumowanie gry.</div>`;
+    });
+
+    const clubUrl = config().clubUrl ?? '';
+    if (clubUrl !== '') {
+      this.setDefaultUserClubData(true);
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      try {
+        const response = await fetch(`${clubUrl}add-alphabet-game-user-data`, {
+          method: 'post',
+          body: gameData,
+          headers
+        });
+        if (response.ok) {
+          const resultClubUserData = await response.json();
+          this.userClubData.beatRecord = resultClubUserData.beatRecord ?? false;
+          this.userClubData.globalPoints = resultClubUserData.globalPoints ?? 0;
+          this.userClubData.minimumPoints = resultClubUserData.minimumPoints ?? 0;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    let html =`
        <p>Świetnie ci poszło!</p>
-       <div>Twoje punkty: ${points.points}</div>
+       <div>Twoje punkty w grze: ${points.points}</div>
        <div>Złe odpowiedzi: ${gameAnswers.badAnswers} <br> Dobre odpowiedzi: ${
         gameAnswers.goodAnswers
-      }</div>
-       <div>Poprawność odpowiedzi ${calculatePercentage(
-         gameAnswers.goodAnswers,
-         gameAnswers.goodAnswers,
-         gameAnswers.badAnswers
-       ).toFixed(2)}%</div>
+    }</div>
+       <div>Poprawność odpowiedzi ${Math.round(calculatePercentage(
+        gameAnswers.goodAnswers,
+        gameAnswers.goodAnswers,
+        gameAnswers.badAnswers
+    ))}%</div>
       `;
-    });
-    this.gameController.off();
-    this.setState("clear-game");
+    if (this.userClubData.beatRecord) {
+      html += '<div>Gratuluję! Pobiłeś swój rekord w grze</div>';
+    }
+    let globalPointsMessage = '';
+    if (this.userClubData.globalPoints !== null) {
+      if (this.userClubData.globalPoints > 0) {
+        globalPointsMessage = `<div>Dodano punktów do Twojego konta: ${this.userClubData.globalPoints}</div>`;
+      } else {
+        if (this.userClubData.minimumPoints > 0) {
+          globalPointsMessage = `<div>Musisz zdobyć minimum ${this.userClubData.minimumPoints} punktów w grze, aby dostać punkty</div>`;
+        } else {
+          globalPointsMessage = `<div>Osiągnięto limit rozegranych gier na dzień. Zagraj jutro, aby zdobyć kolejne punkty.</div>`;
+        }
+      }
+    }
+    html += globalPointsMessage;
+    modalContent.innerHTML = html;
+
+    await this.setState("clear-game");
   }
 
-  clearGame() {
+  async clearGame() {
     this.currentLevel = { name: "", instance: undefined };
-    this.game.clearGame();
+    await this.game.clearGame();
     this.points = 0;
     this.pointsMultiplier = 1;
-    this.setState("main-menu");
+    await this.setState("main-menu");
   }
 
-  initGame() {
+  async initGame() {
     if (this.game instanceof AlphabetGame || this.game) {
-      this.setState("default-state");
+      await this.setState("default-state");
     }
     this.gameMenu.hideMenu();
     this.game = new AlphabetGame(this.currentLevel.instance, this.root);
@@ -191,18 +244,18 @@ class GameState {
     );
     this.pointsMultiplier = this.currentLevel.instance.pointsMultiplier;
     board.renderBoard(board.boardHtmlElement);
-    board.cancelGameButton.addEventListener("click", () => {
-      this.setState("clear-game");
+    board.cancelGameButton.addEventListener("click", async () => {
+      await this.setState("clear-game");
     });
     this.game.setGameBoard(board);
     this.game.setTimer();
     gameAnswers.reset();
-    this.game.loadGameScreen(() => {
-      this.setState("start-game");
+    this.game.loadGameScreen(async () => {
+      await this.setState("start-game");
     }, this.loadGameScreenTime);
   }
 
-  initialize() {
+  async initialize() {
     this.setDomRootForRender();
     this.levelManager = new LevelManager();
     const page1 = chooseLevelPage(this.levelManager.getRoot());
@@ -220,28 +273,28 @@ class GameState {
         this.gameController.resetHistory();
       }, this.keyboardDelay)
     );
-    page2.subscribe((customLevel) => {
+    page2.subscribe(async (customLevel) => {
       if (customLevel === "choose-level") {
         this.gameMenu.pageManager.setCurrentPage(customLevel);
         return;
       }
       this.currentLevel = { name: "custom", instance: customLevel };
-      this.setState("init-game");
+      await this.setState("init-game");
     });
-    this.levelManager.subscribe((name) => {
+    this.levelManager.subscribe(async (name) => {
       if (name !== "custom") {
         this.currentLevel = {
           name: name,
           instance: new LevelFactory().getLevel(name),
         };
-        this.setState("init-game");
+        await this.setState("init-game");
       }
       if (name === "custom") {
         this.gameMenu.pageManager.setCurrentPage("custom-level");
-        this.setState("customize-level");
+        await this.setState("customize-level");
       }
     });
-    this.setState("main-menu");
+    await this.setState("main-menu");
   }
 }
 
