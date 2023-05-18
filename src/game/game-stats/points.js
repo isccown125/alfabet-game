@@ -34,7 +34,7 @@ export class Points {
     }
   }
 
-  get points() {
+  get valueOfPoints() {
     return this.#_points;
   }
 }
