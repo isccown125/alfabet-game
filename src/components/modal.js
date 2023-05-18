@@ -24,6 +24,7 @@ export const showModal = (title, cb) => {
     modalBackdrop.remove();
   });
   document.body.prepend(modal);
+  return content;
 };
 
 export const backdrop = () => {
