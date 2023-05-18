@@ -3,6 +3,7 @@ import { NormalHighlightCharacters } from "../game/game-effects/normal-highlight
 export class Hard {
   gameTime = 1000 * 60 * 2;
   name = "hard";
+  difficulty = 3;
   effect = new NormalHighlightCharacters();
   pointsMultiplier = 3;
   alphabet = [
