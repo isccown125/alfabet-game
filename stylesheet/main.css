@@ -10,6 +10,26 @@
     src: url("../fonts/BoldenVan.otf");
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 * {
     box-sizing: border-box;
     font-family: poppins;
@@ -48,7 +68,8 @@ body {
     min-height: min-content;
     height: 100vh;
     flex-direction: column;
-    position: relative;
+    position: fixed;
+    inset: 0 0 0 0;
 }
 
 /*================ main-menu ========================*/
@@ -111,10 +132,7 @@ body {
 }
 
 .rules {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: block;
     text-align: center;
     width: 90%;
     overflow: auto;
@@ -123,9 +141,12 @@ body {
 }
 
 .rules-content {
+    top: 0;
+    bottom: 0;
+    padding: 10px 2.5px;
     height: max-content;
-    padding-top: 30px;
 }
+
 
 .text-style {
     display: flex;
