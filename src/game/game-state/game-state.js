@@ -191,8 +191,21 @@ class GameState {
       }
     }
 
+    let pointsResultMessage = 'Twój wynik nie jest najlepszy. Chyba jeszcze nie jesteś na tym etapie. Spróbuj zagrać na prostszym poziomie.';
+    if (points.points > 120) {
+      pointsResultMessage = 'Jesteś mistrzem! Nawet nam jest trudno osiągnąć tyle punktów. Koniecznie pochwal się swoim wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!';
+    } else if (points.points > 100) {
+      pointsResultMessage = 'Wow! Świetny wynik! Jeśli udało ci się go osiągnąć, twój mózg pracuje na wysokich obrotach. Koniecznie pochwal się tym wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!';
+    } else if (points.points > 50) {
+      pointsResultMessage = 'Świetna robota! Właśnie o to chodzi. Ciekawe czy potrafisz pokonać barierę 100 punktów?';
+    } else if (points.points > 30) {
+      pointsResultMessage = 'Idzie Ci co raz lepiej - ćwicz dalej!';
+    } else if (points.points > 10) {
+      pointsResultMessage = 'Wiesz już o co chodzi. Nie przestawaj - ćwicz dalej!';
+    }
+
     let html =`
-       <p>Świetnie ci poszło!</p>
+       <p>${pointsResultMessage}</p>
        <div>Twoje punkty w grze: ${points.points}</div>
        <div>Złe odpowiedzi: ${gameAnswers.badAnswers} <br> Dobre odpowiedzi: ${
         gameAnswers.goodAnswers
