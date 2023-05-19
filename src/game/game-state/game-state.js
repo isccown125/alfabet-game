@@ -189,36 +189,58 @@ class GameState {
       }
     }
 
-    let html = `
-       <p>${new Tip(points.valueOfPoints).currentTip}</p>
-       <div>Twoje punkty w grze: ${points.valueOfPoints}</div>
-       <div>Złe odpowiedzi: ${gameAnswers.badAnswers} <br> Dobre odpowiedzi: ${
-      gameAnswers.goodAnswers
-    }</div>
-       <div>Poprawność odpowiedzi ${Math.round(
-         calculatePercentage(
-           gameAnswers.goodAnswers,
-           gameAnswers.goodAnswers,
-           gameAnswers.badAnswers
-         )
-       )}%</div>
-      `;
-    if (this.userClubData.beatRecord) {
-      html += "<div>Gratuluję! Pobiłeś swój rekord w grze</div>";
-    }
+    const personalRecordMessage = this.userClubData.beatRecord
+      ? `<div class="info_background">
+          <div class="info_result_message personal_record">Gratuluję! Pobiłeś swój rekord w grze</div>
+      </div>`
+        : '';
+
     let globalPointsMessage = "";
     if (this.userClubData.globalPoints !== null) {
       if (this.userClubData.globalPoints > 0) {
-        globalPointsMessage = `<div>Dodano punktów do Twojego konta: ${this.userClubData.globalPoints}</div>`;
+        globalPointsMessage = `
+          <div class="info_background">
+            <div class="info_points_message bolded">Dodano punktów do Twojego konta:</div>
+            <div class="info_points_number">${this.userClubData.globalPoints}</div>       
+          </div>`;
       } else {
         if (this.userClubData.minimumPoints > 0) {
-          globalPointsMessage = `<div>Musisz zdobyć minimum ${this.userClubData.minimumPoints} punktów w grze, aby dostać punkty</div>`;
+          globalPointsMessage = `
+            <div class="info_background">            
+                <div class="info_result_message">Musisz zdobyć minimum ${this.userClubData.minimumPoints} punktów w Alfabet game, aby dostać punkty</div>
+            </div>`;
         } else {
-          globalPointsMessage = `<div>Osiągnięto limit rozegranych gier na dzień. Zagraj jutro, aby zdobyć kolejne punkty.</div>`;
+          globalPointsMessage = `
+            <div class="info_background">            
+                <div class="info_result_message">Osiągnięto limit rozegranych gier na dzień. Zagraj jutro, aby zdobyć kolejne punkty.</div>
+            </div>`;
         }
       }
     }
-    html += globalPointsMessage;
+
+    const html = `
+      ${personalRecordMessage}
+      <div class="info_background">
+          <div class="info_points_message bolded">Otrzymane punkty w Alfabet game:</div>
+          <div class="info_points_number">${points.valueOfPoints}</div>
+      </div>
+      <div class="info_background">
+          <div class="info_result_message">${new Tip(points.valueOfPoints).currentTip}</div>
+      </div>
+      <div class="info_background poprawnosc correctly">
+          <div class="info_points_message">Poprawność:</div>
+          <div class="info_points_number good">${correctly}%</div>
+      </div>
+      <div class="info_background">
+          <div class="info_points_message">Dobrych odpowiedzi:</div>
+          <div class="info_points_number good">${gameAnswers.goodAnswers}</div>
+      </div>
+      <div class="info_background blednych incorrect">
+          <div class="info_points_message">Błędnych odpowiedzi:</div>
+          <div class="info_points_number bad">${gameAnswers.badAnswers}</div>
+      </div>
+      ${globalPointsMessage}
+    `;
     modalContent.innerHTML = html;
 
     await this.setState("clear-game");

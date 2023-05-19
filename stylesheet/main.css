@@ -557,12 +557,13 @@ body {
     color: #07a4f2;
     font-family: poppins;
     font-weight: bold;
-    font-size: 35px !important;
+    font-size: 35px;
     margin: 10px 0;
+    text-align: center;
 }
 
 .modal-button {
-    margin-top: 3px;
+    margin-top: 20px;
     padding: 10px 15px;
     color: white;
     background: #cb3b3b;
@@ -631,9 +632,9 @@ body {
         width: 100%;
     }
 
-    .modal-title {
-        font-size: clamp(20px, 3vw, 35px) !important;
-    }
+    /*.modal-title {*/
+    /*    font-size: clamp(20px, 3vw, 35px) !important;*/
+    /*}*/
 
     .modal-content p {
         font-size: clamp(8px, 5vw, 15px);
@@ -671,7 +672,7 @@ body {
         width: 90%;
     }
 
-    .modal-button,
+    /*.modal-button,*/
     .custom-level-button,
     .cancel-game-btn,
     .level-button {
@@ -723,4 +724,48 @@ body {
     .group-container {
         flex-wrap: wrap;
     }
+}
+
+/*Style CSS from Color game for modal window*/
+#modal {
+    max-width: 600px;
+}
+.info_background {
+    float: left;
+    width: 100%;
+    background: #fff;
+    padding: 5px 20px;
+    font-size: 22px;
+}
+.info_points_message.bolded {
+    font-weight: 800;
+}
+.info_points_message {
+    float: left;
+    width: calc(100% - 70px);
+    padding-top: 5px;
+}
+.info_points_number {
+    float: right;
+    width: 70px;
+    text-align: right;
+    font-size: 30px;
+}
+.info_result_message {
+    font-size: 18px;
+}
+.correctly {
+    border-top: 2px solid #cb3b3b;
+}
+.incorrect {
+    border-bottom: 2px solid #cb3b3b;
+}
+.personal_record {
+    font-size: 24px;
+}
+.info_points_number.good {
+    color: green;
+}
+.info_points_number.bad {
+    color: red;
 }
