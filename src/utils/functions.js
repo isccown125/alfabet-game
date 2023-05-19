@@ -12,11 +12,20 @@ export const debounce = (func, delay) => {
     inDebounce = setTimeout(() => func.apply(context, args), delay);
   };
 };
+
 export const calculatePercentage = (numberOfTotalValue, ...valuesForSum) => {
   const totalValue = valuesForSum.reduce((prev, curr) => {
     return Number(prev) + Number(curr);
   }, []);
   return Number((numberOfTotalValue / totalValue) * 100);
+};
+
+export const calculateCorrectnessOfAnswersInPercentage = (goodAnswersAmount, badAnswersAmount) => {
+  let result = Math.round(goodAnswersAmount / (goodAnswersAmount + badAnswersAmount) * 100);
+  if(isNaN(result)){
+    result = 0;
+  }
+  return result;
 };
 
 export function getAbsoluteUrl(relativeUrl) {

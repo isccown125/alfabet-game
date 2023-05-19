@@ -9,7 +9,7 @@ import { LevelManager } from "../../levels/level-manager.js";
 import { showModal } from "../../components/modal.js";
 import { Points } from "../game-stats/points.js";
 import { GameController } from "../game-controller.js";
-import { calculatePercentage, debounce } from "../../utils/functions.js";
+import {calculateCorrectnessOfAnswersInPercentage, debounce} from "../../utils/functions.js";
 import config from "../../config";
 import { Tip } from "../game-stats/tips.js";
 
@@ -148,18 +148,17 @@ class GameState {
 
     this.gameController.off();
 
+    const correctly = calculateCorrectnessOfAnswersInPercentage(
+        gameAnswers.goodAnswers,
+        gameAnswers.badAnswers
+    );
+
     const gameData = JSON.stringify({
       difficulty: this.currentLevel.instance.difficulty,
       badAnswers: gameAnswers.badAnswers,
       goodAnswers: gameAnswers.goodAnswers,
       points: points.valueOfPoints,
-      correctly: Math.round(
-        calculatePercentage(
-          gameAnswers.goodAnswers,
-          gameAnswers.goodAnswers,
-          gameAnswers.badAnswers
-        )
-      ),
+      correctly,
     });
 
     const modalContent = showModal("Koniec gry!", (content) => {
