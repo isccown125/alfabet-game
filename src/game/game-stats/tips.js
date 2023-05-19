@@ -1,4 +1,4 @@
-export class Tips {
+export class Tip {
   points = 0;
   currentTip = "Idzie ci coraz lepiej!";
 
@@ -8,22 +8,23 @@ export class Tips {
     }
   }
 
-  getCurrentTip() {
-    if (this.points <= 30 && this.points >= 0) {
+  get currentTip() {
+    this.currentTip =
+      "Twój wynik nie jest najlepszy. Chyba jeszcze nie jesteś na tym etapie. Spróbuj zagrać na prostszym poziomie.";
+    if (this.points > 120) {
       this.currentTip =
-        "Musisz jeszcze troche popracować, ale nie poddawaj się!";
-    }
-    if (this.points <= 50 && this.points > 30) {
-      this.currentTip = "Świetnie! Trzymaj tak dalej :)";
-    }
-    if (this.points <= 80 && this.points > 50) {
-      this.currentTip = "Wow! Już prawie jesteś legendą tej gry.";
-    }
-    if (this.points > 80) {
+        "Jesteś mistrzem! Nawet nam jest trudno osiągnąć tyle punktów. Koniecznie pochwal się swoim wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!";
+    } else if (this.points > 100) {
       this.currentTip =
-        "Twój poziom koncentracji jest na naprawdę wysokim poziomie,<br> ale nie odpuszczaj sobie ciśnij dalej!";
+        "Wow! Świetny wynik! Jeśli udało ci się go osiągnąć, twój mózg pracuje na wysokich obrotach. Koniecznie pochwal się tym wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!";
+    } else if (this.points > 50) {
+      this.currentTip =
+        "Świetna robota! Właśnie o to chodzi. Ciekawe czy potrafisz pokonać barierę 100 punktów?";
+    } else if (this.points > 30) {
+      this.currentTip = "Idzie Ci co raz lepiej - ćwicz dalej!";
+    } else if (this.points > 10) {
+      this.currentTip = "Wiesz już o co chodzi. Nie przestawaj - ćwicz dalej!";
     }
-
     return this.currentTip;
   }
 }

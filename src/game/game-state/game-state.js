@@ -11,6 +11,7 @@ import { Points } from "../game-stats/points.js";
 import { GameController } from "../game-controller.js";
 import { calculatePercentage, debounce } from "../../utils/functions.js";
 import config from "../../config";
+import { Tip } from "../game-stats/tips.js";
 
 class GameState {
   currentState = "main-menu";
@@ -36,7 +37,7 @@ class GameState {
     this.userClubData = {
       beatRecord: false,
       globalPoints: isShowGlobalPoints ? 0 : null,
-      minimumPoints: 0
+      minimumPoints: 0,
     };
   }
 
@@ -131,11 +132,6 @@ class GameState {
 
     this.game.start(async (e) => {
       if (e === "GAME_FINISH") {
-        const points = new Points(
-          gameAnswers.badAnswers,
-          gameAnswers.goodAnswers,
-          this.currentLevel.instance.pointsMultiplier
-        );
         await this.setState("finish-game");
       }
     });
@@ -156,70 +152,62 @@ class GameState {
       difficulty: this.currentLevel.instance.difficulty,
       badAnswers: gameAnswers.badAnswers,
       goodAnswers: gameAnswers.goodAnswers,
-      points: points.points,
-      correctly: Math.round(calculatePercentage(
+      points: points.valueOfPoints,
+      correctly: Math.round(
+        calculatePercentage(
           gameAnswers.goodAnswers,
           gameAnswers.goodAnswers,
           gameAnswers.badAnswers
-      ))
+        )
+      ),
     });
 
     const modalContent = showModal("Koniec gry!", (content) => {
       content.innerHTML = `<div>Proszę czekać... Za chwilę zobaczysz podsumowanie gry.</div>`;
     });
 
-    const clubUrl = config().clubUrl ?? '';
-    if (clubUrl !== '') {
+    const clubUrl = config().clubUrl ?? "";
+    if (clubUrl !== "") {
       this.setDefaultUserClubData(true);
       const headers = {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       };
       try {
         const response = await fetch(`${clubUrl}add-alphabet-game-user-data`, {
-          method: 'post',
+          method: "post",
           body: gameData,
-          headers
+          headers,
         });
         if (response.ok) {
           const resultClubUserData = await response.json();
           this.userClubData.beatRecord = resultClubUserData.beatRecord ?? false;
           this.userClubData.globalPoints = resultClubUserData.globalPoints ?? 0;
-          this.userClubData.minimumPoints = resultClubUserData.minimumPoints ?? 0;
+          this.userClubData.minimumPoints =
+            resultClubUserData.minimumPoints ?? 0;
         }
       } catch (e) {
         console.error(e);
       }
     }
 
-    let pointsResultMessage = 'Twój wynik nie jest najlepszy. Chyba jeszcze nie jesteś na tym etapie. Spróbuj zagrać na prostszym poziomie.';
-    if (points.points > 120) {
-      pointsResultMessage = 'Jesteś mistrzem! Nawet nam jest trudno osiągnąć tyle punktów. Koniecznie pochwal się swoim wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!';
-    } else if (points.points > 100) {
-      pointsResultMessage = 'Wow! Świetny wynik! Jeśli udało ci się go osiągnąć, twój mózg pracuje na wysokich obrotach. Koniecznie pochwal się tym wynikiem w komentarzach lub napisz na naszej stronie na Facebook-u!';
-    } else if (points.points > 50) {
-      pointsResultMessage = 'Świetna robota! Właśnie o to chodzi. Ciekawe czy potrafisz pokonać barierę 100 punktów?';
-    } else if (points.points > 30) {
-      pointsResultMessage = 'Idzie Ci co raz lepiej - ćwicz dalej!';
-    } else if (points.points > 10) {
-      pointsResultMessage = 'Wiesz już o co chodzi. Nie przestawaj - ćwicz dalej!';
-    }
-
-    let html =`
-       <p>${pointsResultMessage}</p>
-       <div>Twoje punkty w grze: ${points.points}</div>
+    let html = `
+       <p>${new Tip(points.valueOfPoints).currentTip}</p>
+       <div>Twoje punkty w grze: ${points.valueOfPoints}</div>
        <div>Złe odpowiedzi: ${gameAnswers.badAnswers} <br> Dobre odpowiedzi: ${
-        gameAnswers.goodAnswers
+      gameAnswers.goodAnswers
     }</div>
-       <div>Poprawność odpowiedzi ${Math.round(calculatePercentage(
-        gameAnswers.goodAnswers,
-        gameAnswers.goodAnswers,
-        gameAnswers.badAnswers
-    ))}%</div>
+       <div>Poprawność odpowiedzi ${Math.round(
+         calculatePercentage(
+           gameAnswers.goodAnswers,
+           gameAnswers.goodAnswers,
+           gameAnswers.badAnswers
+         )
+       )}%</div>
       `;
     if (this.userClubData.beatRecord) {
-      html += '<div>Gratuluję! Pobiłeś swój rekord w grze</div>';
+      html += "<div>Gratuluję! Pobiłeś swój rekord w grze</div>";
     }
-    let globalPointsMessage = '';
+    let globalPointsMessage = "";
     if (this.userClubData.globalPoints !== null) {
       if (this.userClubData.globalPoints > 0) {
         globalPointsMessage = `<div>Dodano punktów do Twojego konta: ${this.userClubData.globalPoints}</div>`;
