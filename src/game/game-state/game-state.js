@@ -9,7 +9,10 @@ import { LevelManager } from "../../levels/level-manager.js";
 import { showModal } from "../../components/modal.js";
 import { Points } from "../game-stats/points.js";
 import { GameController } from "../game-controller.js";
-import {calculateCorrectnessOfAnswersInPercentage, debounce} from "../../utils/functions.js";
+import {
+  calculateCorrectnessOfAnswersInPercentage,
+  debounce,
+} from "../../utils/functions.js";
 import config from "../../config";
 import { Tip } from "../game-stats/tips.js";
 
@@ -125,7 +128,7 @@ class GameState {
   startGame() {
     this.setDefaultUserClubData();
     this.currentLevel.instance.effect.subscribe((data) => {
-      data === "USER_CAN_CLICK"
+      data.clickManagement === "USER_CAN_CLICK"
         ? this.gameController.on()
         : this.gameController.off();
     });
@@ -149,8 +152,8 @@ class GameState {
     this.gameController.off();
 
     const correctly = calculateCorrectnessOfAnswersInPercentage(
-        gameAnswers.goodAnswers,
-        gameAnswers.badAnswers
+      gameAnswers.goodAnswers,
+      gameAnswers.badAnswers
     );
 
     const gameData = JSON.stringify({
@@ -193,7 +196,7 @@ class GameState {
       ? `<div class="info_background">
           <div class="info_result_message personal_record">Gratuluję! Pobiłeś swój rekord w grze</div>
       </div>`
-        : '';
+      : "";
 
     let globalPointsMessage = "";
     if (this.userClubData.globalPoints !== null) {
@@ -225,7 +228,9 @@ class GameState {
           <div class="info_points_number">${points.valueOfPoints}</div>
       </div>
       <div class="info_background">
-          <div class="info_result_message">${new Tip(points.valueOfPoints).currentTip}</div>
+          <div class="info_result_message">${
+            new Tip(points.valueOfPoints).currentTip
+          }</div>
       </div>
       <div class="info_background poprawnosc correctly">
           <div class="info_points_message">Poprawność:</div>
@@ -291,7 +296,11 @@ class GameState {
     this.gameController.subscribe(
       debounce((data) => {
         gameAnswers.setUserAnswer(data);
-        this.currentLevel.instance.effect.next();
+
+        if (this.currentLevel.instance.hasOwnProperty("next")) {
+          this.currentLevel.instance.effect.next();
+        }
+
         this.gameController.resetHistory();
       }, this.keyboardDelay)
     );

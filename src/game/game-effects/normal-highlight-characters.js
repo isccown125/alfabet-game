@@ -1,5 +1,5 @@
-import {gameAnswers} from "../../board/game-answers.js";
-import {GameFeedback} from "../../board/game-feedback.js";
+import { gameAnswers } from "../../board/game-answers.js";
+import { GameFeedback } from "../../board/game-feedback.js";
 
 export class NormalHighlightCharacters {
   timerId = undefined;
@@ -23,6 +23,9 @@ export class NormalHighlightCharacters {
   highlight(index) {
     const elementForHighlight = this.characters[index].character;
     this.currentHighlightElementGroup = this.characters[index];
+    this.subscribers.forEach((cb) => {
+      cb({ elPos: this.currentHighlightElementGroup.group });
+    });
     gameAnswers.setCorrectAnswer(this.currentHighlightSymbol);
     if (!this.lastHighlightElement) {
       this.currentHighlightElement = elementForHighlight;
@@ -53,16 +56,16 @@ export class NormalHighlightCharacters {
   userClickManagement() {
     this.userCanClickTimer = setTimeout(() => {
       this.subscribers.forEach((el) => {
-        el("USER_DISABLE_CLICK");
+        el({ clickManagement: "USER_DISABLE_CLICK" });
       });
     }, this.intervalTime - 50);
     setTimeout(() => {
       this.subscribers.forEach((el) => {
-        el("USER_CAN_CLICK");
+        el({ clickManagement: "USER_CAN_CLICK" });
       });
     }, 50);
     this.subscribers.forEach((el) => {
-      el("USER_DISABLE_CLICK");
+      el({ clickManagement: "USER_DISABLE_CLICK" });
     });
   }
 
@@ -92,19 +95,18 @@ export class NormalHighlightCharacters {
     if (this.firstStart) {
       clearTimeout(this.timerId);
       new GameFeedback(gameAnswers.checkAnswer()).render(
-          this.currentHighlightElementGroup.symbol
+        this.currentHighlightElementGroup.symbol
       );
       this.firstStart = false;
       this.start();
       return;
     }
     new GameFeedback(gameAnswers.checkAnswer()).render(
-        this.currentHighlightElementGroup.symbol
+      this.currentHighlightElementGroup.symbol
     );
     clearTimeout(this.timerId);
     this.start();
   }
-
 
   stop() {
     clearTimeout(this.timerId);
@@ -120,7 +122,7 @@ export class NormalHighlightCharacters {
     this.nextCharacterIndexForHighlight = 1;
     this.firstStart = true;
     this.subscribers = [];
-    this.options = {randomize: false, reverse: false};
+    this.options = { randomize: false, reverse: false };
   }
 
   subscribe(subscriber) {

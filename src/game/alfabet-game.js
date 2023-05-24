@@ -57,9 +57,16 @@ export class AlphabetGame {
   }
 
   initGame() {
-    if (this.currentLevel.effect) {
+    if (this.currentLevel.effect !== undefined) {
       this.currentLevel.effect.setCharacters(this.board.createdSymbols);
       this.currentLevel.effect.start();
+      this.currentLevel.effect.subscribe((data) => {
+        if (data.hasOwnProperty("elPos")) {
+          this.board.scrollController.scrollTo({
+            elPos: data.elPos,
+          });
+        }
+      });
     }
   }
 

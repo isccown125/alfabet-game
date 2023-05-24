@@ -14,7 +14,7 @@ export const chooseLevelPage = (buttonsContainer) => {
         <p>Postaraj się przejść jak najwięcej razy cały alfabet w czasie który pokazuje zegar.</p>
         <ul class="list">
             <p class="list-head">Oznaczenia</p>
-            <li>L - gdy widzisz ten symbol naciskasz na klawiaturze <stron>A lub przycisk “Lewa ręka”.</stron></li>
+            <li>L - gdy widzisz ten symbol naciskasz na klawiaturze <strong>A lub przycisk “Lewa ręka”.</strong></li>
             <li>P - gdy widzisz ten symbol naciskasz na klawiaturze <strong>D lub przycisk “Prawa ręka”.</strong></li>
             <li>O - gdy widzisz ten symbol naciskasz na klawiaturze jednocześnie <strong>A</strong> oraz <strong>D lub oba przyciski - “Lewa ręka” i “Prawa ręka”</strong>.</li>
         </ul>

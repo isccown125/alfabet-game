@@ -1,15 +1,19 @@
 {
   "devDependencies": {
-    "prettier": "2.8.4"
+    "prettier": "2.8.4",
+    "ts-loader": "^9.4.2",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0",
+    "webpack-merge": "^5.9.0"
   },
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "dev:serve": "npx webpack serve"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
-    "hotkeys-js": "^3.10.2",
-    "webpack": "^5.76.1",
-    "webpack-cli": "^5.0.1"
+    "hotkeys-js": "^3.10.2"
   },
   "name": "alfabet-game",
   "version": "0.5.0",
