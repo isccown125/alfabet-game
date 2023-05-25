@@ -36,7 +36,7 @@ export class Easy {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effect.intervalTime = 900;
+    this.effect.intervalTime = 1500;
   }
 
   setCreatedCharacters(characters) {

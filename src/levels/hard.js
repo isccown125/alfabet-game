@@ -35,7 +35,7 @@ export class Hard {
   symbols = ["L", "P", "O"];
 
   constructor() {
-    this.effect.intervalTime = 800;
+    this.effect.intervalTime = 600;
   }
 
   setTime(time = this.gameTime) {
