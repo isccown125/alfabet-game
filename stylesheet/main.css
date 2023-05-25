@@ -2,12 +2,12 @@
 
 @font-face {
     font-family: mosmos;
-    src: url("/assets/fonts/Mosmos.otf");
+    src: url("../assets/fonts/Mosmos.otf");
 }
 
 @font-face {
     font-family: boldenVan;
-    src: url("/assets/fonts/BoldenVan.otf");
+    src: url("../assets/fonts/BoldenVan.otf");
 }
 
 /* width */
@@ -36,8 +36,7 @@
 }
 
 html {
-    background: no-repeat center center fixed;
-    background-image: url("/assets/background.jpg");
+    background: url("/assets/background.jpg") no-repeat fixed center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -363,7 +362,7 @@ body {
     width: 100%;
     max-width: 600px;
     gap: 0 100px;
-    padding: 30px 8px 0px 8px;
+    padding: 30px 8px 0 8px;
     display: grid;
     height: min-content;
     justify-items: center;
@@ -817,7 +816,6 @@ body {
 }
 
 .navigator-container{
-    height: min-content;
     padding: 5px;
     position: relative;
     height: 40px;
