@@ -2,7 +2,7 @@ import { Component } from "../../components/components.js";
 import { NormalHighlightCharacters } from "../../game/game-effects/normal-highlight-characters.js";
 import { RandomHighlightCharacters } from "../../game/game-effects/random-highlight-characters.js";
 import { ReverseHighlightCharacters } from "../../game/game-effects/reverse-highlight-characters.js";
-import {getAbsoluteUrl} from "../../utils/functions";
+import { getAbsoluteUrl } from "../../utils/functions.js";
 
 export class CustomLevelPage {
   page = {

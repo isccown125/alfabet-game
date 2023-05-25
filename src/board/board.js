@@ -1,8 +1,8 @@
 import { Component } from "../components/components.js";
 import { CreateGameSymbols } from "./create-game-symbols.js";
 import { gameAnswers } from "./game-answers.js";
-import { scrollToTop } from "../utils/functions";
-import { ScrollController } from "../game/scroll-controller";
+import { scrollToTop } from "../utils/functions.js";
+import { ScrollController } from "../game/scroll-controller.js";
 
 export class Board {
   boardHtmlElement = undefined;

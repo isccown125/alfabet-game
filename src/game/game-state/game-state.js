@@ -13,7 +13,7 @@ import {
   calculateCorrectnessOfAnswersInPercentage,
   debounce,
 } from "../../utils/functions.js";
-import config from "../../config";
+import config from "../../config.js";
 import { Tip } from "../game-stats/tips.js";
 
 class GameState {

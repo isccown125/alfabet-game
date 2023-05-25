@@ -1,4 +1,4 @@
-import config from "../config";
+import config from "../config.js";
 
 export const random = (min, max) => {
   return Math.round(Math.random() * (max - min)) + min;
