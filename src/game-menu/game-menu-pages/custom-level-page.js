@@ -456,7 +456,7 @@ export class CustomLevelPage {
         .setClassList("tooltip-icon__img")
         .setAttributes({
           name: "src",
-          value: getAbsoluteUrl("/assets/icons/icons8-info.svg"),
+          value: "./assets/icons/icons8-info.svg",
         })
         .setClassList("tooltip-icon").htmlElement;
 

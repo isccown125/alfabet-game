@@ -1,5 +1,3 @@
-import { getAbsoluteUrl } from "../utils/functions.js";
-
 export class GameFeedback {
   answerFlag = null;
   feedbackForRender = null;
@@ -20,12 +18,12 @@ export class GameFeedback {
     return [
       {
         id: "good-answer",
-        src: getAbsoluteUrl("/assets/icons/check-solid-green.svg"),
+        src: "./assets/icons/check-solid-green.svg",
         classList: "feedback-icon good-answer",
       },
       {
         id: "bad-answer",
-        src: getAbsoluteUrl("/assets/icons/xmark-solid-red.svg"),
+        src: "./assets/icons/xmark-solid-red.svg",
         classList: "feedback-icon bad-answer",
       },
     ];
