@@ -296,11 +296,9 @@ class GameState {
     this.gameController.subscribe(
       debounce((data) => {
         gameAnswers.setUserAnswer(data);
-
-        if (this.currentLevel.instance.hasOwnProperty("next")) {
+        if (this.currentLevel.instance !== undefined) {
           this.currentLevel.instance.effect.next();
         }
-
         this.gameController.resetHistory();
       }, this.keyboardDelay)
     );
