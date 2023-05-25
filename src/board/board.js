@@ -33,7 +33,6 @@ export class Board {
       el.style.height = "min-content";
     }
     window.addEventListener("resize", () => {
-      console.log(window.innerHeight);
       if (
         (window.innerHeight < 800 && window.innerWidth < 800) ||
         (window.innerHeight < window.innerWidth && window.innerHeight < 900)
