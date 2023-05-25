@@ -82,7 +82,7 @@ body {
     align-items: center;
     padding: 20px 0;
     width: 700px;
-    height: min-content;
+    height: 100%;
     gap: 20px;
     position: relative;
     top: 10px;
@@ -130,12 +130,11 @@ body {
 }
 
 .rules {
-    display: block;
+    display: flex;
     text-align: center;
     width: 90%;
-    overflow: auto;
     max-width: 700px;
-    max-height: 600px;
+    height: min-content;
 }
 
 .rules-content {
@@ -380,7 +379,6 @@ body {
     gap: 10px;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.514);
     padding: 10px 5px;
     z-index: 20;
     height: 50px;
@@ -547,7 +545,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    z-index: 11;
+    z-index: 25;
     animation: animate-modal 0.25s forwards ease-in-out;
     border-radius: 12px;
 }
@@ -689,16 +687,17 @@ body {
     .rules {
         max-width: 700px;
         width: 90%;
-        height: 100%;
         max-height: none;
-        overflow: visible;
     }
 
     /*.modal-button,*/
     .custom-level-button,
-    .cancel-game-btn,
     .level-button {
         padding: 5px clamp(5px, 3vw, 8px);
+        font-size: clamp(8px, 3vw, 15px);
+    }
+    .cancel-game-btn{
+        padding: 10px clamp(10px, 3vw, 15px);
         font-size: clamp(8px, 3vw, 15px);
     }
 
@@ -747,19 +746,30 @@ body {
         flex-wrap: wrap;
     }
 }
-@media screen and (max-height: 900px){
-    .rules {
-        overflow: visible;
-        max-height: none;
+@media screen and (min-width: 800px){
+    #main-menu{
+        top: 0;
+        margin-top: -30px;
     }
 }
-@media screen and (min-height: 1050px){
-    .rules {
-        overflow: visible;
-        max-height: none;
+@media screen and (min-height: 600px){
+    .rules{
+       max-height: 350px;
+        overflow: auto;
     }
 }
-
+@media screen and (min-height: 700px){
+    .rules{
+        max-height: 450px;
+        overflow: auto;
+    }
+}
+@media screen and (min-height: 960px){
+    .rules{
+        max-height: 650px;
+        overflow: auto;
+    }
+}
 
 
 /*Style CSS from Color game for modal window*/
