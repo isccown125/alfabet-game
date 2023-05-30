@@ -20,7 +20,6 @@ export class ScrollController {
     this.isActive = true;
   }
   scrollTo({ elPos }) {
-    console.log({ isActive: this.isActive, nodeElement: this.nodeElement });
     if (this.isActive) {
       elPos.scrollIntoView({ block: "center", behavior: "smooth" });
 
@@ -35,14 +34,7 @@ export class ScrollController {
         this.nodeElement.getBoundingClientRect().top -
         nodeElHeight / 2 +
         elPos.offsetHeight / 2;
-      console.log({
-        scrollY: targetY,
-        nodeElementScrollY: this.nodeElement.scrollTop,
-      });
       this.nodeElement.scroll({ top: targetY });
-      console.log({
-        nodeElementScrollY: this.nodeElement.scrollTop,
-      });
     }
   }
 }

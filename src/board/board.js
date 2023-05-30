@@ -21,11 +21,9 @@ export class Board {
     this.createdSymbols = new CreateGameSymbols(alphabet, symbols);
   }
 
-  scrollBoard() {}
-
   resizeBoard(el) {
     if (
-      (window.innerHeight < 800 && window.innerWidth < 800) ||
+      window.innerHeight < 800 ||
       (window.innerHeight < window.innerWidth && window.innerHeight < 900)
     ) {
       el.style.height = window.innerHeight - 80 - 40 - 50;
@@ -34,7 +32,7 @@ export class Board {
     }
     window.addEventListener("resize", () => {
       if (
-        (window.innerHeight < 800 && window.innerWidth < 800) ||
+        window.innerHeight < 800 ||
         (window.innerHeight < window.innerWidth && window.innerHeight < 900)
       ) {
         el.style.height = window.innerHeight - 80 - 40 - 50;
