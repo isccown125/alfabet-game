@@ -11,7 +11,7 @@ module.exports = {
   },
 
   output: {
-    filename: "main.js",
+    filename: "alphabet-game.js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/dist",
   },
