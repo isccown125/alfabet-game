@@ -21,25 +21,22 @@ export class Board {
     this.createdSymbols = new CreateGameSymbols(alphabet, symbols);
   }
 
-  resizeBoard(el) {
+  resizeBoardOnStartAndResizeWindow(el) {
+    this.#resizeBoard(el);
+    window.addEventListener("resize", () => {
+      this.#resizeBoard(el);
+    });
+  }
+
+  #resizeBoard(el) {
     if (
-      window.innerHeight < 800 ||
-      (window.innerHeight < window.innerWidth && window.innerHeight < 900)
+        window.innerHeight < 800 ||
+        (window.innerHeight < window.innerWidth && window.innerHeight < 900)
     ) {
-      el.style.height = window.innerHeight - 80 - 40 - 50;
+      el.style.height = (window.innerHeight - 80 - 40 - 50) + 'px';
     } else {
       el.style.height = "min-content";
     }
-    window.addEventListener("resize", () => {
-      if (
-        window.innerHeight < 800 ||
-        (window.innerHeight < window.innerWidth && window.innerHeight < 900)
-      ) {
-        el.style.height = window.innerHeight - 80 - 40 - 50;
-      } else {
-        el.style.height = "min-content";
-      }
-    });
   }
 
   renderBoard() {
@@ -66,7 +63,7 @@ export class Board {
     this.boardHtmlElement.append(boardContent);
     this.gameHtmlElement.append(this.boardHtmlElement);
     this.gameAnswers.render(this.boardHtmlElement);
-    this.resizeBoard(boardContent);
+    this.resizeBoardOnStartAndResizeWindow(boardContent);
     scrollToTop();
     this.scrollController = new ScrollController(boardContent);
     this.scrollController.activate();
