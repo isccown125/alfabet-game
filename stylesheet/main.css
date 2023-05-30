@@ -766,7 +766,7 @@ body {
 @media screen and (min-height: 960px){
     .rules{
         max-height: 650px;
-        overflow: auto;
+        overflow: visible;
     }
 }
 
