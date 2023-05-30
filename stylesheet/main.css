@@ -36,7 +36,7 @@
 }
 
 html {
-    background: url("/assets/background.jpg") no-repeat fixed center center;
+    background: url("../assets/background.jpg") no-repeat fixed center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
