@@ -67,6 +67,7 @@ body {
     min-height: min-content;
     height: min-content;
     flex-direction: column;
+    margin-top: 50px;
 }
 
 /*================ main-menu ========================*/
@@ -813,12 +814,6 @@ body {
 }
 .info_points_number.bad {
     color: red;
-}
-
-.navigator-container{
-    padding: 5px;
-    position: relative;
-    height: 40px;
 }
 
 #show_game_widget{
